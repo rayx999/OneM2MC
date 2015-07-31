@@ -1,0 +1,27 @@
+// Resource File for <CSEBase>
+
+syntax = "proto3";
+
+package MicroWireless.OneM2M.pb;
+
+import "google/protobuf/timestamp.proto";
+import "CommonTypes.proto";
+
+message CSEBase
+{
+  CommonTypes.ResourceType ty = 1;					// resource_type = 1;
+  string ri = 2;									// resource_id = 2;
+  string rn = 3;									// resource_name = 3;
+  // string pi = 4; * not for CSEBase resource *	// parent_id = 4;
+  google.protobuf.Timestamp ct = 5;					// create_time = 5;
+  google.protobuf.Timestamp lt = 6;					// last_modified_time = 6;
+  repeated string acpi = 7;							// ACP_id = 7;  // accessControlPolicyIDs
+  repeated string lbl = 8;							// label = 8;
+
+  CommonTypes.CSEType cst = 100;					// CSE_type = 100;
+  string csi = 101;									// CSE_id = 101;
+  repeated CommonTypes.SupportedResourceType srt = 102;	// supported_resource_type = 102;
+  repeated CommonTypes.PointOfAccess poa = 103;		// point_of_access = 103;
+  string nl = 104;									// node_link = 104;
+  string ncp = 105;									// notification_congestion_policy = 105;
+}

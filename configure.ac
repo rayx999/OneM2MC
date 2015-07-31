@@ -1,0 +1,4 @@
+AC_INIT([OneM2M], [0.01])
+AM_INIT_AUTOMAKE
+AC_OUTPUT([Makefile])
+

@@ -1,0 +1,52 @@
+// Requests message definition
+
+syntax = "proto3";
+
+package MicroWireless.OneM2M.pb;
+
+import "google/protobuf/timestamp.proto";
+import "google/protobuf/duration.proto";
+import "CommonTypes.proto";
+
+message FilterCriteria
+{
+	google.protobuf.Timestamp crb = 1; 			// created_before = 1;
+	google.protobuf.Timestamp cra = 2; 			// created_after = 2;
+	google.protobuf.Timestamp ms = 3;  			// modified_since = 3;
+	google.protobuf.Timestamp us = 4;  			// unmodified_since = 4;
+	uint32 sts = 5; 				   			// state_tag_smaller = 5;
+	uint32 stb = 6;					   			// state_tag_bigger = 6;
+	google.protobuf.Timestamp exb = 7; 			// expire_before = 7;
+	google.protobuf.Timestamp exa = 8; 			// expire_after = 8;
+	repeated string lbl = 9;		   			// labels = 9;
+	repeated CommonTypes.ResourceType rty = 10; // resource_types = 10;
+	uint64 sza = 11; 				   			// size_above = 11;
+	uint64 szb = 12;				   			// size_below = 12;
+	repeated CommonTypes.ContentType cty = 13; 	// content_type = 13;
+	repeated Attribute atr = 14; 				// attributes = 14;
+	CommonTypes.FilterUsage fu = 15;   			// filter_usage = 15;
+	uint32 lim = 16;				   			// limit = 16;
+}
+
+message Request
+{
+	CommonTypes.Operation op = 1;				// operation = 1;
+	string to = 2;								// to = 2;
+	string fr = 3;								// from
+	string rqi = 4;								// request_id = 4;				
+	CommonTypes.ResourceType ty = 5;			// resource_type = 5;
+	string nm = 6;							// name = 6;
+	string pc=7;								// content = 7;
+	google.protobuf.Timestamp ot = 8;			// originating_timestamp = 8;
+	google.protobuf.Timestamp rqet = 9;			// request_expire_timestamp = 9;
+	google.protobuf.Timestamp rset = 10;		// result_expire_timestamp = 10;
+	google.protobuf.Duration oet = 11;			// operation_execution_time = 11;
+	CommonTypes.ResponseType rt = 12;			// response_type = 12;
+	google.protobuf.Duration rp = 13;		// result_persistence = 13;
+	CommonTypes.ResultContent rcn = 14;		// result_content = 14;
+	CommonTypes.EventCat ec = 15;				// event_cat = 15;
+	bool da = 16;								// delivery_aggregation = 16;
+	string gid = 17;							// group_request_id = 17;
+	FilterCriteria fc = 18;					// filter_criteria = 18;
+	CommonTypes.DiscoveryResultType drt = 19;// discovery_result_type = 19;
+}

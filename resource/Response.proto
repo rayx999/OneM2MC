@@ -1,0 +1,21 @@
+// Response message definition
+
+syntax = "proto3";
+
+package MicroWireless.OneM2M.pb;
+
+import "google/protobuf/timestamp.proto";
+import "CommonTypes.proto";
+
+
+message Response
+{
+	CommonTypes.ResponseStatusCode rsc = 1;				// response_status = 1;
+	string rqi = 2;								// request_id = 2;
+	string pc = 3;								// content
+	string to = 4;								// to = 4;
+	string fr = 5;                // from = 5;
+	google.protobuf.Timestamp ot = 6;			// originating_timestamp = 6;
+	google.protobuf.Timestamp rset = 7;		// result_expire_timestamp = 7;
+	CommonTypes.EventCat ec = 8;				// event_cat = 8;
+}
