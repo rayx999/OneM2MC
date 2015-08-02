@@ -1,7 +1,5 @@
 #Environment Variable required: 
 #  $(PROTOBUF_PATH)
-#  $(GMOCK_INC) $(GMOCK_LIB)
-#  $(GMOCK_GTEST_INC) $(GMOCK_GTEST_LIB)
 
 CC        := g++
 LD        := g++
@@ -34,18 +32,18 @@ EL_INC    := $(addprefix -I,$(EL_DIR))
 EL_LIB    := 
 
 # gtest
-GT_DIR    := utest/gtest
+GT_DIR    := utest/fused utest/gtest
 GT_SRC    := $(foreach sdir,$(GT_DIR),$(wildcard $(sdir)/*.cc))
 GT_OBJ    := $(patsubst %.cc,build/%.o,$(GT_SRC))
-GT_INC    := $(addprefix -I, $(GT_DIR) $(GMOCK_GTEST_INC))
-GT_LIB    :=  -lgtest -L$(GMOCK_GTEST_LIB)
+GT_INC    := $(addprefix -I, $(GT_DIR))
+GT_LIB    := 
 
 # gmock
-GM_DIR    := utest/gmock
+GM_DIR    := utest/fused utest/gmock
 GM_SRC    := $(foreach sdir,$(GM_DIR),$(wildcard $(sdir)/*.cc))
 GM_OBJ    := $(patsubst %.cc,build/%.o,$(GM_SRC))
-GM_INC    := $(addprefix -I, $(GM_DIR) $(GMOCK_INC) $(GMOCK_GTEST_INC))
-GM_LIB    := -lgmock  -lgtest -L$(GMOCK_LIB) -L$(GMOCK_GTEST_LIB)
+GM_INC    := $(addprefix -I, $(GM_DIR))
+GM_LIB    := 
 
 DIR       := $(MC_DIR) $(EL_DIR) $(GT_DIR) $(GM_DIR)
 OBJ       := $(MC_OBJ) $(EL_OBJ) $(GT_OBJ) $(GM_OBJ)
@@ -85,8 +83,8 @@ $(BUILD_DIR)/gmock.exe: $(MC_OBJ) $(EL_GMK) $(GM_OBJ)
 gmock: checkdirs $(BUILD_DIR)/gmock.exe
 	@rm -rf $(BUILD_DIR)/data 
 	@cp -rf utest/data $(BUILD_DIR)
-	#@cp $(BUILD_DIR)/data/CSEBase_Sample.res $(BUILD_DIR)/data/CSEBase.res
-	#@cd $(BUILD_DIR) && ./gmock.exe
+	@cp $(BUILD_DIR)/data/CSEBase_Sample.res $(BUILD_DIR)/data/CSEBase.res
+	@cd $(BUILD_DIR) && ./gmock.exe
 
 protoc: $(PB_SRC)
 

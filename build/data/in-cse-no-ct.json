@@ -1,0 +1,8 @@
+{
+    "ty" 	: 1,
+    "ri"   	: "//microwireless.com/IN-CSE-01/CSEBASE",
+    "rn" 	: "CSEBASE",
+    "cst"   : 1,
+    "csi"   : "/IN-CSE-01",
+    "srt" 	: [ 2, 5, 16 ]
+}

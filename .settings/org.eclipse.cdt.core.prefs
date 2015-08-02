@@ -1,0 +1,15 @@
+eclipse.preferences.version=1
+environment/project/cdt.managedbuild.toolchain.gnu.cygwin.base.923882096/GMOCK_GTEST_INC/delimiter=;
+environment/project/cdt.managedbuild.toolchain.gnu.cygwin.base.923882096/GMOCK_GTEST_INC/operation=append
+environment/project/cdt.managedbuild.toolchain.gnu.cygwin.base.923882096/GMOCK_GTEST_INC/value=/cygdrive/c/Workspace/cygwin/gmock/gtest/include
+environment/project/cdt.managedbuild.toolchain.gnu.cygwin.base.923882096/GMOCK_GTEST_LIB/delimiter=;
+environment/project/cdt.managedbuild.toolchain.gnu.cygwin.base.923882096/GMOCK_GTEST_LIB/operation=append
+environment/project/cdt.managedbuild.toolchain.gnu.cygwin.base.923882096/GMOCK_GTEST_LIB/value=/cygdrive/c/Workspace/cygwin/gmock/gtest/lib/.libs
+environment/project/cdt.managedbuild.toolchain.gnu.cygwin.base.923882096/GMOCK_INC/delimiter=;
+environment/project/cdt.managedbuild.toolchain.gnu.cygwin.base.923882096/GMOCK_INC/operation=append
+environment/project/cdt.managedbuild.toolchain.gnu.cygwin.base.923882096/GMOCK_INC/value=/cygdrive/c/Workspace/cygwin/gmock/include
+environment/project/cdt.managedbuild.toolchain.gnu.cygwin.base.923882096/GMOCK_LIB/delimiter=;
+environment/project/cdt.managedbuild.toolchain.gnu.cygwin.base.923882096/GMOCK_LIB/operation=append
+environment/project/cdt.managedbuild.toolchain.gnu.cygwin.base.923882096/GMOCK_LIB/value=/cygdrive/c/Workspace/cygwin/gmock/lib/.libs
+environment/project/cdt.managedbuild.toolchain.gnu.cygwin.base.923882096/append=true
+environment/project/cdt.managedbuild.toolchain.gnu.cygwin.base.923882096/appendContributed=true
