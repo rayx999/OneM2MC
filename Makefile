@@ -31,36 +31,42 @@ EL_FLG    := -Wall -D_WIN32_WINNT=0x0501 -D__USE_W32_SOCKETS -std=gnu++11
 EL_INC    := $(addprefix -I,$(EL_DIR))
 EL_LIB    := 
 
+#gmock/gtest fused files
+GF_DIR    := utest/fused
+GF_SRC    := $(foreach sdir,$(GF_DIR),$(wildcard $(sdir)/*.cc))
+GF_OBJ    := $(patsubst %.cc,build/%.o,$(GF_SRC))
+GF_INC    := $(addprefix -I, $(GF_DIR))
+
 # gtest
-GT_DIR    := utest/fused utest/gtest
+GT_DIR    := utest/gtest
 GT_SRC    := $(foreach sdir,$(GT_DIR),$(wildcard $(sdir)/*.cc))
 GT_OBJ    := $(patsubst %.cc,build/%.o,$(GT_SRC))
 GT_INC    := $(addprefix -I, $(GT_DIR))
 GT_LIB    := 
 
 # gmock
-GM_DIR    := utest/fused utest/gmock
+GM_DIR    := utest/gmock
 GM_SRC    := $(foreach sdir,$(GM_DIR),$(wildcard $(sdir)/*.cc))
 GM_OBJ    := $(patsubst %.cc,build/%.o,$(GM_SRC))
 GM_INC    := $(addprefix -I, $(GM_DIR))
 GM_LIB    := 
 
-DIR       := $(MC_DIR) $(EL_DIR) $(GT_DIR) $(GM_DIR)
-OBJ       := $(MC_OBJ) $(EL_OBJ) $(GT_OBJ) $(GM_OBJ)
+DIR       := $(MC_DIR) $(EL_DIR) $(GF_DIR) $(GT_DIR) $(GM_DIR)
+OBJ       := $(MC_OBJ) $(EL_OBJ) $(GF_OBJ) $(GT_OBJ) $(GM_OBJ)
 FLG       := $(MC_FLG)
-INC       := $(MC_INC) $(EL_INC) $(GT_INC) $(GM_INC)
+INC       := $(MC_INC) $(EL_INC) $(GF_INC) $(GT_INC) $(GM_INC)
 LIB       := $(PB_LIB) $(MC_LIB) $(EL_LIB) $(GT_LIB) $(GM_LIB) -lws2_32
  
 .PHONY: all checkdirs clean gtest gmock elem protoc 
 
-all: checkdirs gtest elem build/gmock.exe
+all: checkdirs gtest elem gmock
 
 checkdirs: $(addprefix $(BUILD_DIR)/,$(DIR))
 
 $(addprefix $(BUILD_DIR)/,$(DIR)):
 	@mkdir -p $@
 	
-$(BUILD_DIR)/gtest.exe: $(MC_OBJ) $(GT_OBJ)
+$(BUILD_DIR)/gtest.exe: $(MC_OBJ) $(GF_OBJ) $(GT_OBJ)
 	$(LD) $^ $(LIB) -o $@
 
 gtest: checkdirs $(BUILD_DIR)/gtest.exe
@@ -77,7 +83,7 @@ $(BUILD_DIR)/CSEMain.exe: $(MC_OBJ) $(EL_OBJ)
 	$(LD) $^ $(LIB) -o $@
 	
 
-$(BUILD_DIR)/gmock.exe: $(MC_OBJ) $(EL_GMK) $(GM_OBJ)
+$(BUILD_DIR)/gmock.exe: $(MC_OBJ) $(EL_GMK) $(GF_OBJ) $(GM_OBJ)
 	$(LD) $^ $(LIB) -o $@
   
 gmock: checkdirs $(BUILD_DIR)/gmock.exe

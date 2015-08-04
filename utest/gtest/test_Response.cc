@@ -44,7 +44,7 @@ class ResponseTest : public ::testing::Test {
 	}
 
 	const string & getRequestId() {
-		return p_response_->getRequestId();
+		return static_cast<const ResponseTest*>(this)->p_response_->getRequestId();
 	}
 
 	bool setContent(const string & pc) {
@@ -52,7 +52,7 @@ class ResponseTest : public ::testing::Test {
 	}
 
 	const string & getContent() {
-		return p_response_->getContent();
+		return static_cast<const ResponseTest*>(this)->p_response_->getContent();
 	}
 
 	bool setTo(const string & to) {
@@ -60,7 +60,7 @@ class ResponseTest : public ::testing::Test {
 	}
 
 	const string & getTo() {
-		return p_response_->getTo();
+		return static_cast<const ResponseTest*>(this)->p_response_->getTo();
 	}
 
 	bool setFrom(const string & fr) {
@@ -68,7 +68,7 @@ class ResponseTest : public ::testing::Test {
 	}
 
 	const string & getFrom() {
-		return p_response_->getFrom();
+		return static_cast<const ResponseTest*>(this)->p_response_->getFrom();
 	}
 
 	virtual void TearDown() {

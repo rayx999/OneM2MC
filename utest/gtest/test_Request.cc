@@ -76,130 +76,76 @@ const string RequestTest::csi_("/IN-CSE-01");
 const string RequestTest::rn_("CSEBase");
 
 TEST_F(RequestTest, FullCtor) {
-	try {
-		Request request_(op_, to_, fr_, rqi_);
-	} catch (const exception &e) {
-		ASSERT_TRUE(false);
-	}
+	Request request_(op_, to_, fr_, rqi_);
+	ASSERT_TRUE(request_.isValid());
 }
 
 TEST_F(RequestTest, CtorNoTo) {
 	string to_none;
 
-	try {
-		Request request_(op_, to_none, fr_, rqi_);
-	} catch (const exception &e) {
-		cout << "Expected exception:" << e.what() << endl;
-		return;
-	}
-	ASSERT_TRUE(false);
-}
-
-TEST_F(RequestTest, CtorNoFr) {
-	string rqi_none;
-
-	try {
-		Request request_(op_, to_, fr_, rqi_none);
-	} catch (const exception &e) {
-		cout << "Expecetd exception:" << e.what() << endl;
-		return;
-	}
-	ASSERT_TRUE(false);
+	Request request_(op_, to_none, fr_, rqi_);
+	ASSERT_FALSE(request_.isValid());
 }
 
 TEST_F(RequestTest, CtorNoRqi) {
+	string rqi_none;
+
+	Request request_(op_, to_, fr_, rqi_none);
+	ASSERT_FALSE(request_.isValid());
+}
+
+TEST_F(RequestTest, CtorNoFr) {
 	string fr_none;
 
-	try {
-		Request request_(op_, to_, fr_none, rqi_);
-	} catch (const exception &e) {
-		cout << "Expected exception:" << e.what() << endl;
-		return;
-	}
-	ASSERT_TRUE(false);
+	Request request_(op_, to_, fr_none, rqi_);
+	ASSERT_FALSE(request_.isValid());
 }
 
 TEST_F(RequestTest, JsonNormal) {
-	try {
-		Request request_(request_json);
-	} catch (const exception &e) {
-		cout << "exception:" << e.what() << endl;
-		ASSERT_TRUE(false);
-	}
+	Request request_(request_json);
+	ASSERT_TRUE(request_.isValid());
 }
 
-TEST_F(RequestTest, JsonInvalidOpl) {
+TEST_F(RequestTest, JsonInvalidOp) {
 	string json("{\"op\": 10, \"to\": \"//microwireless.com/IN-CSE-01\", \"rqi\": \"ab3f124a\", \"fr\": \"//microwireless.com/AE-01\"}");
 
-	try {
-		Request request_(json);
-	} catch (const exception &e) {
-		cout << "Expected exception:" << e.what() << endl;
-		return;
-	}
-	ASSERT_TRUE(false);
+	Request request_(json);
+	ASSERT_FALSE(request_.isValid());
 }
 
 TEST_F(RequestTest, JsonNoTo) {
 	string json("{\"op\": 2, \"rqi\": \"ab3f124a\", \"fr\": \"//microwireless.com/AE-01\"}");
 
-	try {
-		Request request_(json);
-	} catch (const exception &e) {
-		cout << "Expected exception:" << e.what() << endl;
-		return;
-	}
-	ASSERT_TRUE(false);
+	Request request_(json);
+	ASSERT_FALSE(request_.isValid());
 }
 
 TEST_F(RequestTest, JsonNoFr) {
 	string json("{\"op\": 2, \"to\": \"//microwireless.com/IN-CSE-01\", \"rqi\": \"ab3f124a\"}");
 
-	try {
-		Request request_(json);
-	} catch (const exception &e) {
-		cout << "Expected exception:" << e.what() << endl;
-		return;
-	}
-	ASSERT_TRUE(false);
+	Request request_(json);
+	ASSERT_FALSE(request_.isValid());
 }
 
 TEST_F(RequestTest, JsonNoRqi) {
 	string json("{\"op\": 2, \"to\": \"//microwireless.com/IN-CSE-01\", \"fr\": \"//microwireless.com/AE-01\"}");
 
-	try {
-		Request request_(json);
-	} catch (const exception &e) {
-		cout << "Expected exception:" << e.what() << endl;
-		return;
-	}
-	ASSERT_TRUE(false);
+	Request request_(json);
+	ASSERT_FALSE(request_.isValid());
 }
 
 TEST_F(RequestTest, RetrieveWithResourceType) {
 	string json("{\"op\": 2, \"to\": \"//microwireless.com/IN-CSE-01\", \"rqi\": \"ab3f124a\", \"fr\": \"//microwireless.com/AE-01\", \"ty\": 1}");
-	Request * pReq_ = NULL;
-	try {
-		pReq_ = new Request(json);
-	} catch (const exception &e) {
-		cout << "Exception:" << e.what() << endl;
-		ASSERT_TRUE(false);
-		return;
-	}
-	ASSERT_FALSE(pReq_->isValid(VALIDATE_ALL));
+
+	Request request_(json);
+	ASSERT_FALSE(request_.isValid(VALIDATE_ALL));
 }
 
 TEST_F(RequestTest, RetrieveWithName) {
 	string json("{\"op\": 2, \"to\": \"//microwireless.com/IN-CSE-01\", \"rqi\": \"ab3f124a\", \"fr\": \"//microwireless.com/AE-01\", \"nm\": \"Name\" }");
-	Request * pReq_ = NULL;
-	try {
-		pReq_ = new Request(json);
-	} catch (const exception &e) {
-		cout << "Exception:" << e.what() << endl;
-		ASSERT_TRUE(false);
-		return;
-	}
-	ASSERT_FALSE(pReq_->isValid(VALIDATE_ALL));
+
+	Request request_(json);
+	ASSERT_FALSE(request_.isValid(VALIDATE_ALL));
 }
 
 TEST_F(RequestTest, SetGetResourceType) {

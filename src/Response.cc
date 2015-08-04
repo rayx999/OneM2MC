@@ -38,14 +38,16 @@ Response::Response(Request *p_request, const string &json) {
 }
 
 Response::Response(Request *p_request, ResponseStatusCode rsc, const string & rqi){
-	if (rqi.empty()) {
-		throw runtime_error("Response mandatory field: requestId missing!");
+	if (rsc != RSC_BAD_REQUEST) {
+		if (rqi.empty()) {
+			throw runtime_error("Response mandatory field: requestId missing!");
+		}
+		// keep original request reference
+		if (p_request == NULL || !p_request->isValid()) {
+			throw runtime_error("Matching request is invalid!");
+		}
+		p_request_ = p_request;
 	}
-	// keep original request reference
-	if (p_request == NULL || !p_request->isValid()) {
-		throw runtime_error("Matching request is invalid!");
-	}
-	p_request_ = p_request;
 	// Mandatory fields
 	response_pb_.set_rsc(static_cast<pb::CommonTypes_ResponseStatusCode>(rsc));
 	if (!setString(rqi, &pb::Response::set_allocated_rqi, response_pb_)) {
@@ -57,7 +59,7 @@ const ResponseStatusCode Response::getResponseStatusCode() const {
 	return static_cast<ResponseStatusCode>(response_pb_.rsc());
 }
 
-const string & Response::getRequestId() {
+const string & Response::getRequestId() const {
 	return response_pb_.rqi();
 }
 
@@ -65,7 +67,7 @@ bool Response::setContent(const string & pc) {
 	return setString(pc, &pb::Response::set_allocated_pc, response_pb_);
 }
 
-const string & Response::getContent() {
+const string & Response::getContent() const {
 	return response_pb_.pc();
 }
 
@@ -73,7 +75,7 @@ bool Response::setTo(const string & to) {
 	return setString(to, &pb::Response::set_allocated_to, response_pb_);
 }
 
-const string & Response::getTo() {
+const string & Response::getTo() const {
 	return response_pb_.to();
 }
 
@@ -81,7 +83,7 @@ bool Response::setFrom(const string & fr) {
 	return setString(fr, &pb::Response::set_allocated_fr, response_pb_);
 }
 
-const string & Response::getFrom() {
+const string & Response::getFrom() const {
 	return response_pb_.fr();
 }
 
@@ -129,7 +131,9 @@ bool Response::isValid(ValidateType vt) {
 	return true;
 }
 
-string Response::getJson(){  }
+string Response::getJson() {
+	return pb2json(response_pb_);
+}
 
 Response::~Response() {
 /*	if (p_request_ != NULL) {

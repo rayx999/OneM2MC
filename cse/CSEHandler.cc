@@ -28,10 +28,11 @@ void CSEHandler::handleRequest(Request& req) {
 		case OPERATION_CREATE:
 			break;
 		case OPERATION_RETRIEVE:
-			if (!rdb_.isResourceValid(req.getTo())) {
+			if (rdb_.isResourceValid(req.getTo())) {
+				p_pc_ = composeContent(req);
+			} else {
 				rsc_ = RSC_NOT_FOUND;
 			}
-			p_pc_ = composeContent(req);
 			break;
 		case OPERATION_UPDATE:
 			break;

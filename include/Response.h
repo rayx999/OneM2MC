@@ -26,16 +26,16 @@ public:
 	Response(Request * p_request, ResponseStatusCode rsc, const string & rqi);
 
 	const ResponseStatusCode getResponseStatusCode() const;
-	const string & getRequestId();
+	const string & getRequestId() const;
 
 	bool setContent(const string & pc);
-	const string & getContent();
+	const string & getContent() const;
 
 	bool setTo(const string & to);
-	const string & getTo();
+	const string & getTo() const;
 
 	bool setFrom(const string & fr);
-	const string & getFrom();
+	const string & getFrom() const;
 
 	bool setOriginatingTimestamp(TimeStamp &ot);
 	bool getOriginatingTimestamp(TimeStamp &ot);

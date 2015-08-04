@@ -24,30 +24,37 @@ namespace OneM2M {
 
 Request::Request(const string & json) {
 	// parse to PB buffer
-	json2pb(request_pb_, json.c_str(), json.length());
-
-	if (!isValid()) {
-		throw runtime_error("Request in JSON not valid!");
+	try {
+		json2pb(request_pb_, json.c_str(), json.length());
+	} catch (exception &e) {
+		cerr << "Json2pb exception: " << e.what() << endl;
+		return;
 	}
-
-	parseIdInfo();
+	if (isValid()) {
+		parseIdInfo();
+	} else {
+		cerr << "Request in JSON not valid!\n";
+	}
 }
 
 Request::Request(Operation op, const string & to, const string & fr, const string & rqi) {
-	if (to.empty() || fr.empty() || rqi.empty()) {
-		throw runtime_error("Request mandatory fields to, from, or requestId missing!");
-	}
+
 	// Mandatory fields
-	request_pb_.set_op(static_cast<pb::CommonTypes_Operation>(op));
-	setString(to, &pb::Request::set_allocated_to, request_pb_);
-	setString(fr, &pb::Request::set_allocated_fr, request_pb_);
-	setString(rqi, &pb::Request::set_allocated_rqi, request_pb_);
-
-	if (!isValid()) {
-		throw runtime_error("Request constructor failed!");
+	try {
+		request_pb_.set_op(static_cast<pb::CommonTypes_Operation>(op));
+		setString(to, &pb::Request::set_allocated_to, request_pb_);
+		setString(fr, &pb::Request::set_allocated_fr, request_pb_);
+		setString(rqi, &pb::Request::set_allocated_rqi, request_pb_);
+	} catch (exception &e) {
+		cerr << "PB exception: " << e.what() << endl;
+		return;
 	}
 
-	parseIdInfo();
+	if (isValid()) {
+		parseIdInfo();
+	} else {
+		cerr << "Request validation failed!\n";
+	}
 }
 
 const string & Request::getTo() {

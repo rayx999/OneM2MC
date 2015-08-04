@@ -48,7 +48,13 @@ bool ResourceStore<Root>::setupRoot() {
 template <typename Root>
 bool ResourceStore<Root>::isResourceValid(const string& ri) {
 	path res_path(rdb_fn_);
-	res_path += "/" + ri + ".res";
+	if (ri.c_str()[0] != '/') {
+		res_path += "/" + ri + ".res";
+	} else if (ri.c_str()[1] == '/') {
+		res_path += ri.substr(1) + ".res";
+	} else {
+		res_path += ri + ".res";
+	}
 
 	return exists(res_path);
 }
