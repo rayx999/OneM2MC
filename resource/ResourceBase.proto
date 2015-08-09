@@ -1,0 +1,15 @@
+// Resource File for <CSEBase>
+
+syntax = "proto3";
+
+package MicroWireless.OneM2M.pb;
+
+import "CSEBase.proto";
+
+message ResourceBase
+{
+  oneof resource
+  {
+    CSEBase cse = 5;  // Exactly same as CommonTypes.SupportedResourceType::CSE_BASE
+  }
+}

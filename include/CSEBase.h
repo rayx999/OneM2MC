@@ -16,6 +16,7 @@
 #include "CommonTypes.pb.h"
 #include "CSEBase.pb.h"
 #include "CommonTypes.h"
+#include "ResourceBase.h"
 
 namespace MicroWireless {
 
@@ -23,15 +24,20 @@ namespace OneM2M {
 
 using namespace std;
 
-#define DEFAULT_CSEBASE_FN	"data/CSEBase.res"
+#define DEFAULT_CSEBASE_FN	"CSEBase"
 
-class CSEBase {
+class CSEBase : public ResourceBase {
 
 public:
 	CSEBase();
-	CSEBase(const char* fn);
+	~CSEBase();
+
 	CSEBase(const string& json);
-	bool setCSEBase(const char * fn);
+	CSEBase(const string& ri, ResourceStore<CSEBase>& rdb);
+
+	bool setCSEBase(const string& ri, ResourceStore<CSEBase>& rdb);
+	bool outToResourceStore(const string& ri, ResourceStore<CSEBase>& rdb);
+
 	bool setCSEBase(const string &json);
 
 	const string &getDomain();
@@ -47,7 +53,6 @@ public:
 	int getSupportedResource(SupportedResourceType *&rt);
 	bool isResourceSupported(SupportedResourceType rt);
 
-	bool outToFile(const char * fn);
 	string getJson();
 
 protected:
@@ -58,7 +63,8 @@ private:
 	bool checkIdConsistency();
 
 private:
-	pb::CSEBase cse_base_;
+	pb::CSEBase* p_cse_;
+	bool cse_orphan_;
 	string domain_;
 };
 

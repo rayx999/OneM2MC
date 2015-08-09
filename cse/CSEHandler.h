@@ -33,7 +33,7 @@ public:
 
 private:
 	//bool buildResponse(Operation op, Response& rsp);
-	const string * composeContent(Request& req);
+	const string * composeCSEContent(Request& req);
 
 private:
 	CSEResourceStore& rdb_;

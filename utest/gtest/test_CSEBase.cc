@@ -13,27 +13,25 @@
 
 using namespace MicroWireless::OneM2M;
 
-class CSEBaseTest : public ::testing::Test {
-	protected:
-	CSEBase cse_base;
-	bool setup;
+static bool setup = false;
 
-	CSEBaseTest() { setup = false; }
+class CSEBaseTest : public ::testing::Test {
+protected:
+	static const string cse_ri;
+	CSEBase cse_base;
+	ResourceStore<CSEBase> rdb;
+
+	CSEBaseTest() : cse_base(), rdb("data/.store") {}
 
 	virtual void SetUp() {
-		if (std::ifstream(DEFAULT_CSEBASE_FN).good()) {
-			if (cse_base.setCSEBase(DEFAULT_CSEBASE_FN)) {
-				setup = true;
-			}
+		if (setup) {
+			rdb.setupRoot();
+			cse_base.setCSEBase(cse_ri, rdb);
 		}
 	}
 
-	bool OutputResource(const char * fn) {
-		if (setup) {
-			return cse_base.outToFile(fn);
-		}
-		cerr << "Test fixture cse_base is not set up properly." << endl;
-		return false;
+	bool OutputResource(const string& res_path)  {
+		return cse_base.outToResourceStore(res_path, rdb);
 	}
 
 	const string& getCSEId() {
@@ -66,8 +64,30 @@ class CSEBaseTest : public ::testing::Test {
 	// virtual void TearDown() {}
 };
 
+const string CSEBaseTest::cse_ri("//microwireless.com/IN-CSE-01/CSEBASE");
+
+TEST_F(CSEBaseTest, JsonValid) {
+	static const string json("{"
+					"\"ty\" 	: 1,"
+					"\"ri\" 	: \"//microwireless.com/IN-CSE-01/CSEBASE\","
+					"\"rn\" 	: \"CSEBASE\","
+					"\"ct\" 	: { \"seconds\" : 1435434103 },"
+					"\"cst\" 	: 1,"
+					"\"csi\" 	: \"/IN-CSE-01\","
+					"\"srt\" 	: [ 2, 5, 16 ]"
+				"}");
+
+	try {
+		CSEBase cse_base_(json);
+		cse_base_.outToResourceStore(string("CSEBase_resourcebase"), rdb);
+	} catch (exception &e) {
+		cout << "Unexpected exception: " << e.what() << endl;
+		ASSERT_TRUE(false);
+	}
+}
+
 TEST_F(CSEBaseTest, checkCreateTime) {
-	CSEBase cse_base;
+	CSEBase cse_base_;
 
 	// record current time
 	TimeStamp _create_time;
@@ -75,44 +95,56 @@ TEST_F(CSEBaseTest, checkCreateTime) {
 
 	// retrieve CSEBase create time stamp
 	TimeStamp _time_stamp;
-	ASSERT_TRUE(cse_base.getCreateTimestamp(_time_stamp));
+	ASSERT_TRUE(cse_base_.getCreateTimestamp(_time_stamp));
 	EXPECT_TSEQ(_create_time, _time_stamp);
 }
 
 TEST_F(CSEBaseTest, JsonWithCreateTime) {
-	CSEBase cse_base;
+	static const string json("{"
+					"\"ty\" 	: 1,"
+					"\"ri\" 	: \"//microwireless.com/IN-CSE-01/CSEBASE\","
+					"\"rn\" 	: \"CSEBASE\","
+					"\"ct\" 	: { \"seconds\" : 1435434103 },"
+					"\"cst\" 	: 1,"
+					"\"csi\" 	: \"/IN-CSE-01\","
+					"\"srt\" 	: [ 2, 5, 16 ]"
+				"}");
 
-	fstream ins("data/in-cse.json", ios::in | ios::binary);
-	ASSERT_TRUE(ins != NULL);
-
-	// read json resource definition
-	stringstream buf;
-	buf << ins.rdbuf();
-	//cout << buf.str() << endl;
-	ASSERT_TRUE(cse_base.setCSEBase(buf.str()));
-	//cout << cse_base.getJson() << endl;
+	try {
+		CSEBase cse_base_(json);
+	} catch (exception &e) {
+		cout << "Unexpected exception: " << e.what() << endl;
+		ASSERT_TRUE(false);
+	}
 }
 
 TEST_F(CSEBaseTest, JsonWOCreateTime) {
-	CSEBase cse_base;
+	static const string json("{"
+					"\"ty\" 	: 1,"
+					"\"ri\" 	: \"//microwireless.com/IN-CSE-01/CSEBASE\","
+					"\"rn\" 	: \"CSEBASE\","
+					"\"cst\" 	: 1,"
+					"\"csi\" 	: \"/IN-CSE-01\","
+					"\"srt\" 	: [ 2, 5, 16 ]"
+				"}");
 
-	// keep ct from constructor
-	TimeStamp _original_ct;
-	ASSERT_TRUE(cse_base.getCreateTimestamp(_original_ct));
+	try {
+		CSEBase cse_base;
 
-	fstream ins("data/in-cse-no-ct.json", ios::in | ios::binary);
-	ASSERT_TRUE(ins != NULL);
+		// keep ct from constructor
+		TimeStamp _original_ct;
+		ASSERT_TRUE(cse_base.getCreateTimestamp(_original_ct));
 
-	// read json resource definition
-	stringstream buf;
-	buf << ins.rdbuf();
+		ASSERT_TRUE(cse_base.setCSEBase(json));
 
-	ASSERT_TRUE(cse_base.setCSEBase(buf.str()));
-
-	// check original timestamp persist after loading json file w/o ct
-	TimeStamp _check_ct;
-	ASSERT_TRUE(cse_base.getCreateTimestamp(_check_ct));
-	ASSERT_TSEQ(_original_ct, _check_ct);
+		// check original timestamp persist after loading json file w/o ct
+		TimeStamp _check_ct;
+		ASSERT_TRUE(cse_base.getCreateTimestamp(_check_ct));
+		ASSERT_TSEQ(_original_ct, _check_ct);
+	} catch (exception &e) {
+		cout << "Unexpected exception: " << e.what() << endl;
+		ASSERT_TRUE(false);
+	}
 }
 
 TEST_F(CSEBaseTest, JsonConflictCSEId) {
@@ -157,23 +189,32 @@ TEST_F(CSEBaseTest, JsonConflictResourceName) {
 	ASSERT_TRUE(false);
 }
 
-TEST_F(CSEBaseTest, ResourceConstructor) {
-	CSEBase cse_base;
+TEST_F(CSEBaseTest, SetupRoot) {
 
-	ASSERT_TRUE(UTest::CopyFile("data/CSEBase_Sample.res", DEFAULT_CSEBASE_FN));
-
-	ASSERT_TRUE(cse_base.setCSEBase(DEFAULT_CSEBASE_FN));
+	try {
+		ResourceStore<CSEBase> rdb("data/.store");
+		ASSERT_TRUE(rdb.setupRoot());
+		CSEBase * p_root_ = rdb.getRoot();
+		ASSERT_TRUE(p_root_ != NULL);
+		ASSERT_EQ(p_root_->getResourceBase(), CSE_BASE);
+	} catch (exception &e) {
+		cout << "Unexpected exception: " << e.what() << endl;
+		ASSERT_TRUE(false);
+	}
 }
 
-TEST_F(CSEBaseTest, OutputResouceFile) {
-	ASSERT_TRUE(OutputResource("data/CSEBase_new.res"));
+TEST_F(CSEBaseTest, TurnOnFixture) {
+	setup = true;
+}
+
+TEST_F(CSEBaseTest, OutResourceToStore) {
+	ASSERT_TRUE(OutputResource("CSEBase_new"));
 }
 
 // check if 2 CSEBase the same, except last_modified_time
-TEST_F(CSEBaseTest, CheckOutputResouceFile) {
-	CSEBase cse_base_new;
+TEST_F(CSEBaseTest, CheckOutResource) {
+	CSEBase cse_base_new("CSEBase_new", rdb);
 
-	ASSERT_TRUE(cse_base_new.setCSEBase("data/CSEBase_new.res"));
 	ASSERT_STREQ(getCSEId().c_str(), cse_base_new.getCSEId().c_str());
 	ASSERT_EQ(getCSEType(), cse_base_new.getCSEType());
 	ASSERT_STREQ(getResourceId().c_str(), cse_base_new.getResourceId().c_str());
@@ -199,12 +240,12 @@ TEST_F(CSEBaseTest, CheckLastModifiedTime) {
 	TimeStamp _cur_time;
 	gettimeofday(&_cur_time, NULL);
 
-	ASSERT_TRUE(OutputResource("data/CSEBase_new.res"));
+	ASSERT_TRUE(OutputResource("CSEBase_new"));
 
 	// Reload
 	CSEBase cse_base;
 	TimeStamp _last_modified_time;
-	ASSERT_TRUE(cse_base.setCSEBase("data/CSEBase_new.res"));
+	ASSERT_TRUE(cse_base.setCSEBase("CSEBase_new", rdb));
 	ASSERT_TRUE(cse_base.getLastModifiedTimestamp(_last_modified_time));
 	EXPECT_TSEQ(_last_modified_time, _cur_time);
 }

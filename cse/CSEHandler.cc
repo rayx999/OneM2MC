@@ -29,8 +29,15 @@ void CSEHandler::handleRequest(Request& req) {
 			break;
 		case OPERATION_RETRIEVE:
 			if (rdb_.isResourceValid(req.getTo())) {
-				p_pc_ = composeContent(req);
+				CSEBase cse_;
+				if (cse_.setCSEBase(req.getTo(), rdb_)) {
+					p_pc_ = composeContent(req, cse_);
+				} else {
+					cerr << "Retrieve resource " << req.getTo() << " failed.\n";
+					rsc_ = RSC_NOT_FOUND;
+				}
 			} else {
+				cerr << "Retrieve resource " << req.getTo() << " is not valid.\n";
 				rsc_ = RSC_NOT_FOUND;
 			}
 			break;
@@ -51,22 +58,6 @@ void CSEHandler::handleRequest(Request& req) {
 		rsp_.setContent(*p_pc_);
 	}
 	nse_.send(rsp_);
-}
-
-const string * CSEHandler::composeContent(Request& req) {
-//	string& resource = rdb_.getResource(req.getTargetResource());
-	static const string json("{"
-					"\"ty\" 	: 1,"
-					"\"ri\" 	: \"//microwireless.com/IN-CSE-00/CSEBASE\","
-					"\"rn\" 	: \"CSEBASE\","
-					"\"ct\" 	: { \"seconds\" : 1435434103 },"
-					"\"cst\" 	: 1,"
-					"\"csi\" 	: \"/IN-CSE-01\","
-					"\"srt\" 	: [ 2, 5, 16 ]"
-				"}");
-
-	return &json;
-
 }
 
 }	// OneM2M

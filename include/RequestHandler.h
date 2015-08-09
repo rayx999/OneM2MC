@@ -48,6 +48,22 @@ public:
 		return rsc_;
 	};
 
+	template <typename ResourceType>
+	const string * composeContent(Request& req, ResourceType& res) {
+	//	string& resource = rdb_.getResource(req.getTargetResource());
+		static const string json("{"
+						"\"ty\" 	: 1,"
+						"\"ri\" 	: \"//microwireless.com/IN-CSE-00/CSEBASE\","
+						"\"rn\" 	: \"CSEBASE\","
+						"\"ct\" 	: { \"seconds\" : 1435434103 },"
+						"\"cst\" 	: 1,"
+						"\"csi\" 	: \"/IN-CSE-01\","
+						"\"srt\" 	: [ 2, 5, 16 ]"
+					"}");
+
+		return &json;
+
+	}
 protected:
 	NSEBase& nse_;
 };

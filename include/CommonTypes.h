@@ -35,6 +35,8 @@ enum CSEType
 // also used for MemberType
 enum SupportedResourceType
 {
+  SRT_NONE = 0,
+
   // Normal Resources
 
   ACCESS_CONTROL_POLICY = 1,

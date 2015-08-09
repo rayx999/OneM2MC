@@ -13,8 +13,11 @@
 #include <json2pb.h>
 
 #include "CommonTypes.pb.h"
+#include "ResourceBase.pb.h"
 #include "CSEBase.pb.h"
+#include "CommonTypes.h"
 #include "CSEBase.h"
+#include "ResourceBase.h"
 
 using namespace std;
 using namespace MicroWireless::OneM2M::pb;
@@ -23,61 +26,62 @@ namespace MicroWireless {
 
 namespace OneM2M {
 
-CSEBase::CSEBase() {
+CSEBase::CSEBase() : p_cse_(new(pb::CSEBase)) {
 	// set create time
-	TimeStamp _ct;
-	gettimeofday(&_ct, NULL);
-
-	setCreateTimestamp(_ct);
-}
-
-CSEBase::CSEBase(const char * fn) {
-	CSEBase();
-	if (!setCSEBase(fn)) {
-		throw runtime_error("Set CSE resource file failed.");
+	TimeStamp ct_;
+	gettimeofday(&ct_, NULL);
+	if (!setCreateTimestamp(ct_)) {
+		throw runtime_error("setCreateTimestamp failed.");
 	}
+	cse_orphan_ = true;
 }
 
-CSEBase::CSEBase(const string& json) {
+CSEBase::CSEBase(const string& json) : p_cse_(new(pb::CSEBase)) {
 	CSEBase();
 	if (!setCSEBase(json)) {
 		throw runtime_error("Set CSE Json failed.");
 	}
 }
 
-bool CSEBase::setCSEBase(const char * fn) {
-	bool _ret = false;
-    fstream ins(fn, ios::in | ios::binary);
+CSEBase::CSEBase(const string& ri, ResourceStore<CSEBase>& rdb) : p_cse_(new(pb::CSEBase)) {
+	CSEBase();
+	if (!setCSEBase(ri, rdb)) {
+		throw runtime_error("Set CSE resource file failed.");
+	}
+}
 
-    if (!ins) {
-        cout << "Can't open resource file " << fn << endl;
-    } else if (!cse_base_.ParseFromIstream(&ins)) {
-        cerr << "Failed to parse resource file " << fn << endl;
-    } else {
-    	_ret = checkIdConsistency();
-    }
+bool CSEBase::setCSEBase(const string& ri, ResourceStore<CSEBase>& rdb) {
+	bool ret_ = false;
 
-    return _ret;
+	if (!setResourceBase(ri, rdb)) {
+		cerr << "SetResourceBase failed.\n";
+	} else {
+		// release orphan cse, keep the new one
+		delete p_cse_;
+		p_cse_ = base_.mutable_cse();
+		cse_orphan_ = false;
+		ret_ = checkIdConsistency();
+	}
+	return ret_;
 }
 
 bool CSEBase::setCSEBase(const string &json) {
-	pb::CSEBase _cse_base;
+	// keep original create time
+	TimeStamp _ct;
+	getCreateTimestamp(_ct);
 
 	// parse to PB buffer
-	json2pb(_cse_base, json.c_str(), json.length());
+	json2pb(*p_cse_, json.c_str(), json.length());
 
 	// need to keep original create time if Json file
 	// doesn't have create time set up
-	TimeStamp _ct;
-	bool _ct_set = true;
-	if (!_cse_base.has_ct()) {
-		getCreateTimestamp(_ct);
-		_ct_set = false;
-	}
-	cse_base_ = _cse_base;
-	if (!_ct_set) {
+	if (!p_cse_->has_ct()) {
 		setCreateTimestamp(_ct);
 	}
+
+	// set CSEBase to ResourceBase
+	base_.set_allocated_cse(p_cse_);
+	cse_orphan_ = false;
 
 	return checkIdConsistency();
 }
@@ -87,25 +91,25 @@ const string& CSEBase::getDomain() {
 }
 
 const string& CSEBase::getCSEId() {
-	return cse_base_.csi();
+	return p_cse_->csi();
 }
 
 CSEType CSEBase::getCSEType() {
-	return (CSEType)cse_base_.ty();
+	return (CSEType)p_cse_->ty();
 }
 
 const string& CSEBase::getResourceId() {
-	return cse_base_.ri();
+	return p_cse_->ri();
 }
 
 const string& CSEBase::getResourceName() {
-	return cse_base_.rn();
+	return p_cse_->rn();
 }
 
 bool CSEBase::getCreateTimestamp(TimeStamp &ct) {
-	if (cse_base_.has_ct()) {
+	if (p_cse_->has_ct()) {
 		const google::protobuf::Timestamp &_ct =
-				cse_base_.ct();
+				p_cse_->ct();
 		ct.tv_sec = _ct.seconds();
 		ct.tv_usec = _ct.nanos() / 1000;
 		return true;
@@ -114,9 +118,9 @@ bool CSEBase::getCreateTimestamp(TimeStamp &ct) {
 }
 
 bool CSEBase::getLastModifiedTimestamp(TimeStamp &lt) {
-	if (cse_base_.has_lt()) {
+	if (p_cse_->has_lt()) {
 		const google::protobuf::Timestamp &_lt =
-				cse_base_.lt();
+				p_cse_->lt();
 		lt.tv_sec = _lt.seconds();
 		lt.tv_usec = _lt.nanos() / 1000;
 		return true;
@@ -125,13 +129,11 @@ bool CSEBase::getLastModifiedTimestamp(TimeStamp &lt) {
 }
 
 bool CSEBase::setCreateTimestamp(TimeStamp &ct) {
-	google::protobuf::Timestamp * _ts =
-			new(google::protobuf::Timestamp);
+	google::protobuf::Timestamp * _ts = p_cse_->mutable_ct();
 
 	if (_ts != NULL) {
 		_ts->set_seconds(ct.tv_sec);
 		_ts->set_nanos(ct.tv_usec * 1000);
-		cse_base_.set_allocated_ct(_ts);
 		return true;
 	} else {
 		cerr << "Can't allocate pb::Timestamp." << endl;
@@ -140,13 +142,10 @@ bool CSEBase::setCreateTimestamp(TimeStamp &ct) {
 }
 
 bool CSEBase::setLastModifiedTimestamp(TimeStamp &lt) {
-	google::protobuf::Timestamp * _ts =
-			new(google::protobuf::Timestamp);
-
+	google::protobuf::Timestamp * _ts = p_cse_->mutable_lt();
 	if (_ts != NULL) {
 		_ts->set_seconds(lt.tv_sec);
 		_ts->set_nanos(lt.tv_usec * 1000);
-		cse_base_.set_allocated_lt(_ts);
 		return true;
 	} else {
 		cerr << "Can't allocate pb::Timestamp." << endl;
@@ -156,15 +155,15 @@ bool CSEBase::setLastModifiedTimestamp(TimeStamp &lt) {
 
 int CSEBase::getSupportedResource(SupportedResourceType *&rt) {
 	google::protobuf::RepeatedField<int> * _rt =
-			cse_base_.mutable_srt();
+			p_cse_->mutable_srt();
     rt = (SupportedResourceType *)_rt->mutable_data();
-	return cse_base_.srt_size();
+	return p_cse_->srt_size();
 }
 
 bool CSEBase::isResourceSupported(SupportedResourceType rt) {
 	google::protobuf::RepeatedField<int>::const_iterator _it;
 	const google::protobuf::RepeatedField<int>& _srt =
-			cse_base_.srt();
+			p_cse_->srt();
 	for (_it = _srt.begin(); _it != _srt.end(); _it++) {
 		if (*_it == rt) {
 			return true;
@@ -173,25 +172,19 @@ bool CSEBase::isResourceSupported(SupportedResourceType rt) {
 	return false;
 }
 
-bool CSEBase::outToFile(const char * fn) {
+bool CSEBase::outToResourceStore(const string& res_path, ResourceStore<CSEBase>& rdb) {
 	// update last_modified_time
-	TimeStamp _lt;
-	gettimeofday(&_lt, NULL);
-	if (!setLastModifiedTimestamp(_lt)) {
+	TimeStamp lt_;
+	gettimeofday(&lt_, NULL);
+	if (!setLastModifiedTimestamp(lt_)) {
 		cerr << "Can't set last modified time." << endl;
 		return false;
 	}
 
-    fstream ous(fn, ios::out | ios::trunc | ios::binary);
-    if (!cse_base_.SerializeToOstream(&ous)) {
-      cerr << "Failed to write " << fn << endl;
-      return false;
+	if (!ResourceBase::outToResourceStore(res_path, rdb)) {
+       return false;
     }
 	return true;
-}
-
-string CSEBase::getJson() {
-  	return pb2json(cse_base_);
 }
 
 bool CSEBase::checkIdConsistency() {
@@ -199,7 +192,13 @@ bool CSEBase::checkIdConsistency() {
 	boost::smatch sm;
 	bool ret = false;
 
-	boost::regex_match(getResourceId(), sm, pattern_);
+	if (getResourceBase() != CSE_BASE) {
+		cerr << "CSE resource file with wrong resource base!\n";
+		cerr << "Current resource: " << getResourceBase() << endl;
+	}
+
+	const string& id_ = getResourceId();
+	boost::regex_match(id_, sm, pattern_);
 	switch (sm.size()) {
 	case 4:
 	case 3: if (getResourceName().compare(sm[3]) != 0) {
@@ -220,6 +219,13 @@ bool CSEBase::checkIdConsistency() {
 	}
 
 	return ret;
+}
+
+CSEBase::~CSEBase() {
+	// delete orphan cse, otherwise it's ResourceBase to release
+	if (cse_orphan_) {
+		delete p_cse_;
+	}
 }
 
 }	// OneM2M

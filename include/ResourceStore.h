@@ -29,8 +29,13 @@ public:
 	};
 
 	bool setupRoot();
-	bool isResourceValid(const string& rn);
-	Root* getRoot() { return p_root_; };
+	bool isResourceValid(const string& ri);
+	bool getResource(const string& ri, string& res_str);
+	bool putResource(const string& ri, const string& res_str);
+	Root* getRoot() { return p_root_; }
+
+protected:
+	const string normalizeRi(const string& ri);
 
 protected:
 	const char * rdb_fn_;
