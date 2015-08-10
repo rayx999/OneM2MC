@@ -3,6 +3,17 @@ OneM2M in C++ is an OneM2M (http://www.onem2m.org/) prototype implementation. It
 
 Class relation:
 
+                              ---------------
+                             |  ResourceBase |
+                              ---------------
+							         ^
+									 -
+									 |
+						    +--------+--------+
+							|                 |
+					   -----+-----       -----+-----
+					   | CSEBase |       |  AEBase |
+					   -----------       -----------
 
 
 
