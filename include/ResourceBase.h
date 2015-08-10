@@ -31,7 +31,6 @@ public:
 	ResourceBase() : base_() {}
 	SupportedResourceType getResourceBase();
 	pb::CSEBase& getCSEBase();
-	bool setResourceBase(SupportedResourceType rt, void* p);
 
 	template <typename StoreType>
 	bool setResourceBase(const string& ri, StoreType& rdb) {

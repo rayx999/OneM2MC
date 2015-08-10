@@ -43,7 +43,7 @@ message Request
 	google.protobuf.Duration oet = 11;			// operation_execution_time = 11;
 	CommonTypes.ResponseType rt = 12;			// response_type = 12;
 	google.protobuf.Duration rp = 13;		// result_persistence = 13;
-	CommonTypes.ResultContent rcn = 14;		// result_content = 14;
+	CommonTypes.ResultContent rcn = 14; 	// result_content = 14;
 	CommonTypes.EventCat ec = 15;				// event_cat = 15;
 	bool da = 16;								// delivery_aggregation = 16;
 	string gid = 17;							// group_request_id = 17;

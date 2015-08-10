@@ -140,14 +140,15 @@ message CommonTypes
 
 	enum ResultContent
 	{
-	  RESULT_CONTENT_NONE = 0;
-	  RESULT_CONTENT_NOTHING = 1;
-	  RESULT_CONTENT_ATTRIBUTES = 2;
-	  RESULT_CONTENT_HADDR = 3;	// Hierachical address
-	  RESULT_CONTENT_HADDR_CHILD = 4;	// Hierachical address and child resource
-	  RESULT_CONTENT_ATTR_CHILD = 5;	// Attributes and child resource references
-	  RESULT_CONTENT_CHILD = 6;	// Child resource references
-	  RESULT_CONTENT_ORIGINAL = 7;	// Original resource
+	  // RESULT_CONTENT_NONE = 0;
+    RESULT_CONTENT_NOTHING = 0;
+    RESULT_CONTENT_ATTRIBUTES = 1;
+    RESULT_CONTENT_HADDR = 2; // Hierachical address
+    RESULT_CONTENT_HADDR_ATTR = 3;  // Hierachical address and attributes
+    RESULT_CONTENT_ATTR_CHILD = 4;  // Attributes and child
+    RESULT_CONTENT_ATTR_CHILD_REF = 5;  // Attributes and child reference
+    RESULT_CONTENT_CHILD = 6; // Child resource references
+    RESULT_CONTENT_ORIGINAL = 7;  // Original resource
 	}
 
 	enum RequestStatus

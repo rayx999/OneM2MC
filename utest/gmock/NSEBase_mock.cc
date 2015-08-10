@@ -11,7 +11,9 @@
 //#include "gmock/gmock.h"
 #include "gtest/gtest.h"
 
+#include "CSEBase.pb.h"
 #include "CommonTypes.h"
+#include "CommonUtils.h"
 #include "CSEBase.h"
 #include "Request.h"
 #include "Response.h"
@@ -31,6 +33,20 @@ using ::testing::Matcher;
 using ::testing::Property;
 using ::testing::Eq;
 using ::testing::_;
+
+// Matcher for pb::CSEBase
+MATCHER_P(PbCseEq, exp_cse, "") {
+	pb::CSEBase act_cse;
+	if (!act_cse.ParseFromString(arg)) {
+		return false;
+	}
+
+	return  act_cse.csi() == exp_cse.csi() &&
+			act_cse.ty() == exp_cse.ty() &&
+			act_cse.ri() == exp_cse.ri() &&
+			act_cse.rn() == exp_cse.rn() &&
+			act_cse.ct() == exp_cse.ct();
+}
 
 class NSEBaseMockTest : public ::testing::Test {
 protected:
@@ -92,7 +108,7 @@ const string NSEBaseMockTest::retrieve_json("{"
 
 const string NSEBaseMockTest::cse_content("{"
 				"\"ty\" 	: 1,"
-				"\"ri\" 	: \"//microwireless.com/IN-CSE-00/CSEBASE\","
+				"\"ri\" 	: \"//microwireless.com/IN-CSE-01/CSEBASE\","
 				"\"rn\" 	: \"CSEBASE\","
 				"\"ct\" 	: { \"seconds\" : 1435434103 },"
 				"\"cst\" 	: 1,"
@@ -101,6 +117,8 @@ const string NSEBaseMockTest::cse_content("{"
 			"}");
 
 TEST_F(NSEBaseMockTest, RetrieveCSE) {
+  pb::CSEBase exp_pc_;
+  json2pb(exp_pc_, cse_content.c_str(), cse_content.length());
 
   setJson(const_cast<string&>(retrieve_json));
   EXPECT_CALL(*nse_, run())
@@ -108,7 +126,7 @@ TEST_F(NSEBaseMockTest, RetrieveCSE) {
 
   EXPECT_CALL(*nse_, send(AllOf(Property(&Response::getResponseStatusCode, Eq(RSC_OK)),
 		  	  	  	  	  	  	Property(&Response::getRequestId, StrEq("ab3f124a")),
-								Property(&Response::getContent, StrEq(cse_content)))))
+								Property(&Response::getContent, PbCseEq(exp_pc_)))))
   	  .Times(1);
 
   server_->run();

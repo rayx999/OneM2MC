@@ -22,6 +22,10 @@ namespace MicroWireless {
 
 namespace OneM2M {
 
+void Request::setDefaults() {
+	request_pb_.set_rcn(static_cast<pb::CommonTypes_ResultContent>(RESULT_CONTENT_ATTRIBUTES));
+}
+
 Request::Request(const string & json) {
 	// parse to PB buffer
 	try {
@@ -30,6 +34,9 @@ Request::Request(const string & json) {
 		cerr << "Json2pb exception: " << e.what() << endl;
 		return;
 	}
+
+	setDefaults();
+
 	if (isValid()) {
 		parseIdInfo();
 	} else {
@@ -49,6 +56,8 @@ Request::Request(Operation op, const string & to, const string & fr, const strin
 		cerr << "PB exception: " << e.what() << endl;
 		return;
 	}
+
+	setDefaults();
 
 	if (isValid()) {
 		parseIdInfo();
@@ -86,7 +95,7 @@ ResourceType Request::getResourceType() {
 	return static_cast<ResourceType>(request_pb_.ty());
 }
 
-#if 0
+/*
 bool setName(string &nm);
 bool getName(string &nm);
 
@@ -110,10 +119,17 @@ ResponseType getResponseType();
 
 bool setResultPersistence(Duration &rp);
 bool getResultPersistence(Duration &rp);
+*/
+bool Request::setResultContent(ResultContent rcn) {
+	request_pb_.set_rcn(static_cast<pb::CommonTypes_ResultContent>(rcn));
+	return true;
+}
 
-bool setResultContent(ResultContent rcn);
-ResultContent getResultContent();
+ResultContent Request::getResultContent() {
+	return static_cast<ResultContent>(request_pb_.rcn());
+}
 
+/*
 bool setEventCat(EventCat ec);
 EventCat getEventCat();
 
@@ -129,7 +145,7 @@ bool getGroupRequestId(string &gid);
 bool setDiscoveryResultType(DiscoveryResultType drt);
 DiscoveryResultType getDiscoveryResultType();
 
-#endif
+*/
 
 void Request::parseIdInfo() {
 	// to = //domain/cseid/resource, case insensitive

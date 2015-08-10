@@ -82,6 +82,9 @@ public:
 	string getJson();
 
 private:
+	void setDefaults();
+
+private:
 	void parseIdInfo();
 
 private:

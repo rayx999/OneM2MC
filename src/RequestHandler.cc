@@ -11,12 +11,12 @@
 #include "Request.h"
 #include "RequestHandler.h"
 #include "NSEBase.h"
+#include "ResourceStore.h"
 
 namespace MicroWireless {
 namespace OneM2M {
 
 using namespace MicroWireless::OneM2M;
-
 
 
 }	// OneM2M

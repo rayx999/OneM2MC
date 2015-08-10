@@ -9,7 +9,7 @@
 
 #include "Request.h"
 #include "Response.h"
-//#include "RequestHandler.h"
+#include "RequestHandler.h"
 #include "CSEHandler.h"
 #include "NSEBase.h"
 
@@ -19,7 +19,7 @@ namespace OneM2M {
 using namespace MicroWireless::OneM2M;
 
 void CSEHandler::handleRequest(Request& req) {
-	const string* p_pc_ = NULL;
+	string pc_;
 	RequestHandler::handleRequest(req);
 	ResponseStatusCode rsc_ = isForMe(req, *rdb_.cse());
 
@@ -29,10 +29,7 @@ void CSEHandler::handleRequest(Request& req) {
 			break;
 		case OPERATION_RETRIEVE:
 			if (rdb_.isResourceValid(req.getTo())) {
-				CSEBase cse_;
-				if (cse_.setCSEBase(req.getTo(), rdb_)) {
-					p_pc_ = composeContent(req, cse_);
-				} else {
+				if (!composeContent(req, pc_, rdb_)) {
 					cerr << "Retrieve resource " << req.getTo() << " failed.\n";
 					rsc_ = RSC_NOT_FOUND;
 				}
@@ -54,8 +51,8 @@ void CSEHandler::handleRequest(Request& req) {
 	}
 
 	Response rsp_(&req, rsc_, req.getRequestId());	// FIX ME: remove rqi
-	if (p_pc_ != NULL && !(*p_pc_).empty()) {
-		rsp_.setContent(*p_pc_);
+	if (rsc_ == RSC_OK && !pc_.empty()) {
+		rsp_.setContent(pc_);
 	}
 	nse_.send(rsp_);
 }

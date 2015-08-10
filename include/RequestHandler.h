@@ -9,9 +9,12 @@
 #define INCLUDE_REQUESTHANDLER_H_
 
 #include <string>
+#include <json2pb.h>
 
 #include "CommonTypes.h"
 #include "Request.h"
+#include "ResourceStore.h"
+#include "ResourceBase.h"
 
 namespace MicroWireless {
 namespace OneM2M {
@@ -48,9 +51,26 @@ public:
 		return rsc_;
 	};
 
-	template <typename ResourceType>
-	const string * composeContent(Request& req, ResourceType& res) {
-	//	string& resource = rdb_.getResource(req.getTargetResource());
+	template <typename StoreType>
+	bool composeContent(Request& req, string& pc, StoreType& rdb) {
+		bool ret_ = false;
+		ResourceBase base_;
+		if (!base_.setResourceBase(req.getTo(), rdb)) {
+			cerr << "setResourceBase(" << req.getTo() <<") failed.\n";
+			return false;
+		}
+		SupportedResourceType srt_ = base_.getResourceBase();
+		switch (srt_) {
+		case CSE_BASE:
+			ret_ = serializeContent(base_.getCSEBase(), pc, req.getResultContent());
+			break;
+		default:
+			cerr << "composeContent: Unrecognozed resource: " << srt_ << endl;
+			break;
+		}
+
+		return ret_;
+		/*
 		static const string json("{"
 						"\"ty\" 	: 1,"
 						"\"ri\" 	: \"//microwireless.com/IN-CSE-00/CSEBASE\","
@@ -62,8 +82,24 @@ public:
 					"}");
 
 		return &json;
-
+*/
 	}
+
+protected:
+	template <typename ResourceType>
+	bool serializeContent(ResourceType& res, string& pc, ResultContent rcn) {
+		switch (rcn) {
+		case RESULT_CONTENT_ATTRIBUTES:
+			//pc = pb2json(res);
+			// return true;
+			return res.SerializeToString(&pc);
+		default:
+			cerr << "serializeContent: Unknown ResultContent:" << rcn << endl;
+			break;
+		}
+		return false;
+	}
+
 protected:
 	NSEBase& nse_;
 };

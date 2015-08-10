@@ -310,19 +310,19 @@ inline bool CommonTypes_ResponseType_Parse(
     CommonTypes_ResponseType_descriptor(), name, value);
 }
 enum CommonTypes_ResultContent {
-  CommonTypes_ResultContent_RESULT_CONTENT_NONE = 0,
-  CommonTypes_ResultContent_RESULT_CONTENT_NOTHING = 1,
-  CommonTypes_ResultContent_RESULT_CONTENT_ATTRIBUTES = 2,
-  CommonTypes_ResultContent_RESULT_CONTENT_HADDR = 3,
-  CommonTypes_ResultContent_RESULT_CONTENT_HADDR_CHILD = 4,
-  CommonTypes_ResultContent_RESULT_CONTENT_ATTR_CHILD = 5,
+  CommonTypes_ResultContent_RESULT_CONTENT_NOTHING = 0,
+  CommonTypes_ResultContent_RESULT_CONTENT_ATTRIBUTES = 1,
+  CommonTypes_ResultContent_RESULT_CONTENT_HADDR = 2,
+  CommonTypes_ResultContent_RESULT_CONTENT_HADDR_ATTR = 3,
+  CommonTypes_ResultContent_RESULT_CONTENT_ATTR_CHILD = 4,
+  CommonTypes_ResultContent_RESULT_CONTENT_ATTR_CHILD_REF = 5,
   CommonTypes_ResultContent_RESULT_CONTENT_CHILD = 6,
   CommonTypes_ResultContent_RESULT_CONTENT_ORIGINAL = 7,
   CommonTypes_ResultContent_CommonTypes_ResultContent_INT_MIN_SENTINEL_DO_NOT_USE_ = ::google::protobuf::kint32min,
   CommonTypes_ResultContent_CommonTypes_ResultContent_INT_MAX_SENTINEL_DO_NOT_USE_ = ::google::protobuf::kint32max
 };
 bool CommonTypes_ResultContent_IsValid(int value);
-const CommonTypes_ResultContent CommonTypes_ResultContent_ResultContent_MIN = CommonTypes_ResultContent_RESULT_CONTENT_NONE;
+const CommonTypes_ResultContent CommonTypes_ResultContent_ResultContent_MIN = CommonTypes_ResultContent_RESULT_CONTENT_NOTHING;
 const CommonTypes_ResultContent CommonTypes_ResultContent_ResultContent_MAX = CommonTypes_ResultContent_RESULT_CONTENT_ORIGINAL;
 const int CommonTypes_ResultContent_ResultContent_ARRAYSIZE = CommonTypes_ResultContent_ResultContent_MAX + 1;
 
@@ -912,12 +912,12 @@ class CommonTypes : public ::google::protobuf::Message {
   }
 
   typedef CommonTypes_ResultContent ResultContent;
-  static const ResultContent RESULT_CONTENT_NONE = CommonTypes_ResultContent_RESULT_CONTENT_NONE;
   static const ResultContent RESULT_CONTENT_NOTHING = CommonTypes_ResultContent_RESULT_CONTENT_NOTHING;
   static const ResultContent RESULT_CONTENT_ATTRIBUTES = CommonTypes_ResultContent_RESULT_CONTENT_ATTRIBUTES;
   static const ResultContent RESULT_CONTENT_HADDR = CommonTypes_ResultContent_RESULT_CONTENT_HADDR;
-  static const ResultContent RESULT_CONTENT_HADDR_CHILD = CommonTypes_ResultContent_RESULT_CONTENT_HADDR_CHILD;
+  static const ResultContent RESULT_CONTENT_HADDR_ATTR = CommonTypes_ResultContent_RESULT_CONTENT_HADDR_ATTR;
   static const ResultContent RESULT_CONTENT_ATTR_CHILD = CommonTypes_ResultContent_RESULT_CONTENT_ATTR_CHILD;
+  static const ResultContent RESULT_CONTENT_ATTR_CHILD_REF = CommonTypes_ResultContent_RESULT_CONTENT_ATTR_CHILD_REF;
   static const ResultContent RESULT_CONTENT_CHILD = CommonTypes_ResultContent_RESULT_CONTENT_CHILD;
   static const ResultContent RESULT_CONTENT_ORIGINAL = CommonTypes_ResultContent_RESULT_CONTENT_ORIGINAL;
   static inline bool ResultContent_IsValid(int value) {
