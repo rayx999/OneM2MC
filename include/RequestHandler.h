@@ -12,7 +12,7 @@
 #include <json2pb.h>
 
 #include "CommonTypes.h"
-#include "Request.h"
+#include "RequestPrim.h"
 #include "ResourceStore.h"
 #include "ResourceBase.h"
 
@@ -21,7 +21,7 @@ namespace OneM2M {
 
 using namespace MicroWireless::OneM2M;
 
-class Request;
+class RequestPrim;
 class CSEBase;
 class NSEBase;
 
@@ -31,10 +31,10 @@ public:
 
 	virtual ~RequestHandler() {};
 
-	virtual void handleRequest(Request& request) { };
+	virtual void handleRequest(RequestPrim& request) { };
 
 	template <typename Root>
-	ResponseStatusCode isForMe(Request& req, Root& root) {
+	ResponseStatusCode isForMe(RequestPrim& req, Root& root) {
 		ResponseStatusCode rsc_ = RSC_OK;
 
 		if (req.isValid()) {
@@ -52,7 +52,7 @@ public:
 	};
 
 	template <typename StoreType>
-	bool composeContent(Request& req, string& pc, StoreType& rdb) {
+	bool composeContent(RequestPrim& req, string& pc, StoreType& rdb) {
 		bool ret_ = false;
 		ResourceBase base_;
 		if (!base_.setResourceBase(req.getTo(), rdb)) {

@@ -4,13 +4,13 @@
  *  Created on: 2015年7月18日
  *      Author: weimi_000
  */
+#include <ResponsePrim.h>
 #include <iostream>
 #include <fstream>
 #include <sstream>
 
 #include "gtest/gtest.h"
 #include "test_utils.h"
-#include "Response.h"
 
 using namespace MicroWireless::OneM2M;
 
@@ -23,8 +23,8 @@ class ResponseTest : public ::testing::Test {
 	static const string fr_;
 	string pc_;
 	ResponseStatusCode rsc_ok_;
-	Response * p_response_;
-	Request * p_request_;
+	ResponsePrim * p_response_;
+	RequestPrim * p_request_;
 
 	ResponseTest() {
 		rsc_ok_ = RSC_OK;
@@ -34,8 +34,8 @@ class ResponseTest : public ::testing::Test {
 	}
 
 	virtual void SetUp() {
-		p_request_ = new Request(request_json);
-		p_response_ = new Response(new Request(request_json), response_json);
+		p_request_ = new RequestPrim(request_json);
+		p_response_ = new ResponsePrim(new RequestPrim(request_json), response_json);
 	}
 
 	ResponseStatusCode getResponseStatusCode() {
@@ -91,7 +91,7 @@ const string ResponseTest::fr_("//microwireless.com/AE-01");
 
 TEST_F(ResponseTest, FullCtor) {
 	try {
-		Response response_(p_request_, rsc_ok_, rqi_);
+		ResponsePrim response_(p_request_, rsc_ok_, rqi_);
 	} catch (const exception &e) {
 		cout << "Exception: " << e.what() << endl;
 		ASSERT_TRUE(false);
@@ -102,7 +102,7 @@ TEST_F(ResponseTest, CtorNoRqi) {
 	string rqi_none;
 
 	try {
-		Response response_(p_request_, rsc_ok_, rqi_none);
+		ResponsePrim response_(p_request_, rsc_ok_, rqi_none);
 	} catch (const exception &e) {
 		cout << "Expected exception:" << e.what() << endl;
 		return;
@@ -112,7 +112,7 @@ TEST_F(ResponseTest, CtorNoRqi) {
 
 TEST_F(ResponseTest, JsonNormal) {
 	try {
-		Response response_(p_request_, response_json);
+		ResponsePrim response_(p_request_, response_json);
 	} catch (const exception &e) {
 		cout << "exception:" << e.what() << endl;
 		ASSERT_TRUE(false);
@@ -123,7 +123,7 @@ TEST_F(ResponseTest, JsonInvalidRsc) {
 	string invalid_json("{\"rsc\": 10, \"rqi\": \"ab3f124a\"}");
 
 	try {
-		Response response_(p_request_, invalid_json);
+		ResponsePrim response_(p_request_, invalid_json);
 	} catch (const exception &e) {
 		cout << "Expected exception:" << e.what() << endl;
 		return;
@@ -135,7 +135,7 @@ TEST_F(ResponseTest, JsonNoRsc) {
 	string invalid_json("{\"rqi\": \"ab3f124a\"}");
 
 	try {
-		Response response_(p_request_, invalid_json);
+		ResponsePrim response_(p_request_, invalid_json);
 	} catch (const exception &e) {
 		cout << "Expected exception:" << e.what() << endl;
 		return;
@@ -147,19 +147,19 @@ TEST_F(ResponseTest, JsonNoRqi) {
 	string norsi_json("{\"rsc\": 2000");
 
 	try {
-		Response response_(p_request_, norsi_json);
+		ResponsePrim response_(p_request_, norsi_json);
 	} catch (const exception &e) {
 		cout << "Expected exception:" << e.what() << endl;
 		return;
 	}
 	ASSERT_TRUE(false);
 }
-/*
+
 TEST_F(ResponseTest, RetrieveWithResourceType) {
 	string json("{\"op\": 2, \"to\": \"//microwireless.com/IN-CSE-01\", \"rqi\": \"ab3f124a\", \"fr\": \"//microwireless.com/AE-01\", \"ty\": 1}");
-	Response * pReq_ = NULL;
+	ResponsePrim * pReq_ = NULL;
 	try {
-		pReq_ = new Response(json);
+		pReq_ = new ResponsePrim(p_request_, json);
 	} catch (const exception &e) {
 		cout << "Expected exception:" << e.what() << endl;
 		return;
@@ -169,16 +169,16 @@ TEST_F(ResponseTest, RetrieveWithResourceType) {
 
 TEST_F(ResponseTest, RetrieveWithName) {
 	string json("{\"op\": 2, \"to\": \"//microwireless.com/IN-CSE-01\", \"rqi\": \"ab3f124a\", \"fr\": \"//microwireless.com/AE-01\", \"nm\": \"Name\" }");
-	Response * pReq_ = NULL;
+	ResponsePrim * pReq_ = NULL;
 	try {
-		pReq_ = new Response(json);
+		pReq_ = new ResponsePrim(p_request_, json);
 	} catch (const exception &e) {
 		cout << "Expected exception:" << e.what() << endl;
 		return;
 	}
 	ASSERT_FALSE(pReq_->isValid());
 }
-*/
+
 
 TEST_F(ResponseTest, GetAttributes) {
 	ASSERT_EQ(getResponseStatusCode(), rsc_ok_);

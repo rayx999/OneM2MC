@@ -1,5 +1,5 @@
 /*
- * Request.cc
+ * RequestPrim.cc
  *
  *  Created on: 2015年7月16日
  *      Author: weimi_000
@@ -11,9 +11,9 @@
 #include <boost/regex.hpp>
 #include <json2pb.h>
 
-#include "Request.pb.h"
+#include "RequestPrim.pb.h"
 #include "CommonUtils.h"
-#include "Request.h"
+#include "RequestPrim.h"
 
 using namespace std;
 using namespace MicroWireless::OneM2M;
@@ -22,11 +22,11 @@ namespace MicroWireless {
 
 namespace OneM2M {
 
-void Request::setDefaults() {
+void RequestPrim::setDefaults() {
 	request_pb_.set_rcn(static_cast<pb::CommonTypes_ResultContent>(RESULT_CONTENT_ATTRIBUTES));
 }
 
-Request::Request(const string & json) {
+RequestPrim::RequestPrim(const string & json) {
 	// parse to PB buffer
 	try {
 		json2pb(request_pb_, json.c_str(), json.length());
@@ -40,18 +40,18 @@ Request::Request(const string & json) {
 	if (isValid()) {
 		parseIdInfo();
 	} else {
-		cerr << "Request in JSON not valid!\n";
+		cerr << "RequestPrim in JSON not valid!\n";
 	}
 }
 
-Request::Request(Operation op, const string & to, const string & fr, const string & rqi) {
+RequestPrim::RequestPrim(Operation op, const string & to, const string & fr, const string & rqi) {
 
 	// Mandatory fields
 	try {
 		request_pb_.set_op(static_cast<pb::CommonTypes_Operation>(op));
-		setString(to, &pb::Request::set_allocated_to, request_pb_);
-		setString(fr, &pb::Request::set_allocated_fr, request_pb_);
-		setString(rqi, &pb::Request::set_allocated_rqi, request_pb_);
+		setString(to, &pb::RequestPrim::set_allocated_to, request_pb_);
+		setString(fr, &pb::RequestPrim::set_allocated_fr, request_pb_);
+		setString(rqi, &pb::RequestPrim::set_allocated_rqi, request_pb_);
 	} catch (exception &e) {
 		cerr << "PB exception: " << e.what() << endl;
 		return;
@@ -62,36 +62,36 @@ Request::Request(Operation op, const string & to, const string & fr, const strin
 	if (isValid()) {
 		parseIdInfo();
 	} else {
-		cerr << "Request validation failed!\n";
+		cerr << "RequestPrim validation failed!\n";
 	}
 }
 
-const string & Request::getTo() {
+const string & RequestPrim::getTo() {
 	return request_pb_.to();
 }
 
-const string & Request::getFrom() {
+const string & RequestPrim::getFrom() {
 	return request_pb_.fr();
 }
 
-const string & Request::getRequestId() {
+const string & RequestPrim::getRequestId() {
 	return request_pb_.rqi();
 }
 
-const string & Request::getTargetResource() {
+const string & RequestPrim::getTargetResource() {
 	return rn_;
 }
 
-Operation Request::getOperation() {
+Operation RequestPrim::getOperation() {
 	return static_cast<Operation>(request_pb_.op());
 }
 
-bool Request::setResourceType(ResourceType ty) {
+bool RequestPrim::setResourceType(ResourceType ty) {
 	request_pb_.set_ty(static_cast<pb::CommonTypes_ResourceType>(ty));
 	return true;
 }
 
-ResourceType Request::getResourceType() {
+ResourceType RequestPrim::getResourceType() {
 	return static_cast<ResourceType>(request_pb_.ty());
 }
 
@@ -120,12 +120,12 @@ ResponseType getResponseType();
 bool setResultPersistence(Duration &rp);
 bool getResultPersistence(Duration &rp);
 */
-bool Request::setResultContent(ResultContent rcn) {
+bool RequestPrim::setResultContent(ResultContent rcn) {
 	request_pb_.set_rcn(static_cast<pb::CommonTypes_ResultContent>(rcn));
 	return true;
 }
 
-ResultContent Request::getResultContent() {
+ResultContent RequestPrim::getResultContent() {
 	return static_cast<ResultContent>(request_pb_.rcn());
 }
 
@@ -147,7 +147,7 @@ DiscoveryResultType getDiscoveryResultType();
 
 */
 
-void Request::parseIdInfo() {
+void RequestPrim::parseIdInfo() {
 	// to = //domain/cseid/resource, case insensitive
 	static boost::regex pattern_("(^//[\\.\\w-]+)(/[\\w-]+)(?:/([\\w-]+))?");
 	boost::smatch sm;
@@ -164,16 +164,16 @@ void Request::parseIdInfo() {
 	}
 }
 
-void Request::getIdInfo(string& domain, string& csi) {
+void RequestPrim::getIdInfo(string& domain, string& csi) {
 	domain = domain_;
 	csi = csi_;
 }
 
-bool Request::isValid(ValidateType vt) {
+bool RequestPrim::isValid(ValidateType vt) {
 	if (request_pb_.to().empty() ||
 		request_pb_.fr().empty() ||
 		request_pb_.rqi().empty() ) {
-		cerr << "Request miss to, from or request id." << endl;
+		cerr << "RequestPrim miss to, from or request id." << endl;
 		return false;
 	}
 
@@ -205,7 +205,7 @@ bool Request::isValid(ValidateType vt) {
 	return true;
 }
 
-string Request::getJson() {
+string RequestPrim::getJson() {
 	return pb2json(request_pb_);
 }
 

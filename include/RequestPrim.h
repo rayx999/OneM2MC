@@ -1,14 +1,14 @@
 /*
- * Request.h
+ * RequestPrim.h
  *
  *  Created on: 2015年7月16日
  *      Author: weimi_000
  */
 
-#ifndef INCLUDE_REQUEST_H_
-#define INCLUDE_REQUEST_H_
+#ifndef INCLUDE_REQUESTPRIM_H_
+#define INCLUDE_REQUESTPRIM_H_
 
-#include "Request.pb.h"
+#include "RequestPrim.pb.h"
 #include "CommonTypes.h"
 #include "CommonUtils.h"
 
@@ -19,11 +19,11 @@ namespace MicroWireless {
 
 namespace OneM2M {
 
-class Request
+class RequestPrim
 {
 public:
-	Request(const string &json);
-	Request(Operation op, const string & to, const string & fr, const string & rqi);
+	RequestPrim(const string &json);
+	RequestPrim(Operation op, const string & to, const string & fr, const string & rqi);
 
 	Operation getOperation();
 
@@ -88,12 +88,12 @@ private:
 	void parseIdInfo();
 
 private:
-	pb::Request request_pb_;
+	pb::RequestPrim request_pb_;
 	// parsed fields from getTo()
 	string domain_, csi_, rn_;
 };
 /*
-class Retrieve : public Request
+class Retrieve : public RequestPrim
 {
 
 };
@@ -102,4 +102,4 @@ class Retrieve : public Request
 }	// OneM2M
 }	// MicroWireless
 
-#endif /* INCLUDE_REQUEST_H_ */
+#endif /* INCLUDE_REQUESTPRIM_H_ */

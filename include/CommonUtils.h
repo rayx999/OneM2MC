@@ -32,9 +32,6 @@ bool setString(const std::string & s, void (T::*setter)(std::string *), T & t) {
 // Protobuf 3 Timestamp operator overloading
 using namespace google::protobuf;
 
-bool operator == (const Timestamp& ts1, const Timestamp& ts2) {
-	return ts1.seconds() == ts2.seconds() &&
-		   ts1.nanos() == ts2.nanos();
-}
+bool operator == (const Timestamp& ts1, const Timestamp& ts2);
 
 #endif /* INCLUDE_COMMONUTILS_H_ */

@@ -15,7 +15,7 @@ namespace OneM2M {
 
 using namespace MicroWireless::OneM2M;
 
-class Response;
+class ResponsePrim;
 class RequestHandler;
 
 class NSEBase {
@@ -27,7 +27,7 @@ public:
 		request_handler_ = &req_hdl;
 	};
 
-	virtual void send(Response& rsp) { };
+	virtual void send(ResponsePrim& rsp) { };
 	virtual void run() { };
 
 	virtual ~NSEBase() { };

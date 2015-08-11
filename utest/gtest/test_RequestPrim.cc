@@ -4,13 +4,13 @@
  *  Created on: 2015年7月17日
  *      Author: weimi_000
  */
+#include <RequestPrim.h>
 #include <iostream>
 #include <fstream>
 #include <sstream>
 
 #include "gtest/gtest.h"
 #include "test_utils.h"
-#include "Request.h"
 
 using namespace MicroWireless::OneM2M;
 
@@ -24,7 +24,7 @@ class RequestTest : public ::testing::Test {
 	static const string csi_;
 	static const string rn_;
 	Operation op_;
-	Request * p_request_;
+	RequestPrim * p_request_;
 
 	RequestTest() {
 		op_ = OPERATION_RETRIEVE;
@@ -32,7 +32,7 @@ class RequestTest : public ::testing::Test {
 	}
 
 	virtual void SetUp() {
-		p_request_ = new Request(request_json);
+		p_request_ = new RequestPrim(request_json);
 	}
 
 	Operation getOperation() {
@@ -76,75 +76,75 @@ const string RequestTest::csi_("/IN-CSE-01");
 const string RequestTest::rn_("CSEBase");
 
 TEST_F(RequestTest, FullCtor) {
-	Request request_(op_, to_, fr_, rqi_);
+	RequestPrim request_(op_, to_, fr_, rqi_);
 	ASSERT_TRUE(request_.isValid());
 }
 
 TEST_F(RequestTest, CtorNoTo) {
 	string to_none;
 
-	Request request_(op_, to_none, fr_, rqi_);
+	RequestPrim request_(op_, to_none, fr_, rqi_);
 	ASSERT_FALSE(request_.isValid());
 }
 
 TEST_F(RequestTest, CtorNoRqi) {
 	string rqi_none;
 
-	Request request_(op_, to_, fr_, rqi_none);
+	RequestPrim request_(op_, to_, fr_, rqi_none);
 	ASSERT_FALSE(request_.isValid());
 }
 
 TEST_F(RequestTest, CtorNoFr) {
 	string fr_none;
 
-	Request request_(op_, to_, fr_none, rqi_);
+	RequestPrim request_(op_, to_, fr_none, rqi_);
 	ASSERT_FALSE(request_.isValid());
 }
 
 TEST_F(RequestTest, JsonNormal) {
-	Request request_(request_json);
+	RequestPrim request_(request_json);
 	ASSERT_TRUE(request_.isValid());
 }
 
 TEST_F(RequestTest, JsonInvalidOp) {
 	string json("{\"op\": 10, \"to\": \"//microwireless.com/IN-CSE-01\", \"rqi\": \"ab3f124a\", \"fr\": \"//microwireless.com/AE-01\"}");
 
-	Request request_(json);
+	RequestPrim request_(json);
 	ASSERT_FALSE(request_.isValid());
 }
 
 TEST_F(RequestTest, JsonNoTo) {
 	string json("{\"op\": 2, \"rqi\": \"ab3f124a\", \"fr\": \"//microwireless.com/AE-01\"}");
 
-	Request request_(json);
+	RequestPrim request_(json);
 	ASSERT_FALSE(request_.isValid());
 }
 
 TEST_F(RequestTest, JsonNoFr) {
 	string json("{\"op\": 2, \"to\": \"//microwireless.com/IN-CSE-01\", \"rqi\": \"ab3f124a\"}");
 
-	Request request_(json);
+	RequestPrim request_(json);
 	ASSERT_FALSE(request_.isValid());
 }
 
 TEST_F(RequestTest, JsonNoRqi) {
 	string json("{\"op\": 2, \"to\": \"//microwireless.com/IN-CSE-01\", \"fr\": \"//microwireless.com/AE-01\"}");
 
-	Request request_(json);
+	RequestPrim request_(json);
 	ASSERT_FALSE(request_.isValid());
 }
 
 TEST_F(RequestTest, RetrieveWithResourceType) {
 	string json("{\"op\": 2, \"to\": \"//microwireless.com/IN-CSE-01\", \"rqi\": \"ab3f124a\", \"fr\": \"//microwireless.com/AE-01\", \"ty\": 1}");
 
-	Request request_(json);
+	RequestPrim request_(json);
 	ASSERT_FALSE(request_.isValid(VALIDATE_ALL));
 }
 
 TEST_F(RequestTest, RetrieveWithName) {
 	string json("{\"op\": 2, \"to\": \"//microwireless.com/IN-CSE-01\", \"rqi\": \"ab3f124a\", \"fr\": \"//microwireless.com/AE-01\", \"nm\": \"Name\" }");
 
-	Request request_(json);
+	RequestPrim request_(json);
 	ASSERT_FALSE(request_.isValid(VALIDATE_ALL));
 }
 

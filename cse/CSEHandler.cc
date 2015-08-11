@@ -5,10 +5,10 @@
  *      Author: weimi_000
  */
 
+#include <RequestPrim.h>
+#include <ResponsePrim.h>
 #include <string>
 
-#include "Request.h"
-#include "Response.h"
 #include "RequestHandler.h"
 #include "CSEHandler.h"
 #include "NSEBase.h"
@@ -18,7 +18,7 @@ namespace OneM2M {
 
 using namespace MicroWireless::OneM2M;
 
-void CSEHandler::handleRequest(Request& req) {
+void CSEHandler::handleRequest(RequestPrim& req) {
 	string pc_;
 	RequestHandler::handleRequest(req);
 	ResponseStatusCode rsc_ = isForMe(req, *rdb_.cse());
@@ -50,7 +50,7 @@ void CSEHandler::handleRequest(Request& req) {
 		}
 	}
 
-	Response rsp_(&req, rsc_, req.getRequestId());	// FIX ME: remove rqi
+	ResponsePrim rsp_(&req, rsc_, req.getRequestId());	// FIX ME: remove rqi
 	if (rsc_ == RSC_OK && !pc_.empty()) {
 		rsp_.setContent(pc_);
 	}

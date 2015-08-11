@@ -20,8 +20,8 @@ using namespace MicroWireless::OneM2M;
 
 class NSEBase;
 //class ResourceStore<CSEBase>;
-class Request;
-class Response;
+class RequestPrim;
+class ResponsePrim;
 
 class CSEHandler : public RequestHandler {
 
@@ -29,11 +29,7 @@ public:
 	CSEHandler(NSEBase& nse, CSEResourceStore& rdb)
 		: RequestHandler(nse), rdb_(rdb) {};
 
-	void handleRequest(Request& request);
-
-private:
-	//bool buildResponse(Operation op, Response& rsp);
-	const string * composeCSEContent(Request& req);
+	void handleRequest(RequestPrim& request);
 
 private:
 	CSEResourceStore& rdb_;

@@ -6,6 +6,8 @@
  */
 
 
+#include <RequestPrim.h>
+#include <ResponsePrim.h>
 #include <iostream>
 
 //#include "gmock/gmock.h"
@@ -15,8 +17,6 @@
 #include "CommonTypes.h"
 #include "CommonUtils.h"
 #include "CSEBase.h"
-#include "Request.h"
-#include "Response.h"
 #include "ResourceStore.h"
 #include "NSEBase_mock.h"
 #include "CSEResourceStore.h"
@@ -57,8 +57,8 @@ protected:
 
 	string& json_;
 
-	Request * req_;
-	Response * rsp_;
+	RequestPrim * req_;
+	ResponsePrim * rsp_;
 	CSEResourceStore * rdb_;
 	NSEBaseMock * nse_;
 	CSEHandler * hdl_;
@@ -90,11 +90,11 @@ public:
     }
 
     void handleRequest() {
-    	req_ = new Request(json_);
+    	req_ = new RequestPrim(json_);
     	hdl_->handleRequest(*req_);
     }
 
-    void printResponse(Response rsp) {
+    void printResponse(ResponsePrim rsp) {
     	cout << rsp.getJson() << endl;
     }
 };
@@ -124,9 +124,9 @@ TEST_F(NSEBaseMockTest, RetrieveCSE) {
   EXPECT_CALL(*nse_, run())
 	  .WillOnce(Invoke(this, &NSEBaseMockTest::handleRequest));
 
-  EXPECT_CALL(*nse_, send(AllOf(Property(&Response::getResponseStatusCode, Eq(RSC_OK)),
-		  	  	  	  	  	  	Property(&Response::getRequestId, StrEq("ab3f124a")),
-								Property(&Response::getContent, PbCseEq(exp_pc_)))))
+  EXPECT_CALL(*nse_, send(AllOf(Property(&ResponsePrim::getResponseStatusCode, Eq(RSC_OK)),
+		  	  	  	  	  	  	Property(&ResponsePrim::getRequestId, StrEq("ab3f124a")),
+								Property(&ResponsePrim::getContent, PbCseEq(exp_pc_)))))
   	  .Times(1);
 
   server_->run();
@@ -145,7 +145,7 @@ TEST_F(NSEBaseMockTest, BadRequest) {
   EXPECT_CALL(*nse_, run())
 	  .WillOnce(Invoke(this, &NSEBaseMockTest::handleRequest));
 
-  EXPECT_CALL(*nse_, send(Property(&Response::getResponseStatusCode, Eq(RSC_BAD_REQUEST))))
+  EXPECT_CALL(*nse_, send(Property(&ResponsePrim::getResponseStatusCode, Eq(RSC_BAD_REQUEST))))
 	  .Times(1);
 
   server_->run();
@@ -165,7 +165,7 @@ TEST_F(NSEBaseMockTest, NotExistResource) {
   EXPECT_CALL(*nse_, run())
 	  .WillOnce(Invoke(this, &NSEBaseMockTest::handleRequest));
 
-  EXPECT_CALL(*nse_, send(Property(&Response::getResponseStatusCode, Eq(RSC_NOT_FOUND))))
+  EXPECT_CALL(*nse_, send(Property(&ResponsePrim::getResponseStatusCode, Eq(RSC_NOT_FOUND))))
 	  .Times(1);
 
   server_->run();

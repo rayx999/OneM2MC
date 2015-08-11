@@ -1,16 +1,16 @@
 /*
- * Response.h
+ * ResponsePrim.h
  *
  *  Created on: 2015年7月18日
  *      Author: weimi_000
  */
 
-#ifndef INCLUDE_RESPONSE_H_
-#define INCLUDE_RESPONSE_H_
+#ifndef INCLUDE_RESPONSEPRIM_H_
+#define INCLUDE_RESPONSEPRIM_H_
 
-#include "Response.pb.h"
+#include "ResponsePrim.pb.h"
 #include "CommonTypes.h"
-#include "Request.h"
+#include "RequestPrim.h"
 
 using namespace std;
 using namespace MicroWireless::OneM2M;
@@ -19,11 +19,11 @@ namespace MicroWireless {
 
 namespace OneM2M {
 
-class Response
+class ResponsePrim
 {
 public:
-	Response(Request * p_request, const string &json);
-	Response(Request * p_request, ResponseStatusCode rsc, const string & rqi);
+	ResponsePrim(RequestPrim * p_request, const string &json);
+	ResponsePrim(RequestPrim * p_request, ResponseStatusCode rsc, const string & rqi);
 
 	const ResponseStatusCode getResponseStatusCode() const;
 	const string & getRequestId() const;
@@ -49,14 +49,14 @@ public:
 	bool isValid(ValidateType vt = VALIDATE_COMMON);
 	string getJson();
 
-	~Response();
+	~ResponsePrim();
 
 private:
-	Request * p_request_;		// matching request.
-	pb::Response response_pb_;
+	RequestPrim * p_request_;		// matching request.
+	pb::ResponsePrim response_pb_;
 };
 
 }	// OneM2M
 }	// MicroWireless
 
-#endif /* INCLUDE_RESPONSE_H_ */
+#endif /* INCLUDE_RESPONSEPRIM_H_ */

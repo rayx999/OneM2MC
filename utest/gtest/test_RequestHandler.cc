@@ -6,12 +6,12 @@
  */
 
 
+#include <RequestPrim.h>
 #include <iostream>
 #include <fstream>
 
 #include "gtest/gtest.h"
 #include "test_utils.h"
-#include "Request.h"
 #include "CSEBase.h"
 #include "NSEBase.h"
 #include "RequestHandler.h"
@@ -66,12 +66,12 @@ const string RequestHandlerTest::req1_json("{"
 
 TEST_F(RequestHandlerTest, isForMe) {
 	CSEBase cse_(cse_json);
-	Request req_(req_json);
+	RequestPrim req_(req_json);
 	ASSERT_EQ(p_hdl_->isForMe<CSEBase>(req_, cse_), RSC_OK);
 }
 
 TEST_F(RequestHandlerTest, isNOTForMe) {
 	CSEBase cse_(cse_json);
-	Request req_(req1_json);
+	RequestPrim req_(req1_json);
 	ASSERT_EQ(p_hdl_->isForMe<CSEBase>(req_, cse_), RSC_ACCESS_DENIED);
 }

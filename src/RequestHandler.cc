@@ -5,10 +5,10 @@
  *      Author: weimi_000
  */
 
+#include <RequestPrim.h>
 #include <string>
 
 #include "CSEBase.h"
-#include "Request.h"
 #include "RequestHandler.h"
 #include "NSEBase.h"
 #include "ResourceStore.h"
