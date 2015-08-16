@@ -21,7 +21,7 @@ using namespace MicroWireless::OneM2M;
 class RequestHandlerTest : public ::testing::Test {
 
 protected:
-	static const string cse_json;
+	static const string cse_json, cse_path;
 	static const string req_json, req1_json;
 
 //	CSEBase *p_cse_;
@@ -41,15 +41,20 @@ protected:
 	}
 };
 
+const string RequestHandlerTest::cse_path("//microwireless.com/IN-CSE-01/Z0005");
+
 const string RequestHandlerTest::cse_json("{"
-		"\"ty\" 	: 1,"
-		"\"ri\" 	: \"//microwireless.com/IN-CSE-01/CSEBASE\","
-		"\"rn\" 	: \"CSEBASE\","
+		"\"ty\" 	: 5,"
+		"\"ri\" 	: \"Z0005\","
+		"\"rn\" 	: \"IN-CSE-01\","
 		"\"ct\" 	: { \"seconds\" : 1435434103 },"
-		"\"cst\" 	: 1,"
-		"\"csi\" 	: \"/IN-CSE-01\","
-		"\"srt\" 	: [ 2, 5, 16 ]"
+		"\"cse\"    : {"
+			"\"cst\" 	: 1,"
+			"\"csi\" 	: \"/IN-CSE-01\","
+			"\"srt\" 	: [ 2, 5, 16 ]"
+		"}"
 	"}");
+
 const string RequestHandlerTest::req_json("{"
 		"\"op\"		: 2,"
 		"\"to\"		: \"//microwireless.com/IN-CSE-01/CSEBase\","
@@ -65,13 +70,13 @@ const string RequestHandlerTest::req1_json("{"
 	"}");
 
 TEST_F(RequestHandlerTest, isForMe) {
-	CSEBase cse_(cse_json);
+	CSEBase cse_(cse_json, cse_path);
 	RequestPrim req_(req_json);
 	ASSERT_EQ(p_hdl_->isForMe<CSEBase>(req_, cse_), RSC_OK);
 }
 
 TEST_F(RequestHandlerTest, isNOTForMe) {
-	CSEBase cse_(cse_json);
+	CSEBase cse_(cse_json, cse_path);
 	RequestPrim req_(req1_json);
 	ASSERT_EQ(p_hdl_->isForMe<CSEBase>(req_, cse_), RSC_ACCESS_DENIED);
 }

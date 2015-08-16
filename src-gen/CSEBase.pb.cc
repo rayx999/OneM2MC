@@ -36,14 +36,7 @@ void protobuf_AssignDesc_CSEBase_2eproto() {
       "CSEBase.proto");
   GOOGLE_CHECK(file != NULL);
   CSEBase_descriptor_ = file->message_type(0);
-  static const int CSEBase_offsets_[13] = {
-    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(CSEBase, ty_),
-    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(CSEBase, ri_),
-    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(CSEBase, rn_),
-    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(CSEBase, ct_),
-    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(CSEBase, lt_),
-    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(CSEBase, acpi_),
-    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(CSEBase, lbl_),
+  static const int CSEBase_offsets_[6] = {
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(CSEBase, cst_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(CSEBase, csi_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(CSEBase, srt_),
@@ -91,23 +84,16 @@ void protobuf_AddDesc_CSEBase_2eproto() {
   already_here = true;
   GOOGLE_PROTOBUF_VERIFY_VERSION;
 
-  ::google::protobuf::protobuf_AddDesc_google_2fprotobuf_2ftimestamp_2eproto();
   ::MicroWireless::OneM2M::pb::protobuf_AddDesc_CommonTypes_2eproto();
   ::google::protobuf::DescriptorPool::InternalAddGeneratedFile(
     "\n\rCSEBase.proto\022\027MicroWireless.OneM2M.pb"
-    "\032\037google/protobuf/timestamp.proto\032\021Commo"
-    "nTypes.proto\"\266\003\n\007CSEBase\022=\n\002ty\030\001 \001(\01621.M"
-    "icroWireless.OneM2M.pb.CommonTypes.Resou"
-    "rceType\022\n\n\002ri\030\002 \001(\t\022\n\n\002rn\030\003 \001(\t\022&\n\002ct\030\005 "
-    "\001(\0132\032.google.protobuf.Timestamp\022&\n\002lt\030\006 "
-    "\001(\0132\032.google.protobuf.Timestamp\022\014\n\004acpi\030"
-    "\007 \003(\t\022\013\n\003lbl\030\010 \003(\t\0229\n\003cst\030d \001(\0162,.MicroW"
-    "ireless.OneM2M.pb.CommonTypes.CSEType\022\013\n"
-    "\003csi\030e \001(\t\022G\n\003srt\030f \003(\0162:.MicroWireless."
-    "OneM2M.pb.CommonTypes.SupportedResourceT"
-    "ype\022\?\n\003poa\030g \003(\01622.MicroWireless.OneM2M."
-    "pb.CommonTypes.PointOfAccess\022\n\n\002nl\030h \001(\t"
-    "\022\013\n\003ncp\030i \001(\tb\006proto3", 541);
+    "\032\021CommonTypes.proto\"\364\001\n\007CSEBase\0229\n\003cst\030d"
+    " \001(\0162,.MicroWireless.OneM2M.pb.CommonTyp"
+    "es.CSEType\022\013\n\003csi\030e \001(\t\022G\n\003srt\030f \003(\0162:.M"
+    "icroWireless.OneM2M.pb.CommonTypes.Suppo"
+    "rtedResourceType\022\?\n\003poa\030g \003(\01622.MicroWir"
+    "eless.OneM2M.pb.CommonTypes.PointOfAcces"
+    "s\022\n\n\002nl\030h \001(\t\022\013\n\003ncp\030i \001(\tb\006proto3", 314);
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedFile(
     "CSEBase.proto", &protobuf_RegisterTypes);
   CSEBase::default_instance_ = new CSEBase();
@@ -135,13 +121,6 @@ static void MergeFromFail(int line) {
 // ===================================================================
 
 #ifndef _MSC_VER
-const int CSEBase::kTyFieldNumber;
-const int CSEBase::kRiFieldNumber;
-const int CSEBase::kRnFieldNumber;
-const int CSEBase::kCtFieldNumber;
-const int CSEBase::kLtFieldNumber;
-const int CSEBase::kAcpiFieldNumber;
-const int CSEBase::kLblFieldNumber;
 const int CSEBase::kCstFieldNumber;
 const int CSEBase::kCsiFieldNumber;
 const int CSEBase::kSrtFieldNumber;
@@ -158,8 +137,6 @@ CSEBase::CSEBase()
 
 void CSEBase::InitAsDefaultInstance() {
   _is_default_instance_ = true;
-  ct_ = const_cast< ::google::protobuf::Timestamp*>(&::google::protobuf::Timestamp::default_instance());
-  lt_ = const_cast< ::google::protobuf::Timestamp*>(&::google::protobuf::Timestamp::default_instance());
 }
 
 CSEBase::CSEBase(const CSEBase& from)
@@ -174,11 +151,6 @@ void CSEBase::SharedCtor() {
     _is_default_instance_ = false;
   ::google::protobuf::internal::GetEmptyString();
   _cached_size_ = 0;
-  ty_ = 0;
-  ri_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-  rn_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-  ct_ = NULL;
-  lt_ = NULL;
   cst_ = 0;
   csi_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   nl_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
@@ -191,14 +163,10 @@ CSEBase::~CSEBase() {
 }
 
 void CSEBase::SharedDtor() {
-  ri_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-  rn_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   csi_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   nl_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   ncp_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   if (this != default_instance_) {
-    delete ct_;
-    delete lt_;
   }
 }
 
@@ -228,30 +196,10 @@ CSEBase* CSEBase::New(::google::protobuf::Arena* arena) const {
 }
 
 void CSEBase::Clear() {
-#define ZR_HELPER_(f) reinterpret_cast<char*>(\
-  &reinterpret_cast<CSEBase*>(16)->f)
-
-#define ZR_(first, last) do {\
-  ::memset(&first, 0,\
-           ZR_HELPER_(last) - ZR_HELPER_(first) + sizeof(last));\
-} while (0)
-
-  ZR_(ty_, cst_);
-  ri_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-  rn_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-  if (GetArenaNoVirtual() == NULL && ct_ != NULL) delete ct_;
-  ct_ = NULL;
-  if (GetArenaNoVirtual() == NULL && lt_ != NULL) delete lt_;
-  lt_ = NULL;
+  cst_ = 0;
   csi_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   nl_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   ncp_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-
-#undef ZR_HELPER_
-#undef ZR_
-
-  acpi_.Clear();
-  lbl_.Clear();
   srt_.Clear();
   poa_.Clear();
 }
@@ -266,123 +214,9 @@ bool CSEBase::MergePartialFromCodedStream(
     tag = p.first;
     if (!p.second) goto handle_unusual;
     switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
-      // optional .MicroWireless.OneM2M.pb.CommonTypes.ResourceType ty = 1;
-      case 1: {
-        if (tag == 8) {
-          int value;
-          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
-                   int, ::google::protobuf::internal::WireFormatLite::TYPE_ENUM>(
-                 input, &value)));
-          set_ty(static_cast< ::MicroWireless::OneM2M::pb::CommonTypes_ResourceType >(value));
-        } else {
-          goto handle_unusual;
-        }
-        if (input->ExpectTag(18)) goto parse_ri;
-        break;
-      }
-
-      // optional string ri = 2;
-      case 2: {
-        if (tag == 18) {
-         parse_ri:
-          DO_(::google::protobuf::internal::WireFormatLite::ReadString(
-                input, this->mutable_ri()));
-          ::google::protobuf::internal::WireFormat::VerifyUTF8StringNamedField(
-            this->ri().data(), this->ri().length(),
-            ::google::protobuf::internal::WireFormat::PARSE,
-            "MicroWireless.OneM2M.pb.CSEBase.ri");
-        } else {
-          goto handle_unusual;
-        }
-        if (input->ExpectTag(26)) goto parse_rn;
-        break;
-      }
-
-      // optional string rn = 3;
-      case 3: {
-        if (tag == 26) {
-         parse_rn:
-          DO_(::google::protobuf::internal::WireFormatLite::ReadString(
-                input, this->mutable_rn()));
-          ::google::protobuf::internal::WireFormat::VerifyUTF8StringNamedField(
-            this->rn().data(), this->rn().length(),
-            ::google::protobuf::internal::WireFormat::PARSE,
-            "MicroWireless.OneM2M.pb.CSEBase.rn");
-        } else {
-          goto handle_unusual;
-        }
-        if (input->ExpectTag(42)) goto parse_ct;
-        break;
-      }
-
-      // optional .google.protobuf.Timestamp ct = 5;
-      case 5: {
-        if (tag == 42) {
-         parse_ct:
-          DO_(::google::protobuf::internal::WireFormatLite::ReadMessageNoVirtual(
-               input, mutable_ct()));
-        } else {
-          goto handle_unusual;
-        }
-        if (input->ExpectTag(50)) goto parse_lt;
-        break;
-      }
-
-      // optional .google.protobuf.Timestamp lt = 6;
-      case 6: {
-        if (tag == 50) {
-         parse_lt:
-          DO_(::google::protobuf::internal::WireFormatLite::ReadMessageNoVirtual(
-               input, mutable_lt()));
-        } else {
-          goto handle_unusual;
-        }
-        if (input->ExpectTag(58)) goto parse_acpi;
-        break;
-      }
-
-      // repeated string acpi = 7;
-      case 7: {
-        if (tag == 58) {
-         parse_acpi:
-          DO_(::google::protobuf::internal::WireFormatLite::ReadString(
-                input, this->add_acpi()));
-          ::google::protobuf::internal::WireFormat::VerifyUTF8StringNamedField(
-            this->acpi(this->acpi_size() - 1).data(),
-            this->acpi(this->acpi_size() - 1).length(),
-            ::google::protobuf::internal::WireFormat::PARSE,
-            "MicroWireless.OneM2M.pb.CSEBase.acpi");
-        } else {
-          goto handle_unusual;
-        }
-        if (input->ExpectTag(58)) goto parse_acpi;
-        if (input->ExpectTag(66)) goto parse_lbl;
-        break;
-      }
-
-      // repeated string lbl = 8;
-      case 8: {
-        if (tag == 66) {
-         parse_lbl:
-          DO_(::google::protobuf::internal::WireFormatLite::ReadString(
-                input, this->add_lbl()));
-          ::google::protobuf::internal::WireFormat::VerifyUTF8StringNamedField(
-            this->lbl(this->lbl_size() - 1).data(),
-            this->lbl(this->lbl_size() - 1).length(),
-            ::google::protobuf::internal::WireFormat::PARSE,
-            "MicroWireless.OneM2M.pb.CSEBase.lbl");
-        } else {
-          goto handle_unusual;
-        }
-        if (input->ExpectTag(66)) goto parse_lbl;
-        if (input->ExpectTag(800)) goto parse_cst;
-        break;
-      }
-
       // optional .MicroWireless.OneM2M.pb.CommonTypes.CSEType cst = 100;
       case 100: {
         if (tag == 800) {
-         parse_cst:
           int value;
           DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
                    int, ::google::protobuf::internal::WireFormatLite::TYPE_ENUM>(
@@ -528,64 +362,6 @@ failure:
 void CSEBase::SerializeWithCachedSizes(
     ::google::protobuf::io::CodedOutputStream* output) const {
   // @@protoc_insertion_point(serialize_start:MicroWireless.OneM2M.pb.CSEBase)
-  // optional .MicroWireless.OneM2M.pb.CommonTypes.ResourceType ty = 1;
-  if (this->ty() != 0) {
-    ::google::protobuf::internal::WireFormatLite::WriteEnum(
-      1, this->ty(), output);
-  }
-
-  // optional string ri = 2;
-  if (this->ri().size() > 0) {
-    ::google::protobuf::internal::WireFormat::VerifyUTF8StringNamedField(
-      this->ri().data(), this->ri().length(),
-      ::google::protobuf::internal::WireFormat::SERIALIZE,
-      "MicroWireless.OneM2M.pb.CSEBase.ri");
-    ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
-      2, this->ri(), output);
-  }
-
-  // optional string rn = 3;
-  if (this->rn().size() > 0) {
-    ::google::protobuf::internal::WireFormat::VerifyUTF8StringNamedField(
-      this->rn().data(), this->rn().length(),
-      ::google::protobuf::internal::WireFormat::SERIALIZE,
-      "MicroWireless.OneM2M.pb.CSEBase.rn");
-    ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
-      3, this->rn(), output);
-  }
-
-  // optional .google.protobuf.Timestamp ct = 5;
-  if (this->has_ct()) {
-    ::google::protobuf::internal::WireFormatLite::WriteMessageMaybeToArray(
-      5, *this->ct_, output);
-  }
-
-  // optional .google.protobuf.Timestamp lt = 6;
-  if (this->has_lt()) {
-    ::google::protobuf::internal::WireFormatLite::WriteMessageMaybeToArray(
-      6, *this->lt_, output);
-  }
-
-  // repeated string acpi = 7;
-  for (int i = 0; i < this->acpi_size(); i++) {
-  ::google::protobuf::internal::WireFormat::VerifyUTF8StringNamedField(
-    this->acpi(i).data(), this->acpi(i).length(),
-    ::google::protobuf::internal::WireFormat::SERIALIZE,
-    "MicroWireless.OneM2M.pb.CSEBase.acpi");
-    ::google::protobuf::internal::WireFormatLite::WriteString(
-      7, this->acpi(i), output);
-  }
-
-  // repeated string lbl = 8;
-  for (int i = 0; i < this->lbl_size(); i++) {
-  ::google::protobuf::internal::WireFormat::VerifyUTF8StringNamedField(
-    this->lbl(i).data(), this->lbl(i).length(),
-    ::google::protobuf::internal::WireFormat::SERIALIZE,
-    "MicroWireless.OneM2M.pb.CSEBase.lbl");
-    ::google::protobuf::internal::WireFormatLite::WriteString(
-      8, this->lbl(i), output);
-  }
-
   // optional .MicroWireless.OneM2M.pb.CommonTypes.CSEType cst = 100;
   if (this->cst() != 0) {
     ::google::protobuf::internal::WireFormatLite::WriteEnum(
@@ -654,68 +430,6 @@ void CSEBase::SerializeWithCachedSizes(
 ::google::protobuf::uint8* CSEBase::SerializeWithCachedSizesToArray(
     ::google::protobuf::uint8* target) const {
   // @@protoc_insertion_point(serialize_to_array_start:MicroWireless.OneM2M.pb.CSEBase)
-  // optional .MicroWireless.OneM2M.pb.CommonTypes.ResourceType ty = 1;
-  if (this->ty() != 0) {
-    target = ::google::protobuf::internal::WireFormatLite::WriteEnumToArray(
-      1, this->ty(), target);
-  }
-
-  // optional string ri = 2;
-  if (this->ri().size() > 0) {
-    ::google::protobuf::internal::WireFormat::VerifyUTF8StringNamedField(
-      this->ri().data(), this->ri().length(),
-      ::google::protobuf::internal::WireFormat::SERIALIZE,
-      "MicroWireless.OneM2M.pb.CSEBase.ri");
-    target =
-      ::google::protobuf::internal::WireFormatLite::WriteStringToArray(
-        2, this->ri(), target);
-  }
-
-  // optional string rn = 3;
-  if (this->rn().size() > 0) {
-    ::google::protobuf::internal::WireFormat::VerifyUTF8StringNamedField(
-      this->rn().data(), this->rn().length(),
-      ::google::protobuf::internal::WireFormat::SERIALIZE,
-      "MicroWireless.OneM2M.pb.CSEBase.rn");
-    target =
-      ::google::protobuf::internal::WireFormatLite::WriteStringToArray(
-        3, this->rn(), target);
-  }
-
-  // optional .google.protobuf.Timestamp ct = 5;
-  if (this->has_ct()) {
-    target = ::google::protobuf::internal::WireFormatLite::
-      WriteMessageNoVirtualToArray(
-        5, *this->ct_, target);
-  }
-
-  // optional .google.protobuf.Timestamp lt = 6;
-  if (this->has_lt()) {
-    target = ::google::protobuf::internal::WireFormatLite::
-      WriteMessageNoVirtualToArray(
-        6, *this->lt_, target);
-  }
-
-  // repeated string acpi = 7;
-  for (int i = 0; i < this->acpi_size(); i++) {
-    ::google::protobuf::internal::WireFormat::VerifyUTF8StringNamedField(
-      this->acpi(i).data(), this->acpi(i).length(),
-      ::google::protobuf::internal::WireFormat::SERIALIZE,
-      "MicroWireless.OneM2M.pb.CSEBase.acpi");
-    target = ::google::protobuf::internal::WireFormatLite::
-      WriteStringToArray(7, this->acpi(i), target);
-  }
-
-  // repeated string lbl = 8;
-  for (int i = 0; i < this->lbl_size(); i++) {
-    ::google::protobuf::internal::WireFormat::VerifyUTF8StringNamedField(
-      this->lbl(i).data(), this->lbl(i).length(),
-      ::google::protobuf::internal::WireFormat::SERIALIZE,
-      "MicroWireless.OneM2M.pb.CSEBase.lbl");
-    target = ::google::protobuf::internal::WireFormatLite::
-      WriteStringToArray(8, this->lbl(i), target);
-  }
-
   // optional .MicroWireless.OneM2M.pb.CommonTypes.CSEType cst = 100;
   if (this->cst() != 0) {
     target = ::google::protobuf::internal::WireFormatLite::WriteEnumToArray(
@@ -788,40 +502,6 @@ void CSEBase::SerializeWithCachedSizes(
 int CSEBase::ByteSize() const {
   int total_size = 0;
 
-  // optional .MicroWireless.OneM2M.pb.CommonTypes.ResourceType ty = 1;
-  if (this->ty() != 0) {
-    total_size += 1 +
-      ::google::protobuf::internal::WireFormatLite::EnumSize(this->ty());
-  }
-
-  // optional string ri = 2;
-  if (this->ri().size() > 0) {
-    total_size += 1 +
-      ::google::protobuf::internal::WireFormatLite::StringSize(
-        this->ri());
-  }
-
-  // optional string rn = 3;
-  if (this->rn().size() > 0) {
-    total_size += 1 +
-      ::google::protobuf::internal::WireFormatLite::StringSize(
-        this->rn());
-  }
-
-  // optional .google.protobuf.Timestamp ct = 5;
-  if (this->has_ct()) {
-    total_size += 1 +
-      ::google::protobuf::internal::WireFormatLite::MessageSizeNoVirtual(
-        *this->ct_);
-  }
-
-  // optional .google.protobuf.Timestamp lt = 6;
-  if (this->has_lt()) {
-    total_size += 1 +
-      ::google::protobuf::internal::WireFormatLite::MessageSizeNoVirtual(
-        *this->lt_);
-  }
-
   // optional .MicroWireless.OneM2M.pb.CommonTypes.CSEType cst = 100;
   if (this->cst() != 0) {
     total_size += 2 +
@@ -847,20 +527,6 @@ int CSEBase::ByteSize() const {
     total_size += 2 +
       ::google::protobuf::internal::WireFormatLite::StringSize(
         this->ncp());
-  }
-
-  // repeated string acpi = 7;
-  total_size += 1 * this->acpi_size();
-  for (int i = 0; i < this->acpi_size(); i++) {
-    total_size += ::google::protobuf::internal::WireFormatLite::StringSize(
-      this->acpi(i));
-  }
-
-  // repeated string lbl = 8;
-  total_size += 1 * this->lbl_size();
-  for (int i = 0; i < this->lbl_size(); i++) {
-    total_size += ::google::protobuf::internal::WireFormatLite::StringSize(
-      this->lbl(i));
   }
 
   // repeated .MicroWireless.OneM2M.pb.CommonTypes.SupportedResourceType srt = 102;
@@ -917,27 +583,8 @@ void CSEBase::MergeFrom(const ::google::protobuf::Message& from) {
 
 void CSEBase::MergeFrom(const CSEBase& from) {
   if (GOOGLE_PREDICT_FALSE(&from == this)) MergeFromFail(__LINE__);
-  acpi_.MergeFrom(from.acpi_);
-  lbl_.MergeFrom(from.lbl_);
   srt_.MergeFrom(from.srt_);
   poa_.MergeFrom(from.poa_);
-  if (from.ty() != 0) {
-    set_ty(from.ty());
-  }
-  if (from.ri().size() > 0) {
-
-    ri_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.ri_);
-  }
-  if (from.rn().size() > 0) {
-
-    rn_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.rn_);
-  }
-  if (from.has_ct()) {
-    mutable_ct()->::google::protobuf::Timestamp::MergeFrom(from.ct());
-  }
-  if (from.has_lt()) {
-    mutable_lt()->::google::protobuf::Timestamp::MergeFrom(from.lt());
-  }
   if (from.cst() != 0) {
     set_cst(from.cst());
   }
@@ -977,13 +624,6 @@ void CSEBase::Swap(CSEBase* other) {
   InternalSwap(other);
 }
 void CSEBase::InternalSwap(CSEBase* other) {
-  std::swap(ty_, other->ty_);
-  ri_.Swap(&other->ri_);
-  rn_.Swap(&other->rn_);
-  std::swap(ct_, other->ct_);
-  std::swap(lt_, other->lt_);
-  acpi_.UnsafeArenaSwap(&other->acpi_);
-  lbl_.UnsafeArenaSwap(&other->lbl_);
   std::swap(cst_, other->cst_);
   csi_.Swap(&other->csi_);
   srt_.UnsafeArenaSwap(&other->srt_);
@@ -1004,288 +644,6 @@ void CSEBase::InternalSwap(CSEBase* other) {
 
 #if PROTOBUF_INLINE_NOT_IN_HEADERS
 // CSEBase
-
-// optional .MicroWireless.OneM2M.pb.CommonTypes.ResourceType ty = 1;
-void CSEBase::clear_ty() {
-  ty_ = 0;
-}
- ::MicroWireless::OneM2M::pb::CommonTypes_ResourceType CSEBase::ty() const {
-  // @@protoc_insertion_point(field_get:MicroWireless.OneM2M.pb.CSEBase.ty)
-  return static_cast< ::MicroWireless::OneM2M::pb::CommonTypes_ResourceType >(ty_);
-}
- void CSEBase::set_ty(::MicroWireless::OneM2M::pb::CommonTypes_ResourceType value) {
-  
-  ty_ = value;
-  // @@protoc_insertion_point(field_set:MicroWireless.OneM2M.pb.CSEBase.ty)
-}
-
-// optional string ri = 2;
-void CSEBase::clear_ri() {
-  ri_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-}
- const ::std::string& CSEBase::ri() const {
-  // @@protoc_insertion_point(field_get:MicroWireless.OneM2M.pb.CSEBase.ri)
-  return ri_.GetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-}
- void CSEBase::set_ri(const ::std::string& value) {
-  
-  ri_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
-  // @@protoc_insertion_point(field_set:MicroWireless.OneM2M.pb.CSEBase.ri)
-}
- void CSEBase::set_ri(const char* value) {
-  
-  ri_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
-  // @@protoc_insertion_point(field_set_char:MicroWireless.OneM2M.pb.CSEBase.ri)
-}
- void CSEBase::set_ri(const char* value, size_t size) {
-  
-  ri_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
-      ::std::string(reinterpret_cast<const char*>(value), size));
-  // @@protoc_insertion_point(field_set_pointer:MicroWireless.OneM2M.pb.CSEBase.ri)
-}
- ::std::string* CSEBase::mutable_ri() {
-  
-  // @@protoc_insertion_point(field_mutable:MicroWireless.OneM2M.pb.CSEBase.ri)
-  return ri_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-}
- ::std::string* CSEBase::release_ri() {
-  
-  return ri_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-}
- void CSEBase::set_allocated_ri(::std::string* ri) {
-  if (ri != NULL) {
-    
-  } else {
-    
-  }
-  ri_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ri);
-  // @@protoc_insertion_point(field_set_allocated:MicroWireless.OneM2M.pb.CSEBase.ri)
-}
-
-// optional string rn = 3;
-void CSEBase::clear_rn() {
-  rn_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-}
- const ::std::string& CSEBase::rn() const {
-  // @@protoc_insertion_point(field_get:MicroWireless.OneM2M.pb.CSEBase.rn)
-  return rn_.GetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-}
- void CSEBase::set_rn(const ::std::string& value) {
-  
-  rn_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
-  // @@protoc_insertion_point(field_set:MicroWireless.OneM2M.pb.CSEBase.rn)
-}
- void CSEBase::set_rn(const char* value) {
-  
-  rn_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
-  // @@protoc_insertion_point(field_set_char:MicroWireless.OneM2M.pb.CSEBase.rn)
-}
- void CSEBase::set_rn(const char* value, size_t size) {
-  
-  rn_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
-      ::std::string(reinterpret_cast<const char*>(value), size));
-  // @@protoc_insertion_point(field_set_pointer:MicroWireless.OneM2M.pb.CSEBase.rn)
-}
- ::std::string* CSEBase::mutable_rn() {
-  
-  // @@protoc_insertion_point(field_mutable:MicroWireless.OneM2M.pb.CSEBase.rn)
-  return rn_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-}
- ::std::string* CSEBase::release_rn() {
-  
-  return rn_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-}
- void CSEBase::set_allocated_rn(::std::string* rn) {
-  if (rn != NULL) {
-    
-  } else {
-    
-  }
-  rn_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), rn);
-  // @@protoc_insertion_point(field_set_allocated:MicroWireless.OneM2M.pb.CSEBase.rn)
-}
-
-// optional .google.protobuf.Timestamp ct = 5;
-bool CSEBase::has_ct() const {
-  return !_is_default_instance_ && ct_ != NULL;
-}
-void CSEBase::clear_ct() {
-  if (GetArenaNoVirtual() == NULL && ct_ != NULL) delete ct_;
-  ct_ = NULL;
-}
- const ::google::protobuf::Timestamp& CSEBase::ct() const {
-  // @@protoc_insertion_point(field_get:MicroWireless.OneM2M.pb.CSEBase.ct)
-  return ct_ != NULL ? *ct_ : *default_instance_->ct_;
-}
- ::google::protobuf::Timestamp* CSEBase::mutable_ct() {
-  
-  if (ct_ == NULL) {
-    ct_ = new ::google::protobuf::Timestamp;
-  }
-  // @@protoc_insertion_point(field_mutable:MicroWireless.OneM2M.pb.CSEBase.ct)
-  return ct_;
-}
- ::google::protobuf::Timestamp* CSEBase::release_ct() {
-  
-  ::google::protobuf::Timestamp* temp = ct_;
-  ct_ = NULL;
-  return temp;
-}
- void CSEBase::set_allocated_ct(::google::protobuf::Timestamp* ct) {
-  delete ct_;
-  ct_ = ct;
-  if (ct) {
-    
-  } else {
-    
-  }
-  // @@protoc_insertion_point(field_set_allocated:MicroWireless.OneM2M.pb.CSEBase.ct)
-}
-
-// optional .google.protobuf.Timestamp lt = 6;
-bool CSEBase::has_lt() const {
-  return !_is_default_instance_ && lt_ != NULL;
-}
-void CSEBase::clear_lt() {
-  if (GetArenaNoVirtual() == NULL && lt_ != NULL) delete lt_;
-  lt_ = NULL;
-}
- const ::google::protobuf::Timestamp& CSEBase::lt() const {
-  // @@protoc_insertion_point(field_get:MicroWireless.OneM2M.pb.CSEBase.lt)
-  return lt_ != NULL ? *lt_ : *default_instance_->lt_;
-}
- ::google::protobuf::Timestamp* CSEBase::mutable_lt() {
-  
-  if (lt_ == NULL) {
-    lt_ = new ::google::protobuf::Timestamp;
-  }
-  // @@protoc_insertion_point(field_mutable:MicroWireless.OneM2M.pb.CSEBase.lt)
-  return lt_;
-}
- ::google::protobuf::Timestamp* CSEBase::release_lt() {
-  
-  ::google::protobuf::Timestamp* temp = lt_;
-  lt_ = NULL;
-  return temp;
-}
- void CSEBase::set_allocated_lt(::google::protobuf::Timestamp* lt) {
-  delete lt_;
-  lt_ = lt;
-  if (lt) {
-    
-  } else {
-    
-  }
-  // @@protoc_insertion_point(field_set_allocated:MicroWireless.OneM2M.pb.CSEBase.lt)
-}
-
-// repeated string acpi = 7;
-int CSEBase::acpi_size() const {
-  return acpi_.size();
-}
-void CSEBase::clear_acpi() {
-  acpi_.Clear();
-}
- const ::std::string& CSEBase::acpi(int index) const {
-  // @@protoc_insertion_point(field_get:MicroWireless.OneM2M.pb.CSEBase.acpi)
-  return acpi_.Get(index);
-}
- ::std::string* CSEBase::mutable_acpi(int index) {
-  // @@protoc_insertion_point(field_mutable:MicroWireless.OneM2M.pb.CSEBase.acpi)
-  return acpi_.Mutable(index);
-}
- void CSEBase::set_acpi(int index, const ::std::string& value) {
-  // @@protoc_insertion_point(field_set:MicroWireless.OneM2M.pb.CSEBase.acpi)
-  acpi_.Mutable(index)->assign(value);
-}
- void CSEBase::set_acpi(int index, const char* value) {
-  acpi_.Mutable(index)->assign(value);
-  // @@protoc_insertion_point(field_set_char:MicroWireless.OneM2M.pb.CSEBase.acpi)
-}
- void CSEBase::set_acpi(int index, const char* value, size_t size) {
-  acpi_.Mutable(index)->assign(
-    reinterpret_cast<const char*>(value), size);
-  // @@protoc_insertion_point(field_set_pointer:MicroWireless.OneM2M.pb.CSEBase.acpi)
-}
- ::std::string* CSEBase::add_acpi() {
-  return acpi_.Add();
-}
- void CSEBase::add_acpi(const ::std::string& value) {
-  acpi_.Add()->assign(value);
-  // @@protoc_insertion_point(field_add:MicroWireless.OneM2M.pb.CSEBase.acpi)
-}
- void CSEBase::add_acpi(const char* value) {
-  acpi_.Add()->assign(value);
-  // @@protoc_insertion_point(field_add_char:MicroWireless.OneM2M.pb.CSEBase.acpi)
-}
- void CSEBase::add_acpi(const char* value, size_t size) {
-  acpi_.Add()->assign(reinterpret_cast<const char*>(value), size);
-  // @@protoc_insertion_point(field_add_pointer:MicroWireless.OneM2M.pb.CSEBase.acpi)
-}
- const ::google::protobuf::RepeatedPtrField< ::std::string>&
-CSEBase::acpi() const {
-  // @@protoc_insertion_point(field_list:MicroWireless.OneM2M.pb.CSEBase.acpi)
-  return acpi_;
-}
- ::google::protobuf::RepeatedPtrField< ::std::string>*
-CSEBase::mutable_acpi() {
-  // @@protoc_insertion_point(field_mutable_list:MicroWireless.OneM2M.pb.CSEBase.acpi)
-  return &acpi_;
-}
-
-// repeated string lbl = 8;
-int CSEBase::lbl_size() const {
-  return lbl_.size();
-}
-void CSEBase::clear_lbl() {
-  lbl_.Clear();
-}
- const ::std::string& CSEBase::lbl(int index) const {
-  // @@protoc_insertion_point(field_get:MicroWireless.OneM2M.pb.CSEBase.lbl)
-  return lbl_.Get(index);
-}
- ::std::string* CSEBase::mutable_lbl(int index) {
-  // @@protoc_insertion_point(field_mutable:MicroWireless.OneM2M.pb.CSEBase.lbl)
-  return lbl_.Mutable(index);
-}
- void CSEBase::set_lbl(int index, const ::std::string& value) {
-  // @@protoc_insertion_point(field_set:MicroWireless.OneM2M.pb.CSEBase.lbl)
-  lbl_.Mutable(index)->assign(value);
-}
- void CSEBase::set_lbl(int index, const char* value) {
-  lbl_.Mutable(index)->assign(value);
-  // @@protoc_insertion_point(field_set_char:MicroWireless.OneM2M.pb.CSEBase.lbl)
-}
- void CSEBase::set_lbl(int index, const char* value, size_t size) {
-  lbl_.Mutable(index)->assign(
-    reinterpret_cast<const char*>(value), size);
-  // @@protoc_insertion_point(field_set_pointer:MicroWireless.OneM2M.pb.CSEBase.lbl)
-}
- ::std::string* CSEBase::add_lbl() {
-  return lbl_.Add();
-}
- void CSEBase::add_lbl(const ::std::string& value) {
-  lbl_.Add()->assign(value);
-  // @@protoc_insertion_point(field_add:MicroWireless.OneM2M.pb.CSEBase.lbl)
-}
- void CSEBase::add_lbl(const char* value) {
-  lbl_.Add()->assign(value);
-  // @@protoc_insertion_point(field_add_char:MicroWireless.OneM2M.pb.CSEBase.lbl)
-}
- void CSEBase::add_lbl(const char* value, size_t size) {
-  lbl_.Add()->assign(reinterpret_cast<const char*>(value), size);
-  // @@protoc_insertion_point(field_add_pointer:MicroWireless.OneM2M.pb.CSEBase.lbl)
-}
- const ::google::protobuf::RepeatedPtrField< ::std::string>&
-CSEBase::lbl() const {
-  // @@protoc_insertion_point(field_list:MicroWireless.OneM2M.pb.CSEBase.lbl)
-  return lbl_;
-}
- ::google::protobuf::RepeatedPtrField< ::std::string>*
-CSEBase::mutable_lbl() {
-  // @@protoc_insertion_point(field_mutable_list:MicroWireless.OneM2M.pb.CSEBase.lbl)
-  return &lbl_;
-}
 
 // optional .MicroWireless.OneM2M.pb.CommonTypes.CSEType cst = 100;
 void CSEBase::clear_cst() {

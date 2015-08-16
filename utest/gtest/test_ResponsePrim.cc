@@ -83,10 +83,16 @@ class ResponseTest : public ::testing::Test {
 	}
 };
 
-const string ResponseTest::request_json("{\"op\": 2, \"to\": \"//microwireless.com/IN-CSE-01\", \"rqi\": \"ab3f124a\", \"fr\": \"//microwireless.com/AE-01\"}");
+const string ResponseTest::request_json("{"
+		"\"op\": 2, "
+		"\"to\": \"//microwireless.com/IN-CSE-01/Z0005\", "
+		"\"rqi\": \"ab3f124a\", "
+		"\"fr\": \"//microwireless.com/AE-01\""
+	"}");
+
 const string ResponseTest::response_json("{\"rsc\": 2000, \"rqi\": \"ab3f124a\"}");
 const string ResponseTest::rqi_("ab3f124a");
-const string ResponseTest::to_("//microwireless.com/IN-CSE-01");
+const string ResponseTest::to_("//microwireless.com/IN-CSE-01/Z0005");
 const string ResponseTest::fr_("//microwireless.com/AE-01");
 
 TEST_F(ResponseTest, FullCtor) {
@@ -154,31 +160,6 @@ TEST_F(ResponseTest, JsonNoRqi) {
 	}
 	ASSERT_TRUE(false);
 }
-
-TEST_F(ResponseTest, RetrieveWithResourceType) {
-	string json("{\"op\": 2, \"to\": \"//microwireless.com/IN-CSE-01\", \"rqi\": \"ab3f124a\", \"fr\": \"//microwireless.com/AE-01\", \"ty\": 1}");
-	ResponsePrim * pReq_ = NULL;
-	try {
-		pReq_ = new ResponsePrim(p_request_, json);
-	} catch (const exception &e) {
-		cout << "Expected exception:" << e.what() << endl;
-		return;
-	}
-	ASSERT_FALSE(pReq_->isValid());
-}
-
-TEST_F(ResponseTest, RetrieveWithName) {
-	string json("{\"op\": 2, \"to\": \"//microwireless.com/IN-CSE-01\", \"rqi\": \"ab3f124a\", \"fr\": \"//microwireless.com/AE-01\", \"nm\": \"Name\" }");
-	ResponsePrim * pReq_ = NULL;
-	try {
-		pReq_ = new ResponsePrim(p_request_, json);
-	} catch (const exception &e) {
-		cout << "Expected exception:" << e.what() << endl;
-		return;
-	}
-	ASSERT_FALSE(pReq_->isValid());
-}
-
 
 TEST_F(ResponseTest, GetAttributes) {
 	ASSERT_EQ(getResponseStatusCode(), rsc_ok_);

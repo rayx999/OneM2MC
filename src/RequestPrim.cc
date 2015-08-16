@@ -8,7 +8,6 @@
 #include <stdexcept>
 #include <iostream>
 #include <sstream>
-#include <boost/regex.hpp>
 #include <json2pb.h>
 
 #include "RequestPrim.pb.h"
@@ -32,15 +31,20 @@ RequestPrim::RequestPrim(const string & json) {
 		json2pb(request_pb_, json.c_str(), json.length());
 	} catch (exception &e) {
 		cerr << "Json2pb exception: " << e.what() << endl;
-		return;
+		throw runtime_error("RequestPrim(json) Ctor failed.");
 	}
 
 	setDefaults();
 
-	if (isValid()) {
-		parseIdInfo();
-	} else {
-		cerr << "RequestPrim in JSON not valid!\n";
+	if (!isValid()) {
+		cerr << "RequestPrim validation failed!\n";
+		throw runtime_error("RequestPrim(json) Ctor failed.");
+	}
+
+	if (!parseIds(request_pb_.to(), CSERegex, domain_, csi_, rn_)) {
+		cerr << "RequestPrim parseIds failed. req.to: ";
+		cerr << request_pb_.to() << endl;
+		throw runtime_error("RequestPrim(json) Ctor failed.");
 	}
 }
 
@@ -54,15 +58,20 @@ RequestPrim::RequestPrim(Operation op, const string & to, const string & fr, con
 		setString(rqi, &pb::RequestPrim::set_allocated_rqi, request_pb_);
 	} catch (exception &e) {
 		cerr << "PB exception: " << e.what() << endl;
-		return;
+		throw runtime_error("RequestPrim() Ctor failed.");
 	}
 
 	setDefaults();
 
-	if (isValid()) {
-		parseIdInfo();
-	} else {
+	if (!isValid()) {
 		cerr << "RequestPrim validation failed!\n";
+		throw runtime_error("RequestPrim() Ctor failed.");;
+	}
+
+	if (!parseIds(to, CSERegex, domain_, csi_, rn_)) {
+		cerr << "RequestPrim parseIds failed. req.to: ";
+		cerr << to << endl;
+		throw runtime_error("RequestPrim() Ctor failed.");;
 	}
 }
 
@@ -79,7 +88,11 @@ const string & RequestPrim::getRequestId() {
 }
 
 const string & RequestPrim::getTargetResource() {
-	return rn_;
+	return target_;
+}
+
+void RequestPrim::setTargetResource(const string& target) {
+	target_ = target;
 }
 
 Operation RequestPrim::getOperation() {
@@ -147,26 +160,13 @@ DiscoveryResultType getDiscoveryResultType();
 
 */
 
-void RequestPrim::parseIdInfo() {
-	// to = //domain/cseid/resource, case insensitive
-	static boost::regex pattern_("(^//[\\.\\w-]+)(/[\\w-]+)(?:/([\\w-]+))?");
-	boost::smatch sm;
-
-	boost::regex_match(getTo(), sm, pattern_);
-	switch (sm.size()) {
-	case 4:
-	case 3: rn_ = sm[3];
-	case 2: csi_ = sm[2];
-	case 1: domain_ = sm[1];
-			break;
-	default:
-		cerr << "regex match error on " << getTo() << endl;
-	}
-}
-
 void RequestPrim::getIdInfo(string& domain, string& csi) {
 	domain = domain_;
 	csi = csi_;
+}
+
+const string& RequestPrim::getIntRn() {
+	return rn_;
 }
 
 bool RequestPrim::isValid(ValidateType vt) {
@@ -177,10 +177,10 @@ bool RequestPrim::isValid(ValidateType vt) {
 		return false;
 	}
 
-	if (vt == VALIDATE_COMMON) {
+/*	if (vt == VALIDATE_COMMON) {
 		return true;
 	}
-
+*/
 	switch (static_cast<Operation>(request_pb_.op())) {
 	case OPERATION_CREATE:
 		break;

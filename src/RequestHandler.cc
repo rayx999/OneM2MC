@@ -18,6 +18,5 @@ namespace OneM2M {
 
 using namespace MicroWireless::OneM2M;
 
-
 }	// OneM2M
 }	// MicroWireless

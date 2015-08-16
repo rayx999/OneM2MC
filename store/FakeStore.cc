@@ -10,7 +10,9 @@
 #include <sstream>
 #include <string>
 #include <boost/filesystem.hpp>
+#include <boost/algorithm/string.hpp>
 
+#include "CommonUtils.h"
 #include "CSEBase.h"
 #include "ResourceStore.h"
 
@@ -19,28 +21,55 @@ namespace OneM2M {
 
 using namespace std;
 using namespace boost::filesystem;
+using namespace boost::algorithm;
 using namespace MicroWireless::OneM2M;
 
-//template ResourceStore<CSEBase>;
+template <typename Root>
+const string ResourceStore<Root>::RootStr("root");
+
+template <typename Root>
+const string ResourceStore<Root>::normalizeRi(const string& ri, const string& ext, int level) {
+	const string norm_regex = string("^") + rdb_fn_ + string(".+\\.") + ext + string("$");
+
+	if (isMatching(ri, norm_regex)) {
+		return ri;
+	}
+
+	string ri_ = ri;
+	while (level--) {
+		path res_path(rdb_fn_);
+		if (ri_.c_str()[0] != '/') {
+			res_path += "/" + ri_;
+		} else if (ri_.c_str()[1] == '/') {
+			res_path += ri_.substr(1);
+		} else {
+			res_path += ri_;
+		}
+		path lnk_path(res_path);
+		lnk_path += ".lnk";
+		if (exists(lnk_path) && is_regular_file(lnk_path)) {
+			ifstream ifs(lnk_path.string());
+			stringstream sstr;
+			sstr << ifs.rdbuf();
+			ri_ = sstr.str();
+			trim(ri_);
+			if (level) continue;
+			return ri_;
+		}
+		return res_path.string() + "." + ext;
+	}
+}
 
 template <typename Root>
 bool ResourceStore<Root>::setupRoot() {
-	path store_path(rdb_fn_);
-
-	if (!exists(store_path) || !is_directory(store_path)) {
-	  cout << "Resource store: " << store_path.string() << " doesn't exist." << endl;
+	string ri_ = normalizeRi(RootStr);
+	if (!exists(ri_)) {
+	  cout << "Root: " << ri_ << " doesn't exist." << endl;
 	  return false;
 	}
-
-	store_path += "/root";
-	if (!exists(store_path)) {
-	  cout << "Root: " << store_path.string() << " doesn't exist." << endl;
-	  return false;
-	}
-
 	// initialize root element resource
 	try {
-	  p_root_ = new Root("root", *this);
+	  p_root_ = new Root(RootStr, *this);
 	} catch (exception &e) {
 		cout << e.what() << endl;
 		return false;
@@ -72,27 +101,34 @@ bool ResourceStore<Root>::getResource(const string& ri, string& res_str) {
 }
 
 template <typename Root>
-bool ResourceStore<Root>::putResource(const string& ri, const string& res_str) {
+bool ResourceStore<Root>::putResource(const string& ri, const string& lnk, const string& res_str) {
 	const string norm_ri_(normalizeRi(ri));
-
+	path norm_dir_(norm_ri_);
+	norm_dir_ = norm_dir_.parent_path();
+	if (!exists(norm_dir_) || !is_directory(norm_dir_)) {
+		if (!create_directories(norm_dir_)) {
+			cerr << "putResource: create_dir failed. path: ";
+			cerr << norm_dir_.parent_path() << endl;
+			return false;
+		}
+	}
+	// create resource
 	fstream ous(norm_ri_, ios::out | ios::trunc | ios::binary);
 	ous << res_str;
+	// create link resource
+	fstream oul(normalizeRi(lnk, "lnk"), ios::out | ios::trunc | ios::binary);
+	oul << ri;
 	return true;
 }
 
 template <typename Root>
-const string ResourceStore<Root>::normalizeRi(const string& ri) {
-	path res_path(rdb_fn_);
-
-	if (ri.c_str()[0] != '/') {
-		res_path += "/" + ri;
-	} else if (ri.c_str()[1] == '/') {
-		res_path += ri.substr(1);
-	} else {
-		res_path += ri;
-	}
-
-	return res_path.string();
+const string ResourceStore<Root>::getResourcePath(const string& ri) {
+	string norm_ri_(normalizeRi(ri));
+	int rdb_fn_len_ = strlen(rdb_fn_);
+	int start_ = rdb_fn_len_ + 1;
+	int len_ = norm_ri_.length() - start_ - strlen(".res");
+	norm_ri_ = "//" + norm_ri_.substr(start_, len_);
+	return norm_ri_;
 }
 
 // ghost func to get around template implementation in cc file problem.
@@ -103,7 +139,8 @@ void TemporaryFunction ()
     TempObj.setupRoot();
     TempObj.isResourceValid("");
     TempObj.getResource("", tmp);
-    TempObj.putResource("", "");
+    TempObj.putResource("", "", "");
+    TempObj.getResourcePath("");
 }
 
 }	// OneM2M

@@ -1,0 +1,17 @@
+// Resource File for <AE>
+
+syntax = "proto3";
+
+package MicroWireless.OneM2M.pb;
+
+import "CommonTypes.proto";
+
+message AE
+{
+  string apn = 100;                               // App_name = 100;
+  string api = 101;                               // App_Id = 101;
+  string aei = 102;                               // AE_Id = 102;
+  repeated CommonTypes.PointOfAccess poa = 103;   // point_of_access = 103;
+  string or = 104;                                // OntologyRef = 104
+  string nl = 105;                                // node_link = 105;
+}

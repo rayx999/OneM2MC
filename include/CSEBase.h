@@ -32,23 +32,14 @@ public:
 	CSEBase();
 	~CSEBase();
 
-	CSEBase(const string& json);
+	CSEBase(const string& json, const string& id_str);
 	CSEBase(const string& ri, ResourceStore<CSEBase>& rdb);
 
 	bool setCSEBase(const string& ri, ResourceStore<CSEBase>& rdb);
-	bool outToResourceStore(const string& ri, ResourceStore<CSEBase>& rdb);
+	bool setCSEBase(const string &json, const string& id_str);
 
-	bool setCSEBase(const string &json);
-
-	const string &getDomain();
-	const string &getCSEId();
 	CSEType getCSEType();
-
-	const string& getResourceId();
-	const string& getResourceName();
-
-	bool getCreateTimestamp(TimeStamp &create_time);
-	bool getLastModifiedTimestamp(TimeStamp &create_time);
+	const string &getCSEId();
 
 	int getSupportedResource(SupportedResourceType *&rt);
 	bool isResourceSupported(SupportedResourceType rt);
@@ -64,8 +55,6 @@ private:
 
 private:
 	pb::CSEBase* p_cse_;
-	bool cse_orphan_;
-	string domain_;
 };
 
 }	// OneM2M

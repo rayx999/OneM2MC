@@ -21,6 +21,8 @@ template <typename Root>
 class ResourceStore {
 
 public:
+	static const string RootStr;
+
 	ResourceStore(const char * rdb_fn) :
 		rdb_fn_(rdb_fn), p_root_(NULL) {};
 	~ResourceStore() {
@@ -31,11 +33,12 @@ public:
 	bool setupRoot();
 	bool isResourceValid(const string& ri);
 	bool getResource(const string& ri, string& res_str);
-	bool putResource(const string& ri, const string& res_str);
+	bool putResource(const string& ri, const string& lnk, const string& res_str);
 	Root* getRoot() { return p_root_; }
+	const string getResourcePath(const string& ri);
 
 protected:
-	const string normalizeRi(const string& ri);
+	const string normalizeRi(const string& ri, const string& ext = "res", int level = 999);
 
 protected:
 	const char * rdb_fn_;

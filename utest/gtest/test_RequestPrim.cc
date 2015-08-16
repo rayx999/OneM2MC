@@ -4,15 +4,18 @@
  *  Created on: 2015年7月17日
  *      Author: weimi_000
  */
-#include <RequestPrim.h>
+
 #include <iostream>
 #include <fstream>
 #include <sstream>
 
 #include "gtest/gtest.h"
 #include "test_utils.h"
+#include "RequestPrim.h"
 
 using namespace MicroWireless::OneM2M;
+
+static bool setup = false;
 
 class RequestTest : public ::testing::Test {
 	protected:
@@ -24,148 +27,185 @@ class RequestTest : public ::testing::Test {
 	static const string csi_;
 	static const string rn_;
 	Operation op_;
-	RequestPrim * p_request_;
+	RequestPrim * p_req_;
 
 	RequestTest() {
 		op_ = OPERATION_RETRIEVE;
-		p_request_ = NULL;
+		p_req_ = NULL;
 	}
 
 	virtual void SetUp() {
-		p_request_ = new RequestPrim(request_json);
+		if (setup) {
+			p_req_ = new RequestPrim(request_json);
+		}
 	}
 
-	Operation getOperation() {
-		return p_request_->getOperation();
+	void try_false(const string& json) {
+		try {
+			RequestPrim request_(json);
+		} catch (exception &e) {
+			cout << "Expected exception: " << e.what() << endl;
+			return;
+		}
+		cout << "Expected exception dowsn't occur.\n";
+		ASSERT_TRUE(false);
 	}
 
-	const string & getTo() {
-		return p_request_->getTo();
-	}
-
-	const string & getFrom() {
-		return p_request_->getFrom();
-	}
-
-	const string & getRequestId() {
-		return p_request_->getRequestId();
-	}
-
-	bool setResourceType(ResourceType ty) {
-		return p_request_->setResourceType(ty);
-	}
-
-	ResourceType getResourceType() {
-		return p_request_->getResourceType();
+	void try_false(Operation op, const string& to, const string& fr, const string& rqi) {
+		try {
+			RequestPrim request_(op, to, fr, rqi);
+		} catch (exception &e) {
+			cout << "Expected exception: " << e.what() << endl;
+			return;
+		}
+		cout << "Expected exception dowsn't occur.\n";
+		ASSERT_TRUE(false);
 	}
 
 	virtual void TearDown() {
-		if (p_request_ == NULL) {
-			delete p_request_;
-			p_request_ = NULL;
+		if (p_req_ != NULL) {
+			delete p_req_;
+			p_req_ = NULL;
 		}
 	}
 };
 
-const string RequestTest::request_json("{\"op\": 2, \"to\": \"//microwireless.com/IN-CSE-01/CSEBase\", \"rqi\": \"ab3f124a\", \"fr\": \"//microwireless.com/AE-01\"}");
-const string RequestTest::to_("//microwireless.com/IN-CSE-01/CSEBase");
+const string RequestTest::request_json("{"
+			"\"op\": 2, "
+			"\"to\": \"//microwireless.com/IN-CSE-01/Z0005\", "
+			"\"rqi\": \"ab3f124a\", "
+			"\"fr\": \"//microwireless.com/AE-01\""
+		"}");
+
+const string RequestTest::to_("//microwireless.com/IN-CSE-01/Z0005");
 const string RequestTest::fr_("//microwireless.com/AE-01");
 const string RequestTest::rqi_("ab3f124a");
 const string RequestTest::domain_("//microwireless.com");
 const string RequestTest::csi_("/IN-CSE-01");
-const string RequestTest::rn_("CSEBase");
+const string RequestTest::rn_("IN-CSE-01");
 
 TEST_F(RequestTest, FullCtor) {
-	RequestPrim request_(op_, to_, fr_, rqi_);
-	ASSERT_TRUE(request_.isValid());
+	try {
+		RequestPrim request_(op_, to_, fr_, rqi_);
+		ASSERT_TRUE(request_.isValid());
+	} catch (exception &e) {
+		cerr << "Unexpected exception:" << e.what() << endl;
+		ASSERT_TRUE(false);
+	}
 }
 
 TEST_F(RequestTest, CtorNoTo) {
 	string to_none;
-
-	RequestPrim request_(op_, to_none, fr_, rqi_);
-	ASSERT_FALSE(request_.isValid());
+	try_false(op_, to_none, fr_, rqi_);
 }
 
 TEST_F(RequestTest, CtorNoRqi) {
 	string rqi_none;
-
-	RequestPrim request_(op_, to_, fr_, rqi_none);
-	ASSERT_FALSE(request_.isValid());
+	try_false(op_, to_, fr_, rqi_none);
 }
 
 TEST_F(RequestTest, CtorNoFr) {
 	string fr_none;
-
-	RequestPrim request_(op_, to_, fr_none, rqi_);
-	ASSERT_FALSE(request_.isValid());
+	try_false(op_, to_, fr_none, rqi_);
 }
 
 TEST_F(RequestTest, JsonNormal) {
-	RequestPrim request_(request_json);
-	ASSERT_TRUE(request_.isValid());
+	try {
+		RequestPrim request_(request_json);
+		ASSERT_TRUE(request_.isValid());
+	} catch (exception &e) {
+		cerr << "Unexpected exception:" << e.what() << endl;
+		ASSERT_TRUE(false);
+	}
 }
 
 TEST_F(RequestTest, JsonInvalidOp) {
-	string json("{\"op\": 10, \"to\": \"//microwireless.com/IN-CSE-01\", \"rqi\": \"ab3f124a\", \"fr\": \"//microwireless.com/AE-01\"}");
+	string json("{"
+			"\"op\": 10, "
+			"\"to\": \"//microwireless.com/IN-CSE-01/Z0005\", "
+			"\"rqi\": \"ab3f124a\", "
+			"\"fr\": \"//microwireless.com/AE-01\""
+		"}");
 
-	RequestPrim request_(json);
-	ASSERT_FALSE(request_.isValid());
+	try_false(json);
 }
 
 TEST_F(RequestTest, JsonNoTo) {
-	string json("{\"op\": 2, \"rqi\": \"ab3f124a\", \"fr\": \"//microwireless.com/AE-01\"}");
+	string json("{"
+			"\"op\": 2, "
+			"\"rqi\": \"ab3f124a\", "
+			"\"fr\": \"//microwireless.com/AE-01\""
+		"}");
 
-	RequestPrim request_(json);
-	ASSERT_FALSE(request_.isValid());
+	try_false(json);
 }
 
 TEST_F(RequestTest, JsonNoFr) {
-	string json("{\"op\": 2, \"to\": \"//microwireless.com/IN-CSE-01\", \"rqi\": \"ab3f124a\"}");
+	string json("{"
+			"\"op\": 2, "
+			"\"to\": \"//microwireless.com/IN-CSE-01/Z0005\", "
+			"\"rqi\": \"ab3f124a\" "
+		"}");
 
-	RequestPrim request_(json);
-	ASSERT_FALSE(request_.isValid());
+	try_false(json);
 }
 
 TEST_F(RequestTest, JsonNoRqi) {
-	string json("{\"op\": 2, \"to\": \"//microwireless.com/IN-CSE-01\", \"fr\": \"//microwireless.com/AE-01\"}");
+	string json("{"
+			"\"op\": 2, "
+			"\"to\": \"//microwireless.com/IN-CSE-01/Z0005\", "
+			"\"fr\": \"//microwireless.com/AE-01\""
+		"}");
 
-	RequestPrim request_(json);
-	ASSERT_FALSE(request_.isValid());
+	try_false(json);
 }
 
 TEST_F(RequestTest, RetrieveWithResourceType) {
-	string json("{\"op\": 2, \"to\": \"//microwireless.com/IN-CSE-01\", \"rqi\": \"ab3f124a\", \"fr\": \"//microwireless.com/AE-01\", \"ty\": 1}");
+	string json("{"
+			"\"op\": 2, "
+			"\"to\": \"//microwireless.com/IN-CSE-01/Z0005\", "
+			"\"rqi\": \"ab3f124a\", "
+			"\"fr\": \"//microwireless.com/AE-01\", "
+			"\"ty\": 1 "
+		"}");
 
-	RequestPrim request_(json);
-	ASSERT_FALSE(request_.isValid(VALIDATE_ALL));
+	try_false(json);
 }
 
 TEST_F(RequestTest, RetrieveWithName) {
-	string json("{\"op\": 2, \"to\": \"//microwireless.com/IN-CSE-01\", \"rqi\": \"ab3f124a\", \"fr\": \"//microwireless.com/AE-01\", \"nm\": \"Name\" }");
+	string json("{"
+			"\"op\": 2, "
+			"\"to\": \"//microwireless.com/IN-CSE-01/Z0005\", "
+			"\"rqi\": \"ab3f124a\", "
+			"\"fr\": \"//microwireless.com/AE-01\", "
+			"\"nm\": \"Name\" "
+		"}");
 
-	RequestPrim request_(json);
-	ASSERT_FALSE(request_.isValid(VALIDATE_ALL));
+	try_false(json);
+}
+
+TEST_F(RequestTest, TurnOnFixture) {
+	setup = true;
 }
 
 TEST_F(RequestTest, SetGetResourceType) {
-	ASSERT_TRUE(setResourceType(NORMAL));
-	ASSERT_EQ(getResourceType(), NORMAL);
+	ASSERT_TRUE(p_req_->setResourceType(NORMAL));
+	ASSERT_EQ(p_req_->getResourceType(), NORMAL);
 }
 
 TEST_F(RequestTest, GetAttributes) {
-	ASSERT_EQ(getOperation(), OPERATION_RETRIEVE);
-	ASSERT_STREQ(getTo().c_str(), to_.c_str());
-	ASSERT_STREQ(getFrom().c_str(), fr_.c_str());
-	ASSERT_STREQ(getRequestId().c_str(), rqi_.c_str());
+	ASSERT_EQ(p_req_->getOperation(), OPERATION_RETRIEVE);
+	ASSERT_STREQ(p_req_->getTo().c_str(), to_.c_str());
+	ASSERT_STREQ(p_req_->getFrom().c_str(), fr_.c_str());
+	ASSERT_STREQ(p_req_->getRequestId().c_str(), rqi_.c_str());
 }
 
 TEST_F(RequestTest, GetIdInfoAndTargetResource) {
 	string domainC_, csiC_;
 
-	p_request_->getIdInfo(domainC_, csiC_);
+	p_req_->getIdInfo(domainC_, csiC_);
 
 	ASSERT_STREQ(domainC_.c_str(), domain_.c_str());
 	ASSERT_STREQ(csiC_.c_str(), csi_.c_str());
-	ASSERT_STREQ(p_request_->getTargetResource().c_str(), rn_.c_str());
+	//ASSERT_STREQ(p_req_->getTargetResource().c_str(), rn_.c_str());
 }

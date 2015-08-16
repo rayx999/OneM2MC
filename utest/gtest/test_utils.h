@@ -23,7 +23,7 @@ namespace UTest {
 
 #define EXPECT_TSEQ(A, B)	\
 	ASSERT_EQ(A.tv_sec, B.tv_sec);	\
-	EXPECT_GE(A.tv_usec, B.tv_usec)
+	EXPECT_LE(abs(A.tv_usec - B.tv_usec), 5)
 
 template<typename T>
 void ASSERT_ARREQ(T A[], T B[], int size) {

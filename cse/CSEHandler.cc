@@ -24,18 +24,26 @@ void CSEHandler::handleRequest(RequestPrim& req) {
 	ResponseStatusCode rsc_ = isForMe(req, *rdb_.cse());
 
 	if (rsc_ == RSC_OK) {
+		string target_;
 		switch (req.getOperation()) {
 		case OPERATION_CREATE:
 			break;
 		case OPERATION_RETRIEVE:
-			if (rdb_.isResourceValid(req.getTo())) {
-				if (!composeContent(req, pc_, rdb_)) {
-					cerr << "Retrieve resource " << req.getTo() << " failed.\n";
-					rsc_ = RSC_NOT_FOUND;
-				}
+			getResourceHAddress(req, target_, *rdb_.cse());
+			if (rdb_.isResourceValid(target_)) {
+				req.setTargetResource(target_);
+			} else if (rdb_.isResourceValid(req.getIntRn())) {
+				req.setTargetResource(req.getIntRn());
 			} else {
-				cerr << "Retrieve resource " << req.getTo() << " is not valid.\n";
+				cerr << "handleRequest: resource not found. ri:";
+				cerr << req.getIntRn() << " to:" << target_ << endl;
 				rsc_ = RSC_NOT_FOUND;
+				break;
+			}
+			if (!composeContent(req, pc_, rdb_)) {
+				cerr << "handleRequest: Retrieve resource " << req.getTargetResource();
+				cerr << " failed.\n";
+				rsc_ = RSC_INTERNAL_SERVER_ERROR;
 			}
 			break;
 		case OPERATION_UPDATE:

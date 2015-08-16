@@ -28,16 +28,27 @@ using namespace std;
 
 class ResourceBase {
 public:
-	ResourceBase() : base_() {}
-	SupportedResourceType getResourceBase();
-	pb::CSEBase& getCSEBase();
+	static const int ResourceBaseOffset;
+
+	ResourceBase();
+	ResourceBase(const string& json, const string& id_str);
+
+	template <typename StoreType>
+	ResourceBase(const string& ri, StoreType& rdb) : base_() {
+		ResourceBase();
+		if (!setResourceBase(ri, rdb)) {
+			throw runtime_error("setResourceBase failed.");
+		}
+	}
+
+	bool setResourceBase(const string &json, const string& id_str);
 
 	template <typename StoreType>
 	bool setResourceBase(const string& ri, StoreType& rdb) {
 		try {
 			string res_str_;
 			if (rdb.getResource(ri, res_str_) && base_.ParseFromString(res_str_)) {
-				return true;
+				return checkResourceConsistency(rdb.getResourcePath(ri));
 			}
 		} catch (exception &e) {
 			cerr << "setResourceBase exception: " << e.what() << endl;
@@ -45,22 +56,51 @@ public:
 		return false;
 	}
 
+	pb::CSEBase* getCSEBase();
+
+	const string& getDomain();
+	// get CSE id parsed from ResourceId
+	const string& getIntCsi();
+	// get resource id parsed internally
+	const string& getIntRi();
+
+	SupportedResourceType getResourceType();
+	const string& getResourceId();
+	const string& getResourceName();
+	const string& getParentId();
+
+	bool getCreateTimestamp(TimeStamp &create_time);
+	bool getLastModifiedTimestamp(TimeStamp &create_time);
+
+	bool setParentId(const string& pi);
+
 	template <typename StoreType>
-	bool outToResourceStore(const string& res_path, StoreType& rdb) {
+	bool outToResourceStore(StoreType& rdb) {
 		string res_str;
 		if (base_.SerializeToString(&res_str)) {
-			return rdb.putResource(res_path, res_str);
+			const string res_path(composeResourceStorePath());
+			return rdb.putResource(res_path, ri_, res_str);
 		} else {
 			cerr << "Serialization failed.\n";
 			return false;
 		}
 	}
 
+	bool SerializeToString(string* pc);
 	string getJson();
-	~ResourceBase() { }
+
+private:
+	const string composeResourceStorePath();
+
+private:
+	bool setCreateTimestamp();
+	bool setLastModifiedTimestamp();
+	SupportedResourceType getResourceCase();
+	bool checkResourceConsistency(const string& id_str);
 
 protected:
 	pb::ResourceBase base_;
+	string domain_, csi_, ri_;
 };
 
 }	// OneM2M

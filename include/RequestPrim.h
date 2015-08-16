@@ -22,6 +22,7 @@ namespace OneM2M {
 class RequestPrim
 {
 public:
+
 	RequestPrim(const string &json);
 	RequestPrim(Operation op, const string & to, const string & fr, const string & rqi);
 
@@ -33,7 +34,9 @@ public:
 	const string & getTo();
 	const string & getFrom();
 	const string & getRequestId();
+
 	const string & getTargetResource();
+	void setTargetResource(const string& target);
 
 	bool setName(string &nm);
 	bool getName(string &nm);
@@ -78,6 +81,7 @@ public:
 	DiscoveryResultType getDiscoveryResultType();
 
 	void getIdInfo(string& domain, string& csi);
+	const string& getIntRn();
 	bool isValid(ValidateType vt = VALIDATE_COMMON);
 	string getJson();
 
@@ -85,12 +89,9 @@ private:
 	void setDefaults();
 
 private:
-	void parseIdInfo();
-
-private:
 	pb::RequestPrim request_pb_;
 	// parsed fields from getTo()
-	string domain_, csi_, rn_;
+	string domain_, csi_, rn_, target_;
 };
 /*
 class Retrieve : public RequestPrim

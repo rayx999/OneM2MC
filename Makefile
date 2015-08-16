@@ -72,7 +72,7 @@ $(BUILD_DIR)/gtest.exe: $(MC_OBJ) $(GF_OBJ) $(GT_OBJ)
 gtest: checkdirs $(BUILD_DIR)/gtest.exe
 	@rm -rf $(BUILD_DIR)/data
 	@cp -rf utest/data $(BUILD_DIR)
-	@cd $(BUILD_DIR) && ./gtest.exe
+	#@cd $(BUILD_DIR) && ./gtest.exe
 			
 elem: checkdirs CSEMain
 
@@ -90,7 +90,7 @@ gmock: checkdirs $(BUILD_DIR)/gmock.exe
 	@rm -rf $(BUILD_DIR)/data 
 	@cp -rf utest/data $(BUILD_DIR)
 	@cp $(BUILD_DIR)/data/CSEBase_Sample.res $(BUILD_DIR)/data/CSEBase.res
-	@cd $(BUILD_DIR) && ./gmock.exe
+	#@cd $(BUILD_DIR) && ./gmock.exe
 
 protoc: $(PB_SRC)
 

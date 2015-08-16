@@ -18,6 +18,10 @@ static bool setup = false;
 class CSEBaseTest : public ::testing::Test {
 protected:
 	static const string cse_ri;
+	static const string id_str;
+	static const string json2;
+	static const string id_str2;
+
 	CSEBase cse_base;
 	ResourceStore<CSEBase> rdb;
 
@@ -30,136 +34,49 @@ protected:
 		}
 	}
 
-	bool OutputResource(const string& res_path)  {
-		return cse_base.outToResourceStore(res_path, rdb);
-	}
-
-	const string& getCSEId() {
-		return cse_base.getCSEId();
-	}
-
-	int getCSEType() {
-		return (int)cse_base.getCSEType();
-	}
-
-	const string& getResourceId() {
-		return cse_base.getResourceId();
-	}
-
-	const string& getResourceName() {
-		return cse_base.getResourceName();
-	}
-
-	bool getCreateTime(TimeStamp &ct) {
-		return cse_base.getCreateTimestamp(ct);
-	}
-
-	bool isResourceSupported(SupportedResourceType rt) {
-		return cse_base.isResourceSupported(rt);
-	}
-
-	int getSupportedResource(SupportedResourceType *&rt) {
-		return cse_base.getSupportedResource(rt);
-	}
 	// virtual void TearDown() {}
 };
 
-const string CSEBaseTest::cse_ri("//microwireless.com/IN-CSE-01/CSEBASE");
+const string CSEBaseTest::cse_ri("Z0005");
+const string CSEBaseTest::id_str("//microwireless.com/IN-CSE-01/Z0005");
 
 TEST_F(CSEBaseTest, JsonValid) {
 	static const string json("{"
-					"\"ty\" 	: 1,"
-					"\"ri\" 	: \"//microwireless.com/IN-CSE-01/CSEBASE\","
-					"\"rn\" 	: \"CSEBASE\","
-					"\"ct\" 	: { \"seconds\" : 1435434103 },"
-					"\"cst\" 	: 1,"
-					"\"csi\" 	: \"/IN-CSE-01\","
-					"\"srt\" 	: [ 2, 5, 16 ]"
-				"}");
+			"\"ty\" 	: 5,"
+			"\"ri\" 	: \"Z0005\","
+			"\"rn\" 	: \"IN-CSE-01\","
+			"\"ct\" 	: { \"seconds\" : 1435434103 },"
+			"\"cse\"    : {"
+				"\"cst\" 	: 1,"
+				"\"csi\" 	: \"/IN-CSE-01\","
+				"\"srt\" 	: [ 2, 5, 16 ]"
+			"}"
+		"}");
 
 	try {
-		CSEBase cse_base_(json);
-		cse_base_.outToResourceStore(string("CSEBase_resourcebase"), rdb);
+		CSEBase cse_base_(json, id_str);
+		//cse_base_.outToResourceStore(string("CSEBase_resourcebase"), rdb);
 	} catch (exception &e) {
 		cout << "Unexpected exception: " << e.what() << endl;
 		ASSERT_TRUE(false);
 	}
 }
 
-TEST_F(CSEBaseTest, checkCreateTime) {
-	CSEBase cse_base_;
-
-	// record current time
-	TimeStamp _create_time;
-	gettimeofday(&_create_time, NULL);
-
-	// retrieve CSEBase create time stamp
-	TimeStamp _time_stamp;
-	ASSERT_TRUE(cse_base_.getCreateTimestamp(_time_stamp));
-	EXPECT_TSEQ(_create_time, _time_stamp);
-}
-
-TEST_F(CSEBaseTest, JsonWithCreateTime) {
+TEST_F(CSEBaseTest, JsonNoDomain) {
 	static const string json("{"
-					"\"ty\" 	: 1,"
-					"\"ri\" 	: \"//microwireless.com/IN-CSE-01/CSEBASE\","
-					"\"rn\" 	: \"CSEBASE\","
-					"\"ct\" 	: { \"seconds\" : 1435434103 },"
-					"\"cst\" 	: 1,"
-					"\"csi\" 	: \"/IN-CSE-01\","
-					"\"srt\" 	: [ 2, 5, 16 ]"
-				"}");
+			"\"ty\" 	: 5,"
+			"\"ri\" 	: \"Z0005\","
+			"\"rn\" 	: \"IN-CSE-01\","
+			"\"ct\" 	: { \"seconds\" : 1435434103 },"
+			"\"cse\"    : {"
+				"\"cst\" 	: 1,"
+				"\"csi\" 	: \"/IN-CSE-01\","
+				"\"srt\" 	: [ 2, 5, 16 ]"
+			"}"
+		"}");
 
 	try {
-		CSEBase cse_base_(json);
-	} catch (exception &e) {
-		cout << "Unexpected exception: " << e.what() << endl;
-		ASSERT_TRUE(false);
-	}
-}
-
-TEST_F(CSEBaseTest, JsonWOCreateTime) {
-	static const string json("{"
-					"\"ty\" 	: 1,"
-					"\"ri\" 	: \"//microwireless.com/IN-CSE-01/CSEBASE\","
-					"\"rn\" 	: \"CSEBASE\","
-					"\"cst\" 	: 1,"
-					"\"csi\" 	: \"/IN-CSE-01\","
-					"\"srt\" 	: [ 2, 5, 16 ]"
-				"}");
-
-	try {
-		CSEBase cse_base;
-
-		// keep ct from constructor
-		TimeStamp _original_ct;
-		ASSERT_TRUE(cse_base.getCreateTimestamp(_original_ct));
-
-		ASSERT_TRUE(cse_base.setCSEBase(json));
-
-		// check original timestamp persist after loading json file w/o ct
-		TimeStamp _check_ct;
-		ASSERT_TRUE(cse_base.getCreateTimestamp(_check_ct));
-		ASSERT_TSEQ(_original_ct, _check_ct);
-	} catch (exception &e) {
-		cout << "Unexpected exception: " << e.what() << endl;
-		ASSERT_TRUE(false);
-	}
-}
-
-TEST_F(CSEBaseTest, JsonConflictCSEId) {
-	static const string json("{"
-					"\"ty\" 	: 1,"
-					"\"ri\" 	: \"//microwireless.com/IN-CSE-00/CSEBASE\","
-					"\"rn\" 	: \"CSEBASE\","
-					"\"ct\" 	: { \"seconds\" : 1435434103 },"
-					"\"cst\" 	: 1,"
-					"\"csi\" 	: \"/IN-CSE-01\","
-					"\"srt\" 	: [ 2, 5, 16 ]"
-				"}");
-
-	try {
-		CSEBase cse_base_(json);
+		CSEBase cse_base_(json, "/IN-CSE-01/IN-CSE-01");
 	} catch (exception &e) {
 		cout << "Excepted exception: " << e.what() << endl;
 		return;
@@ -168,19 +85,66 @@ TEST_F(CSEBaseTest, JsonConflictCSEId) {
 	ASSERT_TRUE(false);
 }
 
-TEST_F(CSEBaseTest, JsonConflictResourceName) {
+TEST_F(CSEBaseTest, JsonNoCSEIdInRi) {
 	static const string json("{"
-					"\"ty\" 	: 1,"
-					"\"ri\" 	: \"//microwireless.com/IN-CSE-00/CSE\","
-					"\"rn\" 	: \"CSEBase\","
-					"\"ct\" 	: { \"seconds\" : 1435434103 },"
-					"\"cst\" 	: 1,"
-					"\"csi\" 	: \"/IN-CSE-01\","
-					"\"srt\" 	: [ 2, 5, 16 ]"
-				"}");
+			"\"ty\" 	: 5,"
+			"\"ri\" 	: \"Z0005\","
+			"\"rn\" 	: \"IN-CSE-01\","
+			"\"ct\" 	: { \"seconds\" : 1435434103 },"
+			"\"cse\"    : {"
+				"\"cst\" 	: 1,"
+				"\"csi\" 	: \"/IN-CSE-01\","
+				"\"srt\" 	: [ 2, 5, 16 ]"
+			"}"
+		"}");
 
 	try {
-		CSEBase cse_base_(json);
+		CSEBase cse_base_(json, id_str);
+		ASSERT_STREQ(cse_base_.getCSEId().c_str(), "/IN-CSE-01");
+	} catch (exception &e) {
+		cout << "Unexcepted exception: " << e.what() << endl;
+		ASSERT_TRUE(false);
+	}
+}
+
+TEST_F(CSEBaseTest, JsonBadDomain) {
+	static const string json("{"
+			"\"ty\" 	: 5,"
+			"\"ri\" 	: \"Z0005\","
+			"\"rn\" 	: \"IN-CSE-01\","
+			"\"ct\" 	: { \"seconds\" : 1435434103 },"
+			"\"cse\"    : {"
+				"\"cst\" 	: 1,"
+				"\"csi\" 	: \"/IN-CSE-01\","
+				"\"srt\" 	: [ 2, 5, 16 ]"
+			"}"
+		"}");
+
+	try {
+		CSEBase cse_base_(json, "//microwirless/IN-CSE-01/IN-CSE-01");
+	} catch (exception &e) {
+		cout << "Excepted exception: " << e.what() << endl;
+		return;
+	}
+	cerr << "Excepted exception doesn't occur." << endl;
+	ASSERT_TRUE(false);
+}
+
+TEST_F(CSEBaseTest, JsonConflictCSEId) {
+	static const string json("{"
+			"\"ty\" 	: 5,"
+			"\"ri\" 	: \"Z0005\","
+			"\"rn\" 	: \"IN-CSE-01\","
+			"\"ct\" 	: { \"seconds\" : 1435434103 },"
+			"\"cse\"    : {"
+				"\"cst\" 	: 1,"
+				"\"csi\" 	: \"/IN-CSE-10\","
+				"\"srt\" 	: [ 2, 5, 16 ]"
+			"}"
+		"}");
+
+	try {
+		CSEBase cse_base_(json, id_str);
 	} catch (exception &e) {
 		cout << "Excepted exception: " << e.what() << endl;
 		return;
@@ -196,68 +160,75 @@ TEST_F(CSEBaseTest, SetupRoot) {
 		ASSERT_TRUE(rdb.setupRoot());
 		CSEBase * p_root_ = rdb.getRoot();
 		ASSERT_TRUE(p_root_ != NULL);
-		ASSERT_EQ(p_root_->getResourceBase(), CSE_BASE);
+		ASSERT_EQ(p_root_->getResourceType(), CSE_BASE);
 	} catch (exception &e) {
 		cout << "Unexpected exception: " << e.what() << endl;
 		ASSERT_TRUE(false);
 	}
 }
 
-TEST_F(CSEBaseTest, TurnOnFixture) {
-	setup = true;
-}
+const string CSEBaseTest::json2("{"
+		"\"ty\" 	: 5,"
+		"\"ri\" 	: \"X0005\","
+		"\"rn\" 	: \"IN-CSE-02\","
+		"\"ct\" 	: { \"seconds\" : 1435434103 },"
+		"\"cse\"    : {"
+			"\"cst\" 	: 1,"
+			"\"csi\" 	: \"/IN-CSE-02\","
+			"\"srt\" 	: [ 2, 5, 16 ]"
+		"}"
+	"}");
+
+const string CSEBaseTest::id_str2("//microwireless.com/in-cse-02/X0005");
 
 TEST_F(CSEBaseTest, OutResourceToStore) {
-	ASSERT_TRUE(OutputResource("CSEBase_new"));
+	try {
+		CSEBase cse_base_(json2, id_str2);
+		ASSERT_TRUE(cse_base_.outToResourceStore(rdb));
+	} catch (exception &e) {
+		cout << "Unexpected exception: " << e.what() << endl;
+		ASSERT_TRUE(false);
+	}
 }
 
-// check if 2 CSEBase the same, except last_modified_time
+// check if 2 CSEBase the same
 TEST_F(CSEBaseTest, CheckOutResource) {
-	CSEBase cse_base_new("CSEBase_new", rdb);
+	CSEBase cse_base_(json2, id_str2);
+	CSEBase cse_base_new("X0005", rdb);
 
-	ASSERT_STREQ(getCSEId().c_str(), cse_base_new.getCSEId().c_str());
-	ASSERT_EQ(getCSEType(), cse_base_new.getCSEType());
-	ASSERT_STREQ(getResourceId().c_str(), cse_base_new.getResourceId().c_str());
-	ASSERT_STREQ(getResourceName().c_str(), cse_base_new.getResourceName().c_str());
+	ASSERT_STREQ(cse_base_.getCSEId().c_str(), cse_base_new.getCSEId().c_str());
+	ASSERT_EQ(cse_base_.getCSEType(), cse_base_new.getCSEType());
+	ASSERT_STREQ(cse_base_.getResourceId().c_str(), cse_base_new.getResourceId().c_str());
+	ASSERT_STREQ(cse_base_.getResourceName().c_str(), cse_base_new.getResourceName().c_str());
 
 	TimeStamp _ct1, _ct2;
-	ASSERT_TRUE(getCreateTime(_ct1));
+	ASSERT_TRUE(cse_base_.getCreateTimestamp(_ct1));
 	ASSERT_TRUE(cse_base_new.getCreateTimestamp(_ct2));
 	ASSERT_TSEQ(_ct1, _ct2);
 
 	// supported resource
 }
 
+TEST_F(CSEBaseTest, TurnOnFixture) {
+	setup = true;
+}
+
 TEST_F(CSEBaseTest, GetAttributes) {
-	ASSERT_STREQ(getCSEId().c_str(), "/IN-CSE-01");
-	ASSERT_EQ(getCSEType(), IN_CSE);
-	ASSERT_STREQ(getResourceId().c_str(), "//microwireless.com/IN-CSE-01/CSEBASE");
-	ASSERT_STREQ(getResourceName().c_str(), "CSEBASE");
+	ASSERT_STREQ(cse_base.getCSEId().c_str(), "/IN-CSE-01");
+	ASSERT_EQ(cse_base.getCSEType(), IN_CSE);
+	ASSERT_STREQ(cse_base.getResourceId().c_str(), "Z0005");
+	ASSERT_STREQ(cse_base.getResourceName().c_str(), "IN-CSE-01");
 	ASSERT_STREQ(cse_base.getDomain().c_str(), "//microwireless.com");
 }
 
-TEST_F(CSEBaseTest, CheckLastModifiedTime) {
-	TimeStamp _cur_time;
-	gettimeofday(&_cur_time, NULL);
-
-	ASSERT_TRUE(OutputResource("CSEBase_new"));
-
-	// Reload
-	CSEBase cse_base;
-	TimeStamp _last_modified_time;
-	ASSERT_TRUE(cse_base.setCSEBase("CSEBase_new", rdb));
-	ASSERT_TRUE(cse_base.getLastModifiedTimestamp(_last_modified_time));
-	EXPECT_TSEQ(_last_modified_time, _cur_time);
-}
-
 TEST_F(CSEBaseTest, CheckSupportedResourceType) {
-	ASSERT_TRUE(isResourceSupported(CSE_BASE));
-	ASSERT_FALSE(isResourceSupported(FAN_OUT_POINT));
+	ASSERT_TRUE(cse_base.isResourceSupported(CSE_BASE));
+	ASSERT_FALSE(cse_base.isResourceSupported(FAN_OUT_POINT));
 }
 
 TEST_F(CSEBaseTest, GetSupportedResource) {
 	SupportedResourceType *_rt;
-	int size = getSupportedResource(_rt);
+	int size = cse_base.getSupportedResource(_rt);
 	ASSERT_EQ(size, 3);
 	SupportedResourceType _srt[] = {AE,CSE_BASE,REMOTE_CSE};
 	UTest::ASSERT_ARREQ(_rt, _srt, 3);

@@ -53,12 +53,17 @@ TEST_F(ResourceStoreTest, CtorValidStore) {
 }
 
 TEST_F(ResourceStoreTest, ResourceValid) {
-	const string resource_("microwireless.com/IN-CSE-01/CSEBase");
+	const string resource_("Z0005");
+	ASSERT_TRUE(p_store_->isResourceValid(resource_));
+}
+
+TEST_F(ResourceStoreTest, ResourceValid1) {
+	const string resource_("//microwireless.com/IN-CSE-01/IN-CSE-01");
 	ASSERT_TRUE(p_store_->isResourceValid(resource_));
 }
 
 TEST_F(ResourceStoreTest, ResourceNotExist) {
-	const string resource_("microwireless.com/IN-CSE-01/bad");
+	const string resource_("//microwireless.com/IN-CSE-01/bad");
 	ASSERT_FALSE(p_store_->isResourceValid(resource_));
 }
 
