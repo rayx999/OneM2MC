@@ -22,13 +22,13 @@ namespace MicroWireless {
 namespace OneM2M {
 
 void RequestPrim::setDefaults() {
-	request_pb_.set_rcn(static_cast<pb::CommonTypes_ResultContent>(RESULT_CONTENT_ATTRIBUTES));
+	reqp_.set_rcn(static_cast<pb::CommonTypes_ResultContent>(RESULT_CONTENT_ATTRIBUTES));
 }
 
 RequestPrim::RequestPrim(const string & json) {
 	// parse to PB buffer
 	try {
-		json2pb(request_pb_, json.c_str(), json.length());
+		json2pb(reqp_, json.c_str(), json.length());
 	} catch (exception &e) {
 		cerr << "Json2pb exception: " << e.what() << endl;
 		throw runtime_error("RequestPrim(json) Ctor failed.");
@@ -41,9 +41,9 @@ RequestPrim::RequestPrim(const string & json) {
 		throw runtime_error("RequestPrim(json) Ctor failed.");
 	}
 
-	if (!parseIds(request_pb_.to(), CSERegex, domain_, csi_, rn_)) {
+	if (!parseIds(reqp_.to(), CSERegex, domain_, csi_, rn_)) {
 		cerr << "RequestPrim parseIds failed. req.to: ";
-		cerr << request_pb_.to() << endl;
+		cerr << reqp_.to() << endl;
 		throw runtime_error("RequestPrim(json) Ctor failed.");
 	}
 }
@@ -52,10 +52,10 @@ RequestPrim::RequestPrim(Operation op, const string & to, const string & fr, con
 
 	// Mandatory fields
 	try {
-		request_pb_.set_op(static_cast<pb::CommonTypes_Operation>(op));
-		setString(to, &pb::RequestPrim::set_allocated_to, request_pb_);
-		setString(fr, &pb::RequestPrim::set_allocated_fr, request_pb_);
-		setString(rqi, &pb::RequestPrim::set_allocated_rqi, request_pb_);
+		reqp_.set_op(static_cast<pb::CommonTypes_Operation>(op));
+		setString(to, &pb::RequestPrim::set_allocated_to, reqp_);
+		setString(fr, &pb::RequestPrim::set_allocated_fr, reqp_);
+		setString(rqi, &pb::RequestPrim::set_allocated_rqi, reqp_);
 	} catch (exception &e) {
 		cerr << "PB exception: " << e.what() << endl;
 		throw runtime_error("RequestPrim() Ctor failed.");
@@ -76,15 +76,15 @@ RequestPrim::RequestPrim(Operation op, const string & to, const string & fr, con
 }
 
 const string & RequestPrim::getTo() {
-	return request_pb_.to();
+	return reqp_.to();
 }
 
 const string & RequestPrim::getFrom() {
-	return request_pb_.fr();
+	return reqp_.fr();
 }
 
 const string & RequestPrim::getRequestId() {
-	return request_pb_.rqi();
+	return reqp_.rqi();
 }
 
 const string & RequestPrim::getTargetResource() {
@@ -96,16 +96,16 @@ void RequestPrim::setTargetResource(const string& target) {
 }
 
 Operation RequestPrim::getOperation() {
-	return static_cast<Operation>(request_pb_.op());
+	return static_cast<Operation>(reqp_.op());
 }
 
 bool RequestPrim::setResourceType(ResourceType ty) {
-	request_pb_.set_ty(static_cast<pb::CommonTypes_ResourceType>(ty));
+	reqp_.set_ty(static_cast<pb::CommonTypes_SupportedResourceType>(ty));
 	return true;
 }
 
 ResourceType RequestPrim::getResourceType() {
-	return static_cast<ResourceType>(request_pb_.ty());
+	return static_cast<ResourceType>(reqp_.ty());
 }
 
 /*
@@ -126,20 +126,26 @@ bool getResultExpireTimestamp(TimeStamp &rset);
 
 bool setOperationExecutionTime(Duration &oet);
 bool getOperationExecutionTime(Duration &oet);
+*/
+void RequestPrim::setResponseType(ResponseType rt) {
+	reqp_.set_rt(static_cast<pb::CommonTypes_ResponseType>(rt));
+}
 
-bool setResponseType(ResponseType rt);
-ResponseType getResponseType();
+ResponseType RequestPrim::getResponseType() {
+	return static_cast<ResponseType>(reqp_.rt());
+}
 
+/*
 bool setResultPersistence(Duration &rp);
 bool getResultPersistence(Duration &rp);
 */
 bool RequestPrim::setResultContent(ResultContent rcn) {
-	request_pb_.set_rcn(static_cast<pb::CommonTypes_ResultContent>(rcn));
+	reqp_.set_rcn(static_cast<pb::CommonTypes_ResultContent>(rcn));
 	return true;
 }
 
 ResultContent RequestPrim::getResultContent() {
-	return static_cast<ResultContent>(request_pb_.rcn());
+	return static_cast<ResultContent>(reqp_.rcn());
 }
 
 /*
@@ -170,9 +176,9 @@ const string& RequestPrim::getIntRn() {
 }
 
 bool RequestPrim::isValid(ValidateType vt) {
-	if (request_pb_.to().empty() ||
-		request_pb_.fr().empty() ||
-		request_pb_.rqi().empty() ) {
+	if (reqp_.to().empty() ||
+		reqp_.fr().empty() ||
+		reqp_.rqi().empty() ) {
 		cerr << "RequestPrim miss to, from or request id." << endl;
 		return false;
 	}
@@ -181,12 +187,12 @@ bool RequestPrim::isValid(ValidateType vt) {
 		return true;
 	}
 */
-	switch (static_cast<Operation>(request_pb_.op())) {
+	switch (static_cast<Operation>(reqp_.op())) {
 	case OPERATION_CREATE:
 		break;
 	case OPERATION_RETRIEVE:
-		if (request_pb_.ty() != pb::CommonTypes_ResourceType_RESOURCE_TYPE_NONE ||
-			!request_pb_.nm().empty()) {
+		if (reqp_.ty() != pb::CommonTypes_SupportedResourceType_SUPPORTED_RESOURCE_TYPE_NONE ||
+			!reqp_.nm().empty()) {
 			cerr << "Retrieve request has resource type or name fields." << endl;
 			return false;
 		}
@@ -198,7 +204,7 @@ bool RequestPrim::isValid(ValidateType vt) {
 	case OPERATION_NOTIFY:
 		break;
 	default:
-		cerr << "Invalid request operation: " << request_pb_.op() << endl;
+		cerr << "Invalid request operation: " << reqp_.op() << endl;
 		return false;
 	}
 
@@ -206,7 +212,7 @@ bool RequestPrim::isValid(ValidateType vt) {
 }
 
 string RequestPrim::getJson() {
-	return pb2json(request_pb_);
+	return pb2json(reqp_);
 }
 
 }	// OneM2M

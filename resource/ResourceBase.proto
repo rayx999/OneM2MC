@@ -8,23 +8,27 @@ import "google/protobuf/timestamp.proto";
 import "CommonTypes.proto";
 import "CSEBase.proto";
 import "AE.proto";
+import "Request.proto";
 
 message ResourceBase
 {
   CommonTypes.SupportedResourceType ty = 1; // resource_type = 1;
   string ri = 2;                            // resource_id = 2;
-  string rn = 3;                            // resource_name =
+  string rn = 3;                            // resource_name = 3;
   string pi = 4;                            // parent_id = 4;
   google.protobuf.Timestamp ct = 5;         // create_time = 5;
   google.protobuf.Timestamp lt = 6;         // last_modified_time = 6;
-  repeated string acpi = 7;                 // ACP_id = 7;  // accessControlPolicyIDs
-  repeated string lbl = 8;                  // label = 8;
-  string aa = 9;                            // Announced attribute = 9
-  string at = 10;                           // Announced to = 10
+  google.protobuf.Timestamp et = 7;         // expiration_time = 7;
+  repeated string acpi = 8;                 // ACP_id = 8;  // accessControlPolicyIDs
+  repeated string lbl = 9;                  // label = 9;
+  string aa = 10;                           // Announced attribute = 10
+  string at = 11;                           // Announced to = 11
+  int32 st = 12;                            // State Tag = 12
 
   oneof resource
   {
     AE      ae  = 30002;  // Must be 30000 + CommonTypes.SupportedResourceType::AE
-    CSEBase cse = 30005;  // Must be 30000 + CommonTypes.SupportedResourceType::CSE_BASE
+    CSEBase csb = 30005;  // Must be 30000 + CommonTypes.SupportedResourceType::CSE_BASE
+    Request req = 30017;  // Must be 30000 + CommonTypes.SupportedResourceType::REQUEST
   }
 }

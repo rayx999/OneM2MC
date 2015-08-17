@@ -19,9 +19,12 @@ namespace MicroWireless {
 
 namespace OneM2M {
 
+class Request;
+
 class RequestPrim
 {
 public:
+	friend class Request;
 
 	RequestPrim(const string &json);
 	RequestPrim(Operation op, const string & to, const string & fr, const string & rqi);
@@ -56,7 +59,7 @@ public:
 	bool setOperationExecutionTime(Duration &oet);
 	bool getOperationExecutionTime(Duration &oet);
 
-	bool setResponseType(ResponseType rt);
+	void setResponseType(ResponseType rt);
 	ResponseType getResponseType();
 
 	bool setResultPersistence(Duration &rp);
@@ -89,16 +92,10 @@ private:
 	void setDefaults();
 
 private:
-	pb::RequestPrim request_pb_;
+	pb::RequestPrim reqp_;
 	// parsed fields from getTo()
 	string domain_, csi_, rn_, target_;
 };
-/*
-class Retrieve : public RequestPrim
-{
-
-};
-*/
 
 }	// OneM2M
 }	// MicroWireless

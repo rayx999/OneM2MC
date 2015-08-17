@@ -8,7 +8,6 @@
 #include <iostream>
 #include <string>
 #include <boost/regex.hpp>
-#include "google/protobuf/timestamp.pb.h"
 #include "CommonUtils.h"
 
 namespace MicroWireless {
@@ -163,10 +162,23 @@ bool parseIds(const string& id_str, const string& csi_regex,
 }	// MicroWireless
 
 // Protobuf 3 Timestamp operator overloading
-using namespace google::protobuf;
+using google::protobuf::Timestamp;
 
-bool operator == (const Timestamp& ts1, const Timestamp& ts2) {
+bool operator == (const Timestamp& ts1,	const Timestamp& ts2) {
 	return ts1.seconds() == ts2.seconds() &&
 		   ts1.nanos() == ts2.nanos();
 }
 
+bool operator < (const Timestamp& ts1,	const Timestamp& ts2) {
+	return (ts1.seconds() < ts2.seconds() ||
+		   (ts1.seconds() ==  ts2.seconds() &&
+		    ts1.nanos() < ts2.nanos()));
+}
+
+const Timestamp& max(const Timestamp& ts1,	const Timestamp& ts2) {
+	return (ts1 < ts2 ? ts2 : ts1);
+}
+
+const Timestamp& min(const Timestamp& ts1,	const Timestamp& ts2) {
+	return (ts1 < ts2 ? ts1 : ts2);
+}

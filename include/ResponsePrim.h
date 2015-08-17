@@ -19,6 +19,8 @@ namespace MicroWireless {
 
 namespace OneM2M {
 
+class Request;
+
 class ResponsePrim
 {
 public:
@@ -49,11 +51,12 @@ public:
 	bool isValid(ValidateType vt = VALIDATE_COMMON);
 	string getJson();
 
+	const pb::ResponsePrim& getRspp() { return rspp_;	}
 	~ResponsePrim();
 
 private:
 	RequestPrim * p_request_;		// matching request.
-	pb::ResponsePrim response_pb_;
+	pb::ResponsePrim rspp_;
 };
 
 }	// OneM2M

@@ -31,6 +31,7 @@
 #include "CommonTypes.pb.h"
 #include "CSEBase.pb.h"
 #include "AE.pb.h"
+#include "Request.pb.h"
 // @@protoc_insertion_point(includes)
 
 namespace MicroWireless {
@@ -63,7 +64,8 @@ class ResourceBase : public ::google::protobuf::Message {
 
   enum ResourceCase {
     kAe = 30002,
-    kCse = 30005,
+    kCsb = 30005,
+    kReq = 30017,
     RESOURCE_NOT_SET = 0,
   };
 
@@ -165,10 +167,19 @@ class ResourceBase : public ::google::protobuf::Message {
   ::google::protobuf::Timestamp* release_lt();
   void set_allocated_lt(::google::protobuf::Timestamp* lt);
 
-  // repeated string acpi = 7;
+  // optional .google.protobuf.Timestamp et = 7;
+  bool has_et() const;
+  void clear_et();
+  static const int kEtFieldNumber = 7;
+  const ::google::protobuf::Timestamp& et() const;
+  ::google::protobuf::Timestamp* mutable_et();
+  ::google::protobuf::Timestamp* release_et();
+  void set_allocated_et(::google::protobuf::Timestamp* et);
+
+  // repeated string acpi = 8;
   int acpi_size() const;
   void clear_acpi();
-  static const int kAcpiFieldNumber = 7;
+  static const int kAcpiFieldNumber = 8;
   const ::std::string& acpi(int index) const;
   ::std::string* mutable_acpi(int index);
   void set_acpi(int index, const ::std::string& value);
@@ -181,10 +192,10 @@ class ResourceBase : public ::google::protobuf::Message {
   const ::google::protobuf::RepeatedPtrField< ::std::string>& acpi() const;
   ::google::protobuf::RepeatedPtrField< ::std::string>* mutable_acpi();
 
-  // repeated string lbl = 8;
+  // repeated string lbl = 9;
   int lbl_size() const;
   void clear_lbl();
-  static const int kLblFieldNumber = 8;
+  static const int kLblFieldNumber = 9;
   const ::std::string& lbl(int index) const;
   ::std::string* mutable_lbl(int index);
   void set_lbl(int index, const ::std::string& value);
@@ -197,9 +208,9 @@ class ResourceBase : public ::google::protobuf::Message {
   const ::google::protobuf::RepeatedPtrField< ::std::string>& lbl() const;
   ::google::protobuf::RepeatedPtrField< ::std::string>* mutable_lbl();
 
-  // optional string aa = 9;
+  // optional string aa = 10;
   void clear_aa();
-  static const int kAaFieldNumber = 9;
+  static const int kAaFieldNumber = 10;
   const ::std::string& aa() const;
   void set_aa(const ::std::string& value);
   void set_aa(const char* value);
@@ -208,9 +219,9 @@ class ResourceBase : public ::google::protobuf::Message {
   ::std::string* release_aa();
   void set_allocated_aa(::std::string* aa);
 
-  // optional string at = 10;
+  // optional string at = 11;
   void clear_at();
-  static const int kAtFieldNumber = 10;
+  static const int kAtFieldNumber = 11;
   const ::std::string& at() const;
   void set_at(const ::std::string& value);
   void set_at(const char* value);
@@ -218,6 +229,12 @@ class ResourceBase : public ::google::protobuf::Message {
   ::std::string* mutable_at();
   ::std::string* release_at();
   void set_allocated_at(::std::string* at);
+
+  // optional int32 st = 12;
+  void clear_st();
+  static const int kStFieldNumber = 12;
+  ::google::protobuf::int32 st() const;
+  void set_st(::google::protobuf::int32 value);
 
   // optional .MicroWireless.OneM2M.pb.AE ae = 30002;
   bool has_ae() const;
@@ -228,20 +245,30 @@ class ResourceBase : public ::google::protobuf::Message {
   ::MicroWireless::OneM2M::pb::AE* release_ae();
   void set_allocated_ae(::MicroWireless::OneM2M::pb::AE* ae);
 
-  // optional .MicroWireless.OneM2M.pb.CSEBase cse = 30005;
-  bool has_cse() const;
-  void clear_cse();
-  static const int kCseFieldNumber = 30005;
-  const ::MicroWireless::OneM2M::pb::CSEBase& cse() const;
-  ::MicroWireless::OneM2M::pb::CSEBase* mutable_cse();
-  ::MicroWireless::OneM2M::pb::CSEBase* release_cse();
-  void set_allocated_cse(::MicroWireless::OneM2M::pb::CSEBase* cse);
+  // optional .MicroWireless.OneM2M.pb.CSEBase csb = 30005;
+  bool has_csb() const;
+  void clear_csb();
+  static const int kCsbFieldNumber = 30005;
+  const ::MicroWireless::OneM2M::pb::CSEBase& csb() const;
+  ::MicroWireless::OneM2M::pb::CSEBase* mutable_csb();
+  ::MicroWireless::OneM2M::pb::CSEBase* release_csb();
+  void set_allocated_csb(::MicroWireless::OneM2M::pb::CSEBase* csb);
+
+  // optional .MicroWireless.OneM2M.pb.Request req = 30017;
+  bool has_req() const;
+  void clear_req();
+  static const int kReqFieldNumber = 30017;
+  const ::MicroWireless::OneM2M::pb::Request& req() const;
+  ::MicroWireless::OneM2M::pb::Request* mutable_req();
+  ::MicroWireless::OneM2M::pb::Request* release_req();
+  void set_allocated_req(::MicroWireless::OneM2M::pb::Request* req);
 
   ResourceCase resource_case() const;
   // @@protoc_insertion_point(class_scope:MicroWireless.OneM2M.pb.ResourceBase)
  private:
   inline void set_has_ae();
-  inline void set_has_cse();
+  inline void set_has_csb();
+  inline void set_has_req();
 
   inline bool has_resource() const;
   void clear_resource();
@@ -254,15 +281,18 @@ class ResourceBase : public ::google::protobuf::Message {
   ::google::protobuf::internal::ArenaStringPtr pi_;
   ::google::protobuf::Timestamp* ct_;
   ::google::protobuf::Timestamp* lt_;
+  int ty_;
+  ::google::protobuf::int32 st_;
+  ::google::protobuf::Timestamp* et_;
   ::google::protobuf::RepeatedPtrField< ::std::string> acpi_;
   ::google::protobuf::RepeatedPtrField< ::std::string> lbl_;
   ::google::protobuf::internal::ArenaStringPtr aa_;
   ::google::protobuf::internal::ArenaStringPtr at_;
-  int ty_;
   union ResourceUnion {
     ResourceUnion() {}
     ::MicroWireless::OneM2M::pb::AE* ae_;
-    ::MicroWireless::OneM2M::pb::CSEBase* cse_;
+    ::MicroWireless::OneM2M::pb::CSEBase* csb_;
+    ::MicroWireless::OneM2M::pb::Request* req_;
   } resource_;
   mutable int _cached_size_;
   ::google::protobuf::uint32 _oneof_case_[1];
@@ -499,7 +529,44 @@ inline void ResourceBase::set_allocated_lt(::google::protobuf::Timestamp* lt) {
   // @@protoc_insertion_point(field_set_allocated:MicroWireless.OneM2M.pb.ResourceBase.lt)
 }
 
-// repeated string acpi = 7;
+// optional .google.protobuf.Timestamp et = 7;
+inline bool ResourceBase::has_et() const {
+  return !_is_default_instance_ && et_ != NULL;
+}
+inline void ResourceBase::clear_et() {
+  if (GetArenaNoVirtual() == NULL && et_ != NULL) delete et_;
+  et_ = NULL;
+}
+inline const ::google::protobuf::Timestamp& ResourceBase::et() const {
+  // @@protoc_insertion_point(field_get:MicroWireless.OneM2M.pb.ResourceBase.et)
+  return et_ != NULL ? *et_ : *default_instance_->et_;
+}
+inline ::google::protobuf::Timestamp* ResourceBase::mutable_et() {
+  
+  if (et_ == NULL) {
+    et_ = new ::google::protobuf::Timestamp;
+  }
+  // @@protoc_insertion_point(field_mutable:MicroWireless.OneM2M.pb.ResourceBase.et)
+  return et_;
+}
+inline ::google::protobuf::Timestamp* ResourceBase::release_et() {
+  
+  ::google::protobuf::Timestamp* temp = et_;
+  et_ = NULL;
+  return temp;
+}
+inline void ResourceBase::set_allocated_et(::google::protobuf::Timestamp* et) {
+  delete et_;
+  et_ = et;
+  if (et) {
+    
+  } else {
+    
+  }
+  // @@protoc_insertion_point(field_set_allocated:MicroWireless.OneM2M.pb.ResourceBase.et)
+}
+
+// repeated string acpi = 8;
 inline int ResourceBase::acpi_size() const {
   return acpi_.size();
 }
@@ -553,7 +620,7 @@ ResourceBase::mutable_acpi() {
   return &acpi_;
 }
 
-// repeated string lbl = 8;
+// repeated string lbl = 9;
 inline int ResourceBase::lbl_size() const {
   return lbl_.size();
 }
@@ -607,7 +674,7 @@ ResourceBase::mutable_lbl() {
   return &lbl_;
 }
 
-// optional string aa = 9;
+// optional string aa = 10;
 inline void ResourceBase::clear_aa() {
   aa_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
@@ -650,7 +717,7 @@ inline void ResourceBase::set_allocated_aa(::std::string* aa) {
   // @@protoc_insertion_point(field_set_allocated:MicroWireless.OneM2M.pb.ResourceBase.aa)
 }
 
-// optional string at = 10;
+// optional string at = 11;
 inline void ResourceBase::clear_at() {
   at_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
@@ -691,6 +758,20 @@ inline void ResourceBase::set_allocated_at(::std::string* at) {
   }
   at_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), at);
   // @@protoc_insertion_point(field_set_allocated:MicroWireless.OneM2M.pb.ResourceBase.at)
+}
+
+// optional int32 st = 12;
+inline void ResourceBase::clear_st() {
+  st_ = 0;
+}
+inline ::google::protobuf::int32 ResourceBase::st() const {
+  // @@protoc_insertion_point(field_get:MicroWireless.OneM2M.pb.ResourceBase.st)
+  return st_;
+}
+inline void ResourceBase::set_st(::google::protobuf::int32 value) {
+  
+  st_ = value;
+  // @@protoc_insertion_point(field_set:MicroWireless.OneM2M.pb.ResourceBase.st)
 }
 
 // optional .MicroWireless.OneM2M.pb.AE ae = 30002;
@@ -739,50 +820,96 @@ inline void ResourceBase::set_allocated_ae(::MicroWireless::OneM2M::pb::AE* ae) 
   // @@protoc_insertion_point(field_set_allocated:MicroWireless.OneM2M.pb.ResourceBase.ae)
 }
 
-// optional .MicroWireless.OneM2M.pb.CSEBase cse = 30005;
-inline bool ResourceBase::has_cse() const {
-  return resource_case() == kCse;
+// optional .MicroWireless.OneM2M.pb.CSEBase csb = 30005;
+inline bool ResourceBase::has_csb() const {
+  return resource_case() == kCsb;
 }
-inline void ResourceBase::set_has_cse() {
-  _oneof_case_[0] = kCse;
+inline void ResourceBase::set_has_csb() {
+  _oneof_case_[0] = kCsb;
 }
-inline void ResourceBase::clear_cse() {
-  if (has_cse()) {
-    delete resource_.cse_;
+inline void ResourceBase::clear_csb() {
+  if (has_csb()) {
+    delete resource_.csb_;
     clear_has_resource();
   }
 }
-inline const ::MicroWireless::OneM2M::pb::CSEBase& ResourceBase::cse() const {
-  // @@protoc_insertion_point(field_get:MicroWireless.OneM2M.pb.ResourceBase.cse)
-  return has_cse() ? *resource_.cse_
+inline const ::MicroWireless::OneM2M::pb::CSEBase& ResourceBase::csb() const {
+  // @@protoc_insertion_point(field_get:MicroWireless.OneM2M.pb.ResourceBase.csb)
+  return has_csb() ? *resource_.csb_
                       : ::MicroWireless::OneM2M::pb::CSEBase::default_instance();
 }
-inline ::MicroWireless::OneM2M::pb::CSEBase* ResourceBase::mutable_cse() {
-  if (!has_cse()) {
+inline ::MicroWireless::OneM2M::pb::CSEBase* ResourceBase::mutable_csb() {
+  if (!has_csb()) {
     clear_resource();
-    set_has_cse();
-    resource_.cse_ = new ::MicroWireless::OneM2M::pb::CSEBase;
+    set_has_csb();
+    resource_.csb_ = new ::MicroWireless::OneM2M::pb::CSEBase;
   }
-  // @@protoc_insertion_point(field_mutable:MicroWireless.OneM2M.pb.ResourceBase.cse)
-  return resource_.cse_;
+  // @@protoc_insertion_point(field_mutable:MicroWireless.OneM2M.pb.ResourceBase.csb)
+  return resource_.csb_;
 }
-inline ::MicroWireless::OneM2M::pb::CSEBase* ResourceBase::release_cse() {
-  if (has_cse()) {
+inline ::MicroWireless::OneM2M::pb::CSEBase* ResourceBase::release_csb() {
+  if (has_csb()) {
     clear_has_resource();
-    ::MicroWireless::OneM2M::pb::CSEBase* temp = resource_.cse_;
-    resource_.cse_ = NULL;
+    ::MicroWireless::OneM2M::pb::CSEBase* temp = resource_.csb_;
+    resource_.csb_ = NULL;
     return temp;
   } else {
     return NULL;
   }
 }
-inline void ResourceBase::set_allocated_cse(::MicroWireless::OneM2M::pb::CSEBase* cse) {
+inline void ResourceBase::set_allocated_csb(::MicroWireless::OneM2M::pb::CSEBase* csb) {
   clear_resource();
-  if (cse) {
-    set_has_cse();
-    resource_.cse_ = cse;
+  if (csb) {
+    set_has_csb();
+    resource_.csb_ = csb;
   }
-  // @@protoc_insertion_point(field_set_allocated:MicroWireless.OneM2M.pb.ResourceBase.cse)
+  // @@protoc_insertion_point(field_set_allocated:MicroWireless.OneM2M.pb.ResourceBase.csb)
+}
+
+// optional .MicroWireless.OneM2M.pb.Request req = 30017;
+inline bool ResourceBase::has_req() const {
+  return resource_case() == kReq;
+}
+inline void ResourceBase::set_has_req() {
+  _oneof_case_[0] = kReq;
+}
+inline void ResourceBase::clear_req() {
+  if (has_req()) {
+    delete resource_.req_;
+    clear_has_resource();
+  }
+}
+inline const ::MicroWireless::OneM2M::pb::Request& ResourceBase::req() const {
+  // @@protoc_insertion_point(field_get:MicroWireless.OneM2M.pb.ResourceBase.req)
+  return has_req() ? *resource_.req_
+                      : ::MicroWireless::OneM2M::pb::Request::default_instance();
+}
+inline ::MicroWireless::OneM2M::pb::Request* ResourceBase::mutable_req() {
+  if (!has_req()) {
+    clear_resource();
+    set_has_req();
+    resource_.req_ = new ::MicroWireless::OneM2M::pb::Request;
+  }
+  // @@protoc_insertion_point(field_mutable:MicroWireless.OneM2M.pb.ResourceBase.req)
+  return resource_.req_;
+}
+inline ::MicroWireless::OneM2M::pb::Request* ResourceBase::release_req() {
+  if (has_req()) {
+    clear_has_resource();
+    ::MicroWireless::OneM2M::pb::Request* temp = resource_.req_;
+    resource_.req_ = NULL;
+    return temp;
+  } else {
+    return NULL;
+  }
+}
+inline void ResourceBase::set_allocated_req(::MicroWireless::OneM2M::pb::Request* req) {
+  clear_resource();
+  if (req) {
+    set_has_req();
+    resource_.req_ = req;
+  }
+  // @@protoc_insertion_point(field_set_allocated:MicroWireless.OneM2M.pb.ResourceBase.req)
 }
 
 inline bool ResourceBase::has_resource() const {

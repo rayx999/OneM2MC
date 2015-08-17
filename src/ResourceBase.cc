@@ -62,7 +62,7 @@ bool ResourceBase::setResourceBase(const string &json, const string& id_str) {
 }
 
 pb::CSEBase* ResourceBase::getCSEBase() {
-	return base_.mutable_cse();
+	return base_.mutable_csb();
 }
 
 const string& ResourceBase::getDomain() {

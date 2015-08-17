@@ -17,7 +17,7 @@ using namespace MicroWireless::OneM2M;
 
 static bool setup = false;
 
-class RequestTest : public ::testing::Test {
+class RequestPrimTest : public ::testing::Test {
 	protected:
 	static const string request_json;
 	static const string to_;
@@ -29,7 +29,7 @@ class RequestTest : public ::testing::Test {
 	Operation op_;
 	RequestPrim * p_req_;
 
-	RequestTest() {
+	RequestPrimTest() {
 		op_ = OPERATION_RETRIEVE;
 		p_req_ = NULL;
 	}
@@ -70,21 +70,21 @@ class RequestTest : public ::testing::Test {
 	}
 };
 
-const string RequestTest::request_json("{"
+const string RequestPrimTest::request_json("{"
 			"\"op\": 2, "
 			"\"to\": \"//microwireless.com/IN-CSE-01/Z0005\", "
 			"\"rqi\": \"ab3f124a\", "
 			"\"fr\": \"//microwireless.com/AE-01\""
 		"}");
 
-const string RequestTest::to_("//microwireless.com/IN-CSE-01/Z0005");
-const string RequestTest::fr_("//microwireless.com/AE-01");
-const string RequestTest::rqi_("ab3f124a");
-const string RequestTest::domain_("//microwireless.com");
-const string RequestTest::csi_("/IN-CSE-01");
-const string RequestTest::rn_("IN-CSE-01");
+const string RequestPrimTest::to_("//microwireless.com/IN-CSE-01/Z0005");
+const string RequestPrimTest::fr_("//microwireless.com/AE-01");
+const string RequestPrimTest::rqi_("ab3f124a");
+const string RequestPrimTest::domain_("//microwireless.com");
+const string RequestPrimTest::csi_("/IN-CSE-01");
+const string RequestPrimTest::rn_("IN-CSE-01");
 
-TEST_F(RequestTest, FullCtor) {
+TEST_F(RequestPrimTest, FullCtor) {
 	try {
 		RequestPrim request_(op_, to_, fr_, rqi_);
 		ASSERT_TRUE(request_.isValid());
@@ -94,22 +94,22 @@ TEST_F(RequestTest, FullCtor) {
 	}
 }
 
-TEST_F(RequestTest, CtorNoTo) {
+TEST_F(RequestPrimTest, CtorNoTo) {
 	string to_none;
 	try_false(op_, to_none, fr_, rqi_);
 }
 
-TEST_F(RequestTest, CtorNoRqi) {
+TEST_F(RequestPrimTest, CtorNoRqi) {
 	string rqi_none;
 	try_false(op_, to_, fr_, rqi_none);
 }
 
-TEST_F(RequestTest, CtorNoFr) {
+TEST_F(RequestPrimTest, CtorNoFr) {
 	string fr_none;
 	try_false(op_, to_, fr_none, rqi_);
 }
 
-TEST_F(RequestTest, JsonNormal) {
+TEST_F(RequestPrimTest, JsonNormal) {
 	try {
 		RequestPrim request_(request_json);
 		ASSERT_TRUE(request_.isValid());
@@ -119,7 +119,7 @@ TEST_F(RequestTest, JsonNormal) {
 	}
 }
 
-TEST_F(RequestTest, JsonInvalidOp) {
+TEST_F(RequestPrimTest, JsonInvalidOp) {
 	string json("{"
 			"\"op\": 10, "
 			"\"to\": \"//microwireless.com/IN-CSE-01/Z0005\", "
@@ -130,7 +130,7 @@ TEST_F(RequestTest, JsonInvalidOp) {
 	try_false(json);
 }
 
-TEST_F(RequestTest, JsonNoTo) {
+TEST_F(RequestPrimTest, JsonNoTo) {
 	string json("{"
 			"\"op\": 2, "
 			"\"rqi\": \"ab3f124a\", "
@@ -140,7 +140,7 @@ TEST_F(RequestTest, JsonNoTo) {
 	try_false(json);
 }
 
-TEST_F(RequestTest, JsonNoFr) {
+TEST_F(RequestPrimTest, JsonNoFr) {
 	string json("{"
 			"\"op\": 2, "
 			"\"to\": \"//microwireless.com/IN-CSE-01/Z0005\", "
@@ -150,7 +150,7 @@ TEST_F(RequestTest, JsonNoFr) {
 	try_false(json);
 }
 
-TEST_F(RequestTest, JsonNoRqi) {
+TEST_F(RequestPrimTest, JsonNoRqi) {
 	string json("{"
 			"\"op\": 2, "
 			"\"to\": \"//microwireless.com/IN-CSE-01/Z0005\", "
@@ -160,7 +160,7 @@ TEST_F(RequestTest, JsonNoRqi) {
 	try_false(json);
 }
 
-TEST_F(RequestTest, RetrieveWithResourceType) {
+TEST_F(RequestPrimTest, RetrieveWithResourceType) {
 	string json("{"
 			"\"op\": 2, "
 			"\"to\": \"//microwireless.com/IN-CSE-01/Z0005\", "
@@ -172,7 +172,7 @@ TEST_F(RequestTest, RetrieveWithResourceType) {
 	try_false(json);
 }
 
-TEST_F(RequestTest, RetrieveWithName) {
+TEST_F(RequestPrimTest, RetrieveWithName) {
 	string json("{"
 			"\"op\": 2, "
 			"\"to\": \"//microwireless.com/IN-CSE-01/Z0005\", "
@@ -184,23 +184,23 @@ TEST_F(RequestTest, RetrieveWithName) {
 	try_false(json);
 }
 
-TEST_F(RequestTest, TurnOnFixture) {
+TEST_F(RequestPrimTest, TurnOnFixture) {
 	setup = true;
 }
 
-TEST_F(RequestTest, SetGetResourceType) {
+TEST_F(RequestPrimTest, SetGetResourceType) {
 	ASSERT_TRUE(p_req_->setResourceType(NORMAL));
 	ASSERT_EQ(p_req_->getResourceType(), NORMAL);
 }
 
-TEST_F(RequestTest, GetAttributes) {
+TEST_F(RequestPrimTest, GetAttributes) {
 	ASSERT_EQ(p_req_->getOperation(), OPERATION_RETRIEVE);
 	ASSERT_STREQ(p_req_->getTo().c_str(), to_.c_str());
 	ASSERT_STREQ(p_req_->getFrom().c_str(), fr_.c_str());
 	ASSERT_STREQ(p_req_->getRequestId().c_str(), rqi_.c_str());
 }
 
-TEST_F(RequestTest, GetIdInfoAndTargetResource) {
+TEST_F(RequestPrimTest, GetIdInfoAndTargetResource) {
 	string domainC_, csiC_;
 
 	p_req_->getIdInfo(domainC_, csiC_);

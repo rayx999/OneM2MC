@@ -46,7 +46,7 @@ TEST_F(CSEBaseTest, JsonValid) {
 			"\"ri\" 	: \"Z0005\","
 			"\"rn\" 	: \"IN-CSE-01\","
 			"\"ct\" 	: { \"seconds\" : 1435434103 },"
-			"\"cse\"    : {"
+			"\"csb\"    : {"
 				"\"cst\" 	: 1,"
 				"\"csi\" 	: \"/IN-CSE-01\","
 				"\"srt\" 	: [ 2, 5, 16 ]"
@@ -55,7 +55,7 @@ TEST_F(CSEBaseTest, JsonValid) {
 
 	try {
 		CSEBase cse_base_(json, id_str);
-		//cse_base_.outToResourceStore(string("CSEBase_resourcebase"), rdb);
+		//cse_base_.outToResourceStore(rdb);
 	} catch (exception &e) {
 		cout << "Unexpected exception: " << e.what() << endl;
 		ASSERT_TRUE(false);
@@ -68,7 +68,7 @@ TEST_F(CSEBaseTest, JsonNoDomain) {
 			"\"ri\" 	: \"Z0005\","
 			"\"rn\" 	: \"IN-CSE-01\","
 			"\"ct\" 	: { \"seconds\" : 1435434103 },"
-			"\"cse\"    : {"
+			"\"csb\"    : {"
 				"\"cst\" 	: 1,"
 				"\"csi\" 	: \"/IN-CSE-01\","
 				"\"srt\" 	: [ 2, 5, 16 ]"
@@ -91,7 +91,7 @@ TEST_F(CSEBaseTest, JsonNoCSEIdInRi) {
 			"\"ri\" 	: \"Z0005\","
 			"\"rn\" 	: \"IN-CSE-01\","
 			"\"ct\" 	: { \"seconds\" : 1435434103 },"
-			"\"cse\"    : {"
+			"\"csb\"    : {"
 				"\"cst\" 	: 1,"
 				"\"csi\" 	: \"/IN-CSE-01\","
 				"\"srt\" 	: [ 2, 5, 16 ]"
@@ -113,7 +113,7 @@ TEST_F(CSEBaseTest, JsonBadDomain) {
 			"\"ri\" 	: \"Z0005\","
 			"\"rn\" 	: \"IN-CSE-01\","
 			"\"ct\" 	: { \"seconds\" : 1435434103 },"
-			"\"cse\"    : {"
+			"\"csb\"    : {"
 				"\"cst\" 	: 1,"
 				"\"csi\" 	: \"/IN-CSE-01\","
 				"\"srt\" 	: [ 2, 5, 16 ]"
@@ -136,7 +136,7 @@ TEST_F(CSEBaseTest, JsonConflictCSEId) {
 			"\"ri\" 	: \"Z0005\","
 			"\"rn\" 	: \"IN-CSE-01\","
 			"\"ct\" 	: { \"seconds\" : 1435434103 },"
-			"\"cse\"    : {"
+			"\"csb\"    : {"
 				"\"cst\" 	: 1,"
 				"\"csi\" 	: \"/IN-CSE-10\","
 				"\"srt\" 	: [ 2, 5, 16 ]"
@@ -172,7 +172,7 @@ const string CSEBaseTest::json2("{"
 		"\"ri\" 	: \"X0005\","
 		"\"rn\" 	: \"IN-CSE-02\","
 		"\"ct\" 	: { \"seconds\" : 1435434103 },"
-		"\"cse\"    : {"
+		"\"csb\"    : {"
 			"\"cst\" 	: 1,"
 			"\"csi\" 	: \"/IN-CSE-02\","
 			"\"srt\" 	: [ 2, 5, 16 ]"

@@ -92,7 +92,7 @@ public:
 private:
 	const string composeResourceStorePath();
 
-private:
+protected:
 	bool setCreateTimestamp();
 	bool setLastModifiedTimestamp();
 	SupportedResourceType getResourceCase();

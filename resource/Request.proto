@@ -4,28 +4,17 @@ syntax = "proto3";
 
 package MicroWireless.OneM2M.pb;
 
-import "google/protobuf/timestamp.proto";
-import "google/protobuf/duration.proto";
 import "CommonTypes.proto";
+import "ResponsePrim.proto";
 
 message Request
 {
-	CommonTypes.Operation op = 1;				// operation = 1;
-	string to = 2;								// to = 2;
-	string fr = 3;								// from
-	string rqi = 4;								// request_id = 4;				
-	CommonTypes.ResourceType ty = 5;			// resource_type = 5;
-	string nm = 6;							// name = 6;
-	string pc=7;								// content = 7;
-	google.protobuf.Timestamp ot = 8;			// originating_timestamp = 8;
-	google.protobuf.Timestamp rqet = 9;			// request_expire_timestamp = 9;
-	google.protobuf.Timestamp rset = 10;		// result_expire_timestamp = 10;
-	google.protobuf.Duration oet = 11;			// operation_execution_time = 11;
-	CommonTypes.ResponseType rt = 12;			// response_type = 12;
-	google.protobuf.Duration rp = 13;		// result_persistence = 13;
-	CommonTypes.ResultContent rcn = 14; 	// result_content = 14;
-	CommonTypes.EventCat ec = 15;				// event_cat = 15;
-	bool da = 16;								// delivery_aggregation = 16;
-	string gid = 17;							// group_request_id = 17;
-	CommonTypes.DiscoveryResultType drt = 19;// discovery_result_type = 19;
+	CommonTypes.Operation op = 1;				  // operation = 1;
+	string tg = 2;								        // target = 2; same as to in request primitive
+	string og = 3;							          // originator = 3; same as fr in request primitive
+	string rid = 4;								        // request_id = 4; same rqi in request primitive
+	string mi = 5;			                  // meta info = 5;
+	string pc = 6;                        // content = 6;
+	CommonTypes.RequestStatus rs = 7;			// RequestStatus = 7;
+	ResponsePrim ol = 8;			            // operationResult = 8;
 }

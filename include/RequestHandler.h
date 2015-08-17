@@ -13,18 +13,18 @@
 #include <json2pb.h>
 
 #include "CommonTypes.h"
+#include "Request.h"
 #include "RequestPrim.h"
+#include "ResponsePrim.h"
 #include "ResourceStore.h"
 #include "ResourceBase.h"
+#include "NSEBase.h"
 
 namespace MicroWireless {
 namespace OneM2M {
 
+using namespace std;
 using namespace MicroWireless::OneM2M;
-
-class RequestPrim;
-class CSEBase;
-class NSEBase;
 
 class RequestHandler {
 public:
@@ -32,11 +32,43 @@ public:
 
 	virtual ~RequestHandler() {};
 
-	virtual void handleRequest(RequestPrim& request) { };
+	template <typename StoreType>
+	bool checkRequest(RequestPrim& req, StoreType& rdb) {
+		ResponseStatusCode rsc_ = isForMe(req, *rdb.cse());
+		string pc_;
+
+		if (rsc_ == RSC_OK) {
+			ResponseType rt_ = req.getResponseType();
+			switch (rt_) {
+			case NON_BLOCKING_REQUEST_SYNC:
+			case NON_BLOCKING_REQUEST_ASYNC:
+				if (createRequest(req, pc_, rdb)) {
+					rsc_ = RSC_ACCEPTED;
+				} else {
+					cerr << "handleRequest: createRequest failed.\n";
+					rsc_ = RSC_INTERNAL_SERVER_ERROR;
+				}
+				break;
+			default:
+				break;
+			}
+		}
+
+		if (rsc_ != RSC_OK) {
+			ResponsePrim rsp_(&req, rsc_, req.getRequestId());
+			if (!pc_.empty()) {
+				rsp_.setContent(pc_);
+			}
+			nse_.send(rsp_);
+		}
+
+		return (rsc_ == RSC_OK ||
+				rsc_ == RSC_ACCEPTED);
+}
 
 	template <typename Root>
 	void getResourceHAddress(RequestPrim& req, string& addr, Root& root) {
-		addr =  root.getDomain() + root.getCSEId() + "/" + req.getIntRn();
+		addr = root.getDomain() + root.getCSEId() + "/" + req.getIntRn();
 	}
 
 	template <typename Root>
@@ -78,6 +110,18 @@ public:
 		}
 
 		return ret_;
+	}
+
+private:
+	template <typename StoreType>
+	bool createRequest(RequestPrim& req, string& pc, StoreType &rdb) {
+		Request req_(req, "ri", rdb.getRoot()->getResourceId());
+
+		if (!req_.outToResourceStore(rdb)) {
+			cerr << "createRequest: outToResourceStore failed.\n";
+			return false;
+		}
+		return true;
 	}
 
 protected:

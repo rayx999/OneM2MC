@@ -14,7 +14,7 @@
 
 using namespace MicroWireless::OneM2M;
 
-class ResponseTest : public ::testing::Test {
+class ResponsePrimTest : public ::testing::Test {
 	protected:
 	static const string request_json;
 	static const string response_json;
@@ -26,7 +26,7 @@ class ResponseTest : public ::testing::Test {
 	ResponsePrim * p_response_;
 	RequestPrim * p_request_;
 
-	ResponseTest() {
+	ResponsePrimTest() {
 		rsc_ok_ = RSC_OK;
 		pc_ = request_json;
 		p_response_ = NULL;
@@ -39,12 +39,12 @@ class ResponseTest : public ::testing::Test {
 	}
 
 	ResponseStatusCode getResponseStatusCode() {
-		return static_cast<const ResponseTest*>(this)->p_response_->getResponseStatusCode();
+		return static_cast<const ResponsePrimTest*>(this)->p_response_->getResponseStatusCode();
 		//return c->p_response_->getResponseStatusCode();
 	}
 
 	const string & getRequestId() {
-		return static_cast<const ResponseTest*>(this)->p_response_->getRequestId();
+		return static_cast<const ResponsePrimTest*>(this)->p_response_->getRequestId();
 	}
 
 	bool setContent(const string & pc) {
@@ -52,7 +52,7 @@ class ResponseTest : public ::testing::Test {
 	}
 
 	const string & getContent() {
-		return static_cast<const ResponseTest*>(this)->p_response_->getContent();
+		return static_cast<const ResponsePrimTest*>(this)->p_response_->getContent();
 	}
 
 	bool setTo(const string & to) {
@@ -60,7 +60,7 @@ class ResponseTest : public ::testing::Test {
 	}
 
 	const string & getTo() {
-		return static_cast<const ResponseTest*>(this)->p_response_->getTo();
+		return static_cast<const ResponsePrimTest*>(this)->p_response_->getTo();
 	}
 
 	bool setFrom(const string & fr) {
@@ -68,7 +68,7 @@ class ResponseTest : public ::testing::Test {
 	}
 
 	const string & getFrom() {
-		return static_cast<const ResponseTest*>(this)->p_response_->getFrom();
+		return static_cast<const ResponsePrimTest*>(this)->p_response_->getFrom();
 	}
 
 	virtual void TearDown() {
@@ -83,19 +83,19 @@ class ResponseTest : public ::testing::Test {
 	}
 };
 
-const string ResponseTest::request_json("{"
+const string ResponsePrimTest::request_json("{"
 		"\"op\": 2, "
 		"\"to\": \"//microwireless.com/IN-CSE-01/Z0005\", "
 		"\"rqi\": \"ab3f124a\", "
 		"\"fr\": \"//microwireless.com/AE-01\""
 	"}");
 
-const string ResponseTest::response_json("{\"rsc\": 2000, \"rqi\": \"ab3f124a\"}");
-const string ResponseTest::rqi_("ab3f124a");
-const string ResponseTest::to_("//microwireless.com/IN-CSE-01/Z0005");
-const string ResponseTest::fr_("//microwireless.com/AE-01");
+const string ResponsePrimTest::response_json("{\"rsc\": 2000, \"rqi\": \"ab3f124a\"}");
+const string ResponsePrimTest::rqi_("ab3f124a");
+const string ResponsePrimTest::to_("//microwireless.com/IN-CSE-01/Z0005");
+const string ResponsePrimTest::fr_("//microwireless.com/AE-01");
 
-TEST_F(ResponseTest, FullCtor) {
+TEST_F(ResponsePrimTest, FullCtor) {
 	try {
 		ResponsePrim response_(p_request_, rsc_ok_, rqi_);
 	} catch (const exception &e) {
@@ -104,7 +104,7 @@ TEST_F(ResponseTest, FullCtor) {
 	}
 }
 
-TEST_F(ResponseTest, CtorNoRqi) {
+TEST_F(ResponsePrimTest, CtorNoRqi) {
 	string rqi_none;
 
 	try {
@@ -116,7 +116,7 @@ TEST_F(ResponseTest, CtorNoRqi) {
 	ASSERT_TRUE(false);
 }
 
-TEST_F(ResponseTest, JsonNormal) {
+TEST_F(ResponsePrimTest, JsonNormal) {
 	try {
 		ResponsePrim response_(p_request_, response_json);
 	} catch (const exception &e) {
@@ -125,7 +125,7 @@ TEST_F(ResponseTest, JsonNormal) {
 	}
 }
 
-TEST_F(ResponseTest, JsonInvalidRsc) {
+TEST_F(ResponsePrimTest, JsonInvalidRsc) {
 	string invalid_json("{\"rsc\": 10, \"rqi\": \"ab3f124a\"}");
 
 	try {
@@ -137,7 +137,7 @@ TEST_F(ResponseTest, JsonInvalidRsc) {
 	ASSERT_TRUE(false);
 }
 
-TEST_F(ResponseTest, JsonNoRsc) {
+TEST_F(ResponsePrimTest, JsonNoRsc) {
 	string invalid_json("{\"rqi\": \"ab3f124a\"}");
 
 	try {
@@ -149,7 +149,7 @@ TEST_F(ResponseTest, JsonNoRsc) {
 	ASSERT_TRUE(false);
 }
 
-TEST_F(ResponseTest, JsonNoRqi) {
+TEST_F(ResponsePrimTest, JsonNoRqi) {
 	string norsi_json("{\"rsc\": 2000");
 
 	try {
@@ -161,22 +161,22 @@ TEST_F(ResponseTest, JsonNoRqi) {
 	ASSERT_TRUE(false);
 }
 
-TEST_F(ResponseTest, GetAttributes) {
+TEST_F(ResponsePrimTest, GetAttributes) {
 	ASSERT_EQ(getResponseStatusCode(), rsc_ok_);
 	ASSERT_STREQ(getRequestId().c_str(), rqi_.c_str());
 }
 
-TEST_F(ResponseTest, SetGetContent) {
+TEST_F(ResponsePrimTest, SetGetContent) {
 	ASSERT_TRUE(setContent(request_json));
 	ASSERT_STREQ(getContent().c_str(), request_json.c_str());
 }
 
-TEST_F(ResponseTest, SetGetTo) {
+TEST_F(ResponsePrimTest, SetGetTo) {
 	ASSERT_TRUE(setTo(to_));
 	ASSERT_STREQ(getTo().c_str(), to_.c_str());
 }
 
-TEST_F(ResponseTest, SetGetFr) {
+TEST_F(ResponsePrimTest, SetGetFr) {
 	ASSERT_TRUE(setFrom(fr_));
 	ASSERT_STREQ(getFrom().c_str(), fr_.c_str());
 }

@@ -155,26 +155,26 @@ void protobuf_AddDesc_RequestPrim_2eproto() {
     "CommonTypes.ContentType\022/\n\003atr\030\016 \003(\0132\".M"
     "icroWireless.OneM2M.pb.Attribute\022<\n\002fu\030\017"
     " \001(\01620.MicroWireless.OneM2M.pb.CommonTyp"
-    "es.FilterUsage\022\013\n\003lim\030\020 \001(\r\"\340\005\n\013RequestP"
+    "es.FilterUsage\022\013\n\003lim\030\020 \001(\r\"\351\005\n\013RequestP"
     "rim\022:\n\002op\030\001 \001(\0162..MicroWireless.OneM2M.p"
     "b.CommonTypes.Operation\022\n\n\002to\030\002 \001(\t\022\n\n\002f"
-    "r\030\003 \001(\t\022\013\n\003rqi\030\004 \001(\t\022=\n\002ty\030\005 \001(\01621.Micro"
-    "Wireless.OneM2M.pb.CommonTypes.ResourceT"
-    "ype\022\n\n\002nm\030\006 \001(\t\022\n\n\002pc\030\007 \001(\t\022&\n\002ot\030\010 \001(\0132"
-    "\032.google.protobuf.Timestamp\022(\n\004rqet\030\t \001("
-    "\0132\032.google.protobuf.Timestamp\022(\n\004rset\030\n "
-    "\001(\0132\032.google.protobuf.Timestamp\022&\n\003oet\030\013"
-    " \001(\0132\031.google.protobuf.Duration\022=\n\002rt\030\014 "
-    "\001(\01621.MicroWireless.OneM2M.pb.CommonType"
-    "s.ResponseType\022%\n\002rp\030\r \001(\0132\031.google.prot"
-    "obuf.Duration\022\?\n\003rcn\030\016 \001(\01622.MicroWirele"
-    "ss.OneM2M.pb.CommonTypes.ResultContent\0229"
-    "\n\002ec\030\017 \001(\0162-.MicroWireless.OneM2M.pb.Com"
-    "monTypes.EventCat\022\n\n\002da\030\020 \001(\010\022\013\n\003gid\030\021 \001"
-    "(\t\0223\n\002fc\030\022 \001(\0132\'.MicroWireless.OneM2M.pb"
-    ".FilterCriteria\022E\n\003drt\030\023 \001(\01628.MicroWire"
-    "less.OneM2M.pb.CommonTypes.DiscoveryResu"
-    "ltTypeb\006proto3", 1454);
+    "r\030\003 \001(\t\022\013\n\003rqi\030\004 \001(\t\022F\n\002ty\030\005 \001(\0162:.Micro"
+    "Wireless.OneM2M.pb.CommonTypes.Supported"
+    "ResourceType\022\n\n\002nm\030\006 \001(\t\022\n\n\002pc\030\007 \001(\t\022&\n\002"
+    "ot\030\010 \001(\0132\032.google.protobuf.Timestamp\022(\n\004"
+    "rqet\030\t \001(\0132\032.google.protobuf.Timestamp\022("
+    "\n\004rset\030\n \001(\0132\032.google.protobuf.Timestamp"
+    "\022&\n\003oet\030\013 \001(\0132\031.google.protobuf.Duration"
+    "\022=\n\002rt\030\014 \001(\01621.MicroWireless.OneM2M.pb.C"
+    "ommonTypes.ResponseType\022%\n\002rp\030\r \001(\0132\031.go"
+    "ogle.protobuf.Duration\022\?\n\003rcn\030\016 \001(\01622.Mi"
+    "croWireless.OneM2M.pb.CommonTypes.Result"
+    "Content\0229\n\002ec\030\017 \001(\0162-.MicroWireless.OneM"
+    "2M.pb.CommonTypes.EventCat\022\n\n\002da\030\020 \001(\010\022\013"
+    "\n\003gid\030\021 \001(\t\0223\n\002fc\030\022 \001(\0132\'.MicroWireless."
+    "OneM2M.pb.FilterCriteria\022E\n\003drt\030\023 \001(\01628."
+    "MicroWireless.OneM2M.pb.CommonTypes.Disc"
+    "overyResultTypeb\006proto3", 1463);
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedFile(
     "RequestPrim.proto", &protobuf_RegisterTypes);
   FilterCriteria::default_instance_ = new FilterCriteria();
@@ -1804,7 +1804,7 @@ bool RequestPrim::MergePartialFromCodedStream(
         break;
       }
 
-      // optional .MicroWireless.OneM2M.pb.CommonTypes.ResourceType ty = 5;
+      // optional .MicroWireless.OneM2M.pb.CommonTypes.SupportedResourceType ty = 5;
       case 5: {
         if (tag == 40) {
          parse_ty:
@@ -1812,7 +1812,7 @@ bool RequestPrim::MergePartialFromCodedStream(
           DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
                    int, ::google::protobuf::internal::WireFormatLite::TYPE_ENUM>(
                  input, &value)));
-          set_ty(static_cast< ::MicroWireless::OneM2M::pb::CommonTypes_ResourceType >(value));
+          set_ty(static_cast< ::MicroWireless::OneM2M::pb::CommonTypes_SupportedResourceType >(value));
         } else {
           goto handle_unusual;
         }
@@ -2088,7 +2088,7 @@ void RequestPrim::SerializeWithCachedSizes(
       4, this->rqi(), output);
   }
 
-  // optional .MicroWireless.OneM2M.pb.CommonTypes.ResourceType ty = 5;
+  // optional .MicroWireless.OneM2M.pb.CommonTypes.SupportedResourceType ty = 5;
   if (this->ty() != 0) {
     ::google::protobuf::internal::WireFormatLite::WriteEnum(
       5, this->ty(), output);
@@ -2234,7 +2234,7 @@ void RequestPrim::SerializeWithCachedSizes(
         4, this->rqi(), target);
   }
 
-  // optional .MicroWireless.OneM2M.pb.CommonTypes.ResourceType ty = 5;
+  // optional .MicroWireless.OneM2M.pb.CommonTypes.SupportedResourceType ty = 5;
   if (this->ty() != 0) {
     target = ::google::protobuf::internal::WireFormatLite::WriteEnumToArray(
       5, this->ty(), target);
@@ -2378,7 +2378,7 @@ int RequestPrim::ByteSize() const {
         this->rqi());
   }
 
-  // optional .MicroWireless.OneM2M.pb.CommonTypes.ResourceType ty = 5;
+  // optional .MicroWireless.OneM2M.pb.CommonTypes.SupportedResourceType ty = 5;
   if (this->ty() != 0) {
     total_size += 1 +
       ::google::protobuf::internal::WireFormatLite::EnumSize(this->ty());
@@ -2760,15 +2760,15 @@ void RequestPrim::clear_rqi() {
   // @@protoc_insertion_point(field_set_allocated:MicroWireless.OneM2M.pb.RequestPrim.rqi)
 }
 
-// optional .MicroWireless.OneM2M.pb.CommonTypes.ResourceType ty = 5;
+// optional .MicroWireless.OneM2M.pb.CommonTypes.SupportedResourceType ty = 5;
 void RequestPrim::clear_ty() {
   ty_ = 0;
 }
- ::MicroWireless::OneM2M::pb::CommonTypes_ResourceType RequestPrim::ty() const {
+ ::MicroWireless::OneM2M::pb::CommonTypes_SupportedResourceType RequestPrim::ty() const {
   // @@protoc_insertion_point(field_get:MicroWireless.OneM2M.pb.RequestPrim.ty)
-  return static_cast< ::MicroWireless::OneM2M::pb::CommonTypes_ResourceType >(ty_);
+  return static_cast< ::MicroWireless::OneM2M::pb::CommonTypes_SupportedResourceType >(ty_);
 }
- void RequestPrim::set_ty(::MicroWireless::OneM2M::pb::CommonTypes_ResourceType value) {
+ void RequestPrim::set_ty(::MicroWireless::OneM2M::pb::CommonTypes_SupportedResourceType value) {
   
   ty_ = value;
   // @@protoc_insertion_point(field_set:MicroWireless.OneM2M.pb.RequestPrim.ty)

@@ -31,7 +31,7 @@ ResponsePrim::ResponsePrim(RequestPrim *p_request, const string &json) {
 	p_request_ = p_request;
 
 	// parse to PB buffer
-	json2pb(response_pb_, json.c_str(), json.length());
+	json2pb(rspp_, json.c_str(), json.length());
 
 	if (!isValid()) {
 		throw runtime_error("ResponsePrim in JSON not valid!");
@@ -50,42 +50,42 @@ ResponsePrim::ResponsePrim(RequestPrim *p_request, ResponseStatusCode rsc, const
 		p_request_ = p_request;
 	}
 	// Mandatory fields
-	response_pb_.set_rsc(static_cast<pb::CommonTypes_ResponseStatusCode>(rsc));
-	if (!setString(rqi, &pb::ResponsePrim::set_allocated_rqi, response_pb_)) {
+	rspp_.set_rsc(static_cast<pb::CommonTypes_ResponseStatusCode>(rsc));
+	if (!setString(rqi, &pb::ResponsePrim::set_allocated_rqi, rspp_)) {
 		throw runtime_error("ResponsePrim(status_code, req_id) failed.");
 	}
 }
 
 const ResponseStatusCode ResponsePrim::getResponseStatusCode() const {
-	return static_cast<ResponseStatusCode>(response_pb_.rsc());
+	return static_cast<ResponseStatusCode>(rspp_.rsc());
 }
 
 const string & ResponsePrim::getRequestId() const {
-	return response_pb_.rqi();
+	return rspp_.rqi();
 }
 
 bool ResponsePrim::setContent(const string & pc) {
-	return setString(pc, &pb::ResponsePrim::set_allocated_pc, response_pb_);
+	return setString(pc, &pb::ResponsePrim::set_allocated_pc, rspp_);
 }
 
 const string & ResponsePrim::getContent() const {
-	return response_pb_.pc();
+	return rspp_.pc();
 }
 
 bool ResponsePrim::setTo(const string & to) {
-	return setString(to, &pb::ResponsePrim::set_allocated_to, response_pb_);
+	return setString(to, &pb::ResponsePrim::set_allocated_to, rspp_);
 }
 
 const string & ResponsePrim::getTo() const {
-	return response_pb_.to();
+	return rspp_.to();
 }
 
 bool ResponsePrim::setFrom(const string & fr) {
-	return setString(fr, &pb::ResponsePrim::set_allocated_fr, response_pb_);
+	return setString(fr, &pb::ResponsePrim::set_allocated_fr, rspp_);
 }
 
 const string & ResponsePrim::getFrom() const {
-	return response_pb_.fr();
+	return rspp_.fr();
 }
 
 bool ResponsePrim::setOriginatingTimestamp(TimeStamp &ot){  }
@@ -100,7 +100,7 @@ EventCat ResponsePrim::getEventCat(){  }
 bool ResponsePrim::isValid(ValidateType vt) {
 
 	if (getResponseStatusCode() == RSC_NONE ||
-		response_pb_.rqi().empty()) {
+		rspp_.rqi().empty()) {
 		cerr << "RequestPrim miss request id or response status code." << endl;
 		return false;
 	}
@@ -113,7 +113,7 @@ bool ResponsePrim::isValid(ValidateType vt) {
 	case OPERATION_CREATE:
 		break;
 	case OPERATION_RETRIEVE:
-		if (response_pb_.pc().empty()) {
+		if (rspp_.pc().empty()) {
 			cerr << "RequestPrim miss content." << endl;
 			return false;
 		}
@@ -133,7 +133,7 @@ bool ResponsePrim::isValid(ValidateType vt) {
 }
 
 string ResponsePrim::getJson() {
-	return pb2json(response_pb_);
+	return pb2json(rspp_);
 }
 
 ResponsePrim::~ResponsePrim() {

@@ -46,9 +46,9 @@ MATCHER_P(PbCseEq, exp_cse, "") {
 			act_cse.ri() == exp_cse.ri() &&
 			act_cse.rn() == exp_cse.rn() &&
 			act_cse.ct() == exp_cse.ct() &&
-			act_cse.has_cse() &&
-			act_cse.cse().cst() == exp_cse.cse().cst() &&
-			act_cse.cse().csi() == exp_cse.cse().csi();
+			act_cse.has_csb() &&
+			act_cse.csb().cst() == exp_cse.csb().cst() &&
+			act_cse.csb().csi() == exp_cse.csb().csi();
 }
 
 class NSEBaseMockTest : public ::testing::Test {
@@ -129,7 +129,7 @@ const string NSEBaseMockTest::cse_content("{"
 			"\"ri\" 	: \"Z0005\","
 			"\"rn\" 	: \"IN-CSE-01\","
 			"\"ct\" 	: { \"seconds\" : 1435434103 },"
-			"\"cse\"    : {"
+			"\"csb\"    : {"
 				"\"cst\" 	: 1,"
 				"\"csi\" 	: \"/IN-CSE-01\","
 				"\"srt\" 	: [ 2, 5, 16 ]"

@@ -27,9 +27,8 @@
 #include <google/protobuf/repeated_field.h>
 #include <google/protobuf/extension_set.h>
 #include <google/protobuf/unknown_field_set.h>
-#include "google/protobuf/timestamp.pb.h"
-#include "google/protobuf/duration.pb.h"
 #include "CommonTypes.pb.h"
+#include "ResponsePrim.pb.h"
 // @@protoc_insertion_point(includes)
 
 namespace MicroWireless {
@@ -107,59 +106,53 @@ class Request : public ::google::protobuf::Message {
   ::MicroWireless::OneM2M::pb::CommonTypes_Operation op() const;
   void set_op(::MicroWireless::OneM2M::pb::CommonTypes_Operation value);
 
-  // optional string to = 2;
-  void clear_to();
-  static const int kToFieldNumber = 2;
-  const ::std::string& to() const;
-  void set_to(const ::std::string& value);
-  void set_to(const char* value);
-  void set_to(const char* value, size_t size);
-  ::std::string* mutable_to();
-  ::std::string* release_to();
-  void set_allocated_to(::std::string* to);
+  // optional string tg = 2;
+  void clear_tg();
+  static const int kTgFieldNumber = 2;
+  const ::std::string& tg() const;
+  void set_tg(const ::std::string& value);
+  void set_tg(const char* value);
+  void set_tg(const char* value, size_t size);
+  ::std::string* mutable_tg();
+  ::std::string* release_tg();
+  void set_allocated_tg(::std::string* tg);
 
-  // optional string fr = 3;
-  void clear_fr();
-  static const int kFrFieldNumber = 3;
-  const ::std::string& fr() const;
-  void set_fr(const ::std::string& value);
-  void set_fr(const char* value);
-  void set_fr(const char* value, size_t size);
-  ::std::string* mutable_fr();
-  ::std::string* release_fr();
-  void set_allocated_fr(::std::string* fr);
+  // optional string og = 3;
+  void clear_og();
+  static const int kOgFieldNumber = 3;
+  const ::std::string& og() const;
+  void set_og(const ::std::string& value);
+  void set_og(const char* value);
+  void set_og(const char* value, size_t size);
+  ::std::string* mutable_og();
+  ::std::string* release_og();
+  void set_allocated_og(::std::string* og);
 
-  // optional string rqi = 4;
-  void clear_rqi();
-  static const int kRqiFieldNumber = 4;
-  const ::std::string& rqi() const;
-  void set_rqi(const ::std::string& value);
-  void set_rqi(const char* value);
-  void set_rqi(const char* value, size_t size);
-  ::std::string* mutable_rqi();
-  ::std::string* release_rqi();
-  void set_allocated_rqi(::std::string* rqi);
+  // optional string rid = 4;
+  void clear_rid();
+  static const int kRidFieldNumber = 4;
+  const ::std::string& rid() const;
+  void set_rid(const ::std::string& value);
+  void set_rid(const char* value);
+  void set_rid(const char* value, size_t size);
+  ::std::string* mutable_rid();
+  ::std::string* release_rid();
+  void set_allocated_rid(::std::string* rid);
 
-  // optional .MicroWireless.OneM2M.pb.CommonTypes.ResourceType ty = 5;
-  void clear_ty();
-  static const int kTyFieldNumber = 5;
-  ::MicroWireless::OneM2M::pb::CommonTypes_ResourceType ty() const;
-  void set_ty(::MicroWireless::OneM2M::pb::CommonTypes_ResourceType value);
+  // optional string mi = 5;
+  void clear_mi();
+  static const int kMiFieldNumber = 5;
+  const ::std::string& mi() const;
+  void set_mi(const ::std::string& value);
+  void set_mi(const char* value);
+  void set_mi(const char* value, size_t size);
+  ::std::string* mutable_mi();
+  ::std::string* release_mi();
+  void set_allocated_mi(::std::string* mi);
 
-  // optional string nm = 6;
-  void clear_nm();
-  static const int kNmFieldNumber = 6;
-  const ::std::string& nm() const;
-  void set_nm(const ::std::string& value);
-  void set_nm(const char* value);
-  void set_nm(const char* value, size_t size);
-  ::std::string* mutable_nm();
-  ::std::string* release_nm();
-  void set_allocated_nm(::std::string* nm);
-
-  // optional string pc = 7;
+  // optional string pc = 6;
   void clear_pc();
-  static const int kPcFieldNumber = 7;
+  static const int kPcFieldNumber = 6;
   const ::std::string& pc() const;
   void set_pc(const ::std::string& value);
   void set_pc(const char* value);
@@ -168,115 +161,34 @@ class Request : public ::google::protobuf::Message {
   ::std::string* release_pc();
   void set_allocated_pc(::std::string* pc);
 
-  // optional .google.protobuf.Timestamp ot = 8;
-  bool has_ot() const;
-  void clear_ot();
-  static const int kOtFieldNumber = 8;
-  const ::google::protobuf::Timestamp& ot() const;
-  ::google::protobuf::Timestamp* mutable_ot();
-  ::google::protobuf::Timestamp* release_ot();
-  void set_allocated_ot(::google::protobuf::Timestamp* ot);
+  // optional .MicroWireless.OneM2M.pb.CommonTypes.RequestStatus rs = 7;
+  void clear_rs();
+  static const int kRsFieldNumber = 7;
+  ::MicroWireless::OneM2M::pb::CommonTypes_RequestStatus rs() const;
+  void set_rs(::MicroWireless::OneM2M::pb::CommonTypes_RequestStatus value);
 
-  // optional .google.protobuf.Timestamp rqet = 9;
-  bool has_rqet() const;
-  void clear_rqet();
-  static const int kRqetFieldNumber = 9;
-  const ::google::protobuf::Timestamp& rqet() const;
-  ::google::protobuf::Timestamp* mutable_rqet();
-  ::google::protobuf::Timestamp* release_rqet();
-  void set_allocated_rqet(::google::protobuf::Timestamp* rqet);
-
-  // optional .google.protobuf.Timestamp rset = 10;
-  bool has_rset() const;
-  void clear_rset();
-  static const int kRsetFieldNumber = 10;
-  const ::google::protobuf::Timestamp& rset() const;
-  ::google::protobuf::Timestamp* mutable_rset();
-  ::google::protobuf::Timestamp* release_rset();
-  void set_allocated_rset(::google::protobuf::Timestamp* rset);
-
-  // optional .google.protobuf.Duration oet = 11;
-  bool has_oet() const;
-  void clear_oet();
-  static const int kOetFieldNumber = 11;
-  const ::google::protobuf::Duration& oet() const;
-  ::google::protobuf::Duration* mutable_oet();
-  ::google::protobuf::Duration* release_oet();
-  void set_allocated_oet(::google::protobuf::Duration* oet);
-
-  // optional .MicroWireless.OneM2M.pb.CommonTypes.ResponseType rt = 12;
-  void clear_rt();
-  static const int kRtFieldNumber = 12;
-  ::MicroWireless::OneM2M::pb::CommonTypes_ResponseType rt() const;
-  void set_rt(::MicroWireless::OneM2M::pb::CommonTypes_ResponseType value);
-
-  // optional .google.protobuf.Duration rp = 13;
-  bool has_rp() const;
-  void clear_rp();
-  static const int kRpFieldNumber = 13;
-  const ::google::protobuf::Duration& rp() const;
-  ::google::protobuf::Duration* mutable_rp();
-  ::google::protobuf::Duration* release_rp();
-  void set_allocated_rp(::google::protobuf::Duration* rp);
-
-  // optional .MicroWireless.OneM2M.pb.CommonTypes.ResultContent rcn = 14;
-  void clear_rcn();
-  static const int kRcnFieldNumber = 14;
-  ::MicroWireless::OneM2M::pb::CommonTypes_ResultContent rcn() const;
-  void set_rcn(::MicroWireless::OneM2M::pb::CommonTypes_ResultContent value);
-
-  // optional .MicroWireless.OneM2M.pb.CommonTypes.EventCat ec = 15;
-  void clear_ec();
-  static const int kEcFieldNumber = 15;
-  ::MicroWireless::OneM2M::pb::CommonTypes_EventCat ec() const;
-  void set_ec(::MicroWireless::OneM2M::pb::CommonTypes_EventCat value);
-
-  // optional bool da = 16;
-  void clear_da();
-  static const int kDaFieldNumber = 16;
-  bool da() const;
-  void set_da(bool value);
-
-  // optional string gid = 17;
-  void clear_gid();
-  static const int kGidFieldNumber = 17;
-  const ::std::string& gid() const;
-  void set_gid(const ::std::string& value);
-  void set_gid(const char* value);
-  void set_gid(const char* value, size_t size);
-  ::std::string* mutable_gid();
-  ::std::string* release_gid();
-  void set_allocated_gid(::std::string* gid);
-
-  // optional .MicroWireless.OneM2M.pb.CommonTypes.DiscoveryResultType drt = 19;
-  void clear_drt();
-  static const int kDrtFieldNumber = 19;
-  ::MicroWireless::OneM2M::pb::CommonTypes_DiscoveryResultType drt() const;
-  void set_drt(::MicroWireless::OneM2M::pb::CommonTypes_DiscoveryResultType value);
+  // optional .MicroWireless.OneM2M.pb.ResponsePrim ol = 8;
+  bool has_ol() const;
+  void clear_ol();
+  static const int kOlFieldNumber = 8;
+  const ::MicroWireless::OneM2M::pb::ResponsePrim& ol() const;
+  ::MicroWireless::OneM2M::pb::ResponsePrim* mutable_ol();
+  ::MicroWireless::OneM2M::pb::ResponsePrim* release_ol();
+  void set_allocated_ol(::MicroWireless::OneM2M::pb::ResponsePrim* ol);
 
   // @@protoc_insertion_point(class_scope:MicroWireless.OneM2M.pb.Request)
  private:
 
   ::google::protobuf::internal::InternalMetadataWithArena _internal_metadata_;
   bool _is_default_instance_;
-  ::google::protobuf::internal::ArenaStringPtr to_;
-  ::google::protobuf::internal::ArenaStringPtr fr_;
+  ::google::protobuf::internal::ArenaStringPtr tg_;
+  ::google::protobuf::internal::ArenaStringPtr og_;
+  ::google::protobuf::internal::ArenaStringPtr rid_;
   int op_;
-  int ty_;
-  ::google::protobuf::internal::ArenaStringPtr rqi_;
-  ::google::protobuf::internal::ArenaStringPtr nm_;
+  int rs_;
+  ::google::protobuf::internal::ArenaStringPtr mi_;
   ::google::protobuf::internal::ArenaStringPtr pc_;
-  ::google::protobuf::Timestamp* ot_;
-  ::google::protobuf::Timestamp* rqet_;
-  ::google::protobuf::Timestamp* rset_;
-  ::google::protobuf::Duration* oet_;
-  ::google::protobuf::Duration* rp_;
-  int rt_;
-  int rcn_;
-  int ec_;
-  bool da_;
-  ::google::protobuf::internal::ArenaStringPtr gid_;
-  int drt_;
+  ::MicroWireless::OneM2M::pb::ResponsePrim* ol_;
   mutable int _cached_size_;
   friend void  protobuf_AddDesc_Request_2eproto();
   friend void protobuf_AssignDesc_Request_2eproto();
@@ -307,193 +219,179 @@ inline void Request::set_op(::MicroWireless::OneM2M::pb::CommonTypes_Operation v
   // @@protoc_insertion_point(field_set:MicroWireless.OneM2M.pb.Request.op)
 }
 
-// optional string to = 2;
-inline void Request::clear_to() {
-  to_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+// optional string tg = 2;
+inline void Request::clear_tg() {
+  tg_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
-inline const ::std::string& Request::to() const {
-  // @@protoc_insertion_point(field_get:MicroWireless.OneM2M.pb.Request.to)
-  return to_.GetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+inline const ::std::string& Request::tg() const {
+  // @@protoc_insertion_point(field_get:MicroWireless.OneM2M.pb.Request.tg)
+  return tg_.GetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
-inline void Request::set_to(const ::std::string& value) {
+inline void Request::set_tg(const ::std::string& value) {
   
-  to_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
-  // @@protoc_insertion_point(field_set:MicroWireless.OneM2M.pb.Request.to)
+  tg_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
+  // @@protoc_insertion_point(field_set:MicroWireless.OneM2M.pb.Request.tg)
 }
-inline void Request::set_to(const char* value) {
+inline void Request::set_tg(const char* value) {
   
-  to_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
-  // @@protoc_insertion_point(field_set_char:MicroWireless.OneM2M.pb.Request.to)
+  tg_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
+  // @@protoc_insertion_point(field_set_char:MicroWireless.OneM2M.pb.Request.tg)
 }
-inline void Request::set_to(const char* value, size_t size) {
+inline void Request::set_tg(const char* value, size_t size) {
   
-  to_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
+  tg_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
       ::std::string(reinterpret_cast<const char*>(value), size));
-  // @@protoc_insertion_point(field_set_pointer:MicroWireless.OneM2M.pb.Request.to)
+  // @@protoc_insertion_point(field_set_pointer:MicroWireless.OneM2M.pb.Request.tg)
 }
-inline ::std::string* Request::mutable_to() {
+inline ::std::string* Request::mutable_tg() {
   
-  // @@protoc_insertion_point(field_mutable:MicroWireless.OneM2M.pb.Request.to)
-  return to_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  // @@protoc_insertion_point(field_mutable:MicroWireless.OneM2M.pb.Request.tg)
+  return tg_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
-inline ::std::string* Request::release_to() {
+inline ::std::string* Request::release_tg() {
   
-  return to_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  return tg_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
-inline void Request::set_allocated_to(::std::string* to) {
-  if (to != NULL) {
+inline void Request::set_allocated_tg(::std::string* tg) {
+  if (tg != NULL) {
     
   } else {
     
   }
-  to_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), to);
-  // @@protoc_insertion_point(field_set_allocated:MicroWireless.OneM2M.pb.Request.to)
+  tg_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), tg);
+  // @@protoc_insertion_point(field_set_allocated:MicroWireless.OneM2M.pb.Request.tg)
 }
 
-// optional string fr = 3;
-inline void Request::clear_fr() {
-  fr_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+// optional string og = 3;
+inline void Request::clear_og() {
+  og_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
-inline const ::std::string& Request::fr() const {
-  // @@protoc_insertion_point(field_get:MicroWireless.OneM2M.pb.Request.fr)
-  return fr_.GetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+inline const ::std::string& Request::og() const {
+  // @@protoc_insertion_point(field_get:MicroWireless.OneM2M.pb.Request.og)
+  return og_.GetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
-inline void Request::set_fr(const ::std::string& value) {
+inline void Request::set_og(const ::std::string& value) {
   
-  fr_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
-  // @@protoc_insertion_point(field_set:MicroWireless.OneM2M.pb.Request.fr)
+  og_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
+  // @@protoc_insertion_point(field_set:MicroWireless.OneM2M.pb.Request.og)
 }
-inline void Request::set_fr(const char* value) {
+inline void Request::set_og(const char* value) {
   
-  fr_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
-  // @@protoc_insertion_point(field_set_char:MicroWireless.OneM2M.pb.Request.fr)
+  og_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
+  // @@protoc_insertion_point(field_set_char:MicroWireless.OneM2M.pb.Request.og)
 }
-inline void Request::set_fr(const char* value, size_t size) {
+inline void Request::set_og(const char* value, size_t size) {
   
-  fr_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
+  og_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
       ::std::string(reinterpret_cast<const char*>(value), size));
-  // @@protoc_insertion_point(field_set_pointer:MicroWireless.OneM2M.pb.Request.fr)
+  // @@protoc_insertion_point(field_set_pointer:MicroWireless.OneM2M.pb.Request.og)
 }
-inline ::std::string* Request::mutable_fr() {
+inline ::std::string* Request::mutable_og() {
   
-  // @@protoc_insertion_point(field_mutable:MicroWireless.OneM2M.pb.Request.fr)
-  return fr_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  // @@protoc_insertion_point(field_mutable:MicroWireless.OneM2M.pb.Request.og)
+  return og_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
-inline ::std::string* Request::release_fr() {
+inline ::std::string* Request::release_og() {
   
-  return fr_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  return og_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
-inline void Request::set_allocated_fr(::std::string* fr) {
-  if (fr != NULL) {
+inline void Request::set_allocated_og(::std::string* og) {
+  if (og != NULL) {
     
   } else {
     
   }
-  fr_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), fr);
-  // @@protoc_insertion_point(field_set_allocated:MicroWireless.OneM2M.pb.Request.fr)
+  og_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), og);
+  // @@protoc_insertion_point(field_set_allocated:MicroWireless.OneM2M.pb.Request.og)
 }
 
-// optional string rqi = 4;
-inline void Request::clear_rqi() {
-  rqi_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+// optional string rid = 4;
+inline void Request::clear_rid() {
+  rid_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
-inline const ::std::string& Request::rqi() const {
-  // @@protoc_insertion_point(field_get:MicroWireless.OneM2M.pb.Request.rqi)
-  return rqi_.GetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+inline const ::std::string& Request::rid() const {
+  // @@protoc_insertion_point(field_get:MicroWireless.OneM2M.pb.Request.rid)
+  return rid_.GetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
-inline void Request::set_rqi(const ::std::string& value) {
+inline void Request::set_rid(const ::std::string& value) {
   
-  rqi_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
-  // @@protoc_insertion_point(field_set:MicroWireless.OneM2M.pb.Request.rqi)
+  rid_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
+  // @@protoc_insertion_point(field_set:MicroWireless.OneM2M.pb.Request.rid)
 }
-inline void Request::set_rqi(const char* value) {
+inline void Request::set_rid(const char* value) {
   
-  rqi_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
-  // @@protoc_insertion_point(field_set_char:MicroWireless.OneM2M.pb.Request.rqi)
+  rid_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
+  // @@protoc_insertion_point(field_set_char:MicroWireless.OneM2M.pb.Request.rid)
 }
-inline void Request::set_rqi(const char* value, size_t size) {
+inline void Request::set_rid(const char* value, size_t size) {
   
-  rqi_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
+  rid_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
       ::std::string(reinterpret_cast<const char*>(value), size));
-  // @@protoc_insertion_point(field_set_pointer:MicroWireless.OneM2M.pb.Request.rqi)
+  // @@protoc_insertion_point(field_set_pointer:MicroWireless.OneM2M.pb.Request.rid)
 }
-inline ::std::string* Request::mutable_rqi() {
+inline ::std::string* Request::mutable_rid() {
   
-  // @@protoc_insertion_point(field_mutable:MicroWireless.OneM2M.pb.Request.rqi)
-  return rqi_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  // @@protoc_insertion_point(field_mutable:MicroWireless.OneM2M.pb.Request.rid)
+  return rid_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
-inline ::std::string* Request::release_rqi() {
+inline ::std::string* Request::release_rid() {
   
-  return rqi_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  return rid_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
-inline void Request::set_allocated_rqi(::std::string* rqi) {
-  if (rqi != NULL) {
+inline void Request::set_allocated_rid(::std::string* rid) {
+  if (rid != NULL) {
     
   } else {
     
   }
-  rqi_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), rqi);
-  // @@protoc_insertion_point(field_set_allocated:MicroWireless.OneM2M.pb.Request.rqi)
+  rid_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), rid);
+  // @@protoc_insertion_point(field_set_allocated:MicroWireless.OneM2M.pb.Request.rid)
 }
 
-// optional .MicroWireless.OneM2M.pb.CommonTypes.ResourceType ty = 5;
-inline void Request::clear_ty() {
-  ty_ = 0;
+// optional string mi = 5;
+inline void Request::clear_mi() {
+  mi_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
-inline ::MicroWireless::OneM2M::pb::CommonTypes_ResourceType Request::ty() const {
-  // @@protoc_insertion_point(field_get:MicroWireless.OneM2M.pb.Request.ty)
-  return static_cast< ::MicroWireless::OneM2M::pb::CommonTypes_ResourceType >(ty_);
+inline const ::std::string& Request::mi() const {
+  // @@protoc_insertion_point(field_get:MicroWireless.OneM2M.pb.Request.mi)
+  return mi_.GetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
-inline void Request::set_ty(::MicroWireless::OneM2M::pb::CommonTypes_ResourceType value) {
+inline void Request::set_mi(const ::std::string& value) {
   
-  ty_ = value;
-  // @@protoc_insertion_point(field_set:MicroWireless.OneM2M.pb.Request.ty)
+  mi_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
+  // @@protoc_insertion_point(field_set:MicroWireless.OneM2M.pb.Request.mi)
 }
-
-// optional string nm = 6;
-inline void Request::clear_nm() {
-  nm_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-}
-inline const ::std::string& Request::nm() const {
-  // @@protoc_insertion_point(field_get:MicroWireless.OneM2M.pb.Request.nm)
-  return nm_.GetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-}
-inline void Request::set_nm(const ::std::string& value) {
+inline void Request::set_mi(const char* value) {
   
-  nm_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
-  // @@protoc_insertion_point(field_set:MicroWireless.OneM2M.pb.Request.nm)
+  mi_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
+  // @@protoc_insertion_point(field_set_char:MicroWireless.OneM2M.pb.Request.mi)
 }
-inline void Request::set_nm(const char* value) {
+inline void Request::set_mi(const char* value, size_t size) {
   
-  nm_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
-  // @@protoc_insertion_point(field_set_char:MicroWireless.OneM2M.pb.Request.nm)
-}
-inline void Request::set_nm(const char* value, size_t size) {
-  
-  nm_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
+  mi_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
       ::std::string(reinterpret_cast<const char*>(value), size));
-  // @@protoc_insertion_point(field_set_pointer:MicroWireless.OneM2M.pb.Request.nm)
+  // @@protoc_insertion_point(field_set_pointer:MicroWireless.OneM2M.pb.Request.mi)
 }
-inline ::std::string* Request::mutable_nm() {
+inline ::std::string* Request::mutable_mi() {
   
-  // @@protoc_insertion_point(field_mutable:MicroWireless.OneM2M.pb.Request.nm)
-  return nm_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  // @@protoc_insertion_point(field_mutable:MicroWireless.OneM2M.pb.Request.mi)
+  return mi_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
-inline ::std::string* Request::release_nm() {
+inline ::std::string* Request::release_mi() {
   
-  return nm_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  return mi_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
-inline void Request::set_allocated_nm(::std::string* nm) {
-  if (nm != NULL) {
+inline void Request::set_allocated_mi(::std::string* mi) {
+  if (mi != NULL) {
     
   } else {
     
   }
-  nm_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), nm);
-  // @@protoc_insertion_point(field_set_allocated:MicroWireless.OneM2M.pb.Request.nm)
+  mi_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), mi);
+  // @@protoc_insertion_point(field_set_allocated:MicroWireless.OneM2M.pb.Request.mi)
 }
 
-// optional string pc = 7;
+// optional string pc = 6;
 inline void Request::clear_pc() {
   pc_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
@@ -536,302 +434,55 @@ inline void Request::set_allocated_pc(::std::string* pc) {
   // @@protoc_insertion_point(field_set_allocated:MicroWireless.OneM2M.pb.Request.pc)
 }
 
-// optional .google.protobuf.Timestamp ot = 8;
-inline bool Request::has_ot() const {
-  return !_is_default_instance_ && ot_ != NULL;
+// optional .MicroWireless.OneM2M.pb.CommonTypes.RequestStatus rs = 7;
+inline void Request::clear_rs() {
+  rs_ = 0;
 }
-inline void Request::clear_ot() {
-  if (GetArenaNoVirtual() == NULL && ot_ != NULL) delete ot_;
-  ot_ = NULL;
+inline ::MicroWireless::OneM2M::pb::CommonTypes_RequestStatus Request::rs() const {
+  // @@protoc_insertion_point(field_get:MicroWireless.OneM2M.pb.Request.rs)
+  return static_cast< ::MicroWireless::OneM2M::pb::CommonTypes_RequestStatus >(rs_);
 }
-inline const ::google::protobuf::Timestamp& Request::ot() const {
-  // @@protoc_insertion_point(field_get:MicroWireless.OneM2M.pb.Request.ot)
-  return ot_ != NULL ? *ot_ : *default_instance_->ot_;
-}
-inline ::google::protobuf::Timestamp* Request::mutable_ot() {
+inline void Request::set_rs(::MicroWireless::OneM2M::pb::CommonTypes_RequestStatus value) {
   
-  if (ot_ == NULL) {
-    ot_ = new ::google::protobuf::Timestamp;
+  rs_ = value;
+  // @@protoc_insertion_point(field_set:MicroWireless.OneM2M.pb.Request.rs)
+}
+
+// optional .MicroWireless.OneM2M.pb.ResponsePrim ol = 8;
+inline bool Request::has_ol() const {
+  return !_is_default_instance_ && ol_ != NULL;
+}
+inline void Request::clear_ol() {
+  if (GetArenaNoVirtual() == NULL && ol_ != NULL) delete ol_;
+  ol_ = NULL;
+}
+inline const ::MicroWireless::OneM2M::pb::ResponsePrim& Request::ol() const {
+  // @@protoc_insertion_point(field_get:MicroWireless.OneM2M.pb.Request.ol)
+  return ol_ != NULL ? *ol_ : *default_instance_->ol_;
+}
+inline ::MicroWireless::OneM2M::pb::ResponsePrim* Request::mutable_ol() {
+  
+  if (ol_ == NULL) {
+    ol_ = new ::MicroWireless::OneM2M::pb::ResponsePrim;
   }
-  // @@protoc_insertion_point(field_mutable:MicroWireless.OneM2M.pb.Request.ot)
-  return ot_;
+  // @@protoc_insertion_point(field_mutable:MicroWireless.OneM2M.pb.Request.ol)
+  return ol_;
 }
-inline ::google::protobuf::Timestamp* Request::release_ot() {
+inline ::MicroWireless::OneM2M::pb::ResponsePrim* Request::release_ol() {
   
-  ::google::protobuf::Timestamp* temp = ot_;
-  ot_ = NULL;
+  ::MicroWireless::OneM2M::pb::ResponsePrim* temp = ol_;
+  ol_ = NULL;
   return temp;
 }
-inline void Request::set_allocated_ot(::google::protobuf::Timestamp* ot) {
-  delete ot_;
-  ot_ = ot;
-  if (ot) {
+inline void Request::set_allocated_ol(::MicroWireless::OneM2M::pb::ResponsePrim* ol) {
+  delete ol_;
+  ol_ = ol;
+  if (ol) {
     
   } else {
     
   }
-  // @@protoc_insertion_point(field_set_allocated:MicroWireless.OneM2M.pb.Request.ot)
-}
-
-// optional .google.protobuf.Timestamp rqet = 9;
-inline bool Request::has_rqet() const {
-  return !_is_default_instance_ && rqet_ != NULL;
-}
-inline void Request::clear_rqet() {
-  if (GetArenaNoVirtual() == NULL && rqet_ != NULL) delete rqet_;
-  rqet_ = NULL;
-}
-inline const ::google::protobuf::Timestamp& Request::rqet() const {
-  // @@protoc_insertion_point(field_get:MicroWireless.OneM2M.pb.Request.rqet)
-  return rqet_ != NULL ? *rqet_ : *default_instance_->rqet_;
-}
-inline ::google::protobuf::Timestamp* Request::mutable_rqet() {
-  
-  if (rqet_ == NULL) {
-    rqet_ = new ::google::protobuf::Timestamp;
-  }
-  // @@protoc_insertion_point(field_mutable:MicroWireless.OneM2M.pb.Request.rqet)
-  return rqet_;
-}
-inline ::google::protobuf::Timestamp* Request::release_rqet() {
-  
-  ::google::protobuf::Timestamp* temp = rqet_;
-  rqet_ = NULL;
-  return temp;
-}
-inline void Request::set_allocated_rqet(::google::protobuf::Timestamp* rqet) {
-  delete rqet_;
-  rqet_ = rqet;
-  if (rqet) {
-    
-  } else {
-    
-  }
-  // @@protoc_insertion_point(field_set_allocated:MicroWireless.OneM2M.pb.Request.rqet)
-}
-
-// optional .google.protobuf.Timestamp rset = 10;
-inline bool Request::has_rset() const {
-  return !_is_default_instance_ && rset_ != NULL;
-}
-inline void Request::clear_rset() {
-  if (GetArenaNoVirtual() == NULL && rset_ != NULL) delete rset_;
-  rset_ = NULL;
-}
-inline const ::google::protobuf::Timestamp& Request::rset() const {
-  // @@protoc_insertion_point(field_get:MicroWireless.OneM2M.pb.Request.rset)
-  return rset_ != NULL ? *rset_ : *default_instance_->rset_;
-}
-inline ::google::protobuf::Timestamp* Request::mutable_rset() {
-  
-  if (rset_ == NULL) {
-    rset_ = new ::google::protobuf::Timestamp;
-  }
-  // @@protoc_insertion_point(field_mutable:MicroWireless.OneM2M.pb.Request.rset)
-  return rset_;
-}
-inline ::google::protobuf::Timestamp* Request::release_rset() {
-  
-  ::google::protobuf::Timestamp* temp = rset_;
-  rset_ = NULL;
-  return temp;
-}
-inline void Request::set_allocated_rset(::google::protobuf::Timestamp* rset) {
-  delete rset_;
-  rset_ = rset;
-  if (rset) {
-    
-  } else {
-    
-  }
-  // @@protoc_insertion_point(field_set_allocated:MicroWireless.OneM2M.pb.Request.rset)
-}
-
-// optional .google.protobuf.Duration oet = 11;
-inline bool Request::has_oet() const {
-  return !_is_default_instance_ && oet_ != NULL;
-}
-inline void Request::clear_oet() {
-  if (GetArenaNoVirtual() == NULL && oet_ != NULL) delete oet_;
-  oet_ = NULL;
-}
-inline const ::google::protobuf::Duration& Request::oet() const {
-  // @@protoc_insertion_point(field_get:MicroWireless.OneM2M.pb.Request.oet)
-  return oet_ != NULL ? *oet_ : *default_instance_->oet_;
-}
-inline ::google::protobuf::Duration* Request::mutable_oet() {
-  
-  if (oet_ == NULL) {
-    oet_ = new ::google::protobuf::Duration;
-  }
-  // @@protoc_insertion_point(field_mutable:MicroWireless.OneM2M.pb.Request.oet)
-  return oet_;
-}
-inline ::google::protobuf::Duration* Request::release_oet() {
-  
-  ::google::protobuf::Duration* temp = oet_;
-  oet_ = NULL;
-  return temp;
-}
-inline void Request::set_allocated_oet(::google::protobuf::Duration* oet) {
-  delete oet_;
-  oet_ = oet;
-  if (oet) {
-    
-  } else {
-    
-  }
-  // @@protoc_insertion_point(field_set_allocated:MicroWireless.OneM2M.pb.Request.oet)
-}
-
-// optional .MicroWireless.OneM2M.pb.CommonTypes.ResponseType rt = 12;
-inline void Request::clear_rt() {
-  rt_ = 0;
-}
-inline ::MicroWireless::OneM2M::pb::CommonTypes_ResponseType Request::rt() const {
-  // @@protoc_insertion_point(field_get:MicroWireless.OneM2M.pb.Request.rt)
-  return static_cast< ::MicroWireless::OneM2M::pb::CommonTypes_ResponseType >(rt_);
-}
-inline void Request::set_rt(::MicroWireless::OneM2M::pb::CommonTypes_ResponseType value) {
-  
-  rt_ = value;
-  // @@protoc_insertion_point(field_set:MicroWireless.OneM2M.pb.Request.rt)
-}
-
-// optional .google.protobuf.Duration rp = 13;
-inline bool Request::has_rp() const {
-  return !_is_default_instance_ && rp_ != NULL;
-}
-inline void Request::clear_rp() {
-  if (GetArenaNoVirtual() == NULL && rp_ != NULL) delete rp_;
-  rp_ = NULL;
-}
-inline const ::google::protobuf::Duration& Request::rp() const {
-  // @@protoc_insertion_point(field_get:MicroWireless.OneM2M.pb.Request.rp)
-  return rp_ != NULL ? *rp_ : *default_instance_->rp_;
-}
-inline ::google::protobuf::Duration* Request::mutable_rp() {
-  
-  if (rp_ == NULL) {
-    rp_ = new ::google::protobuf::Duration;
-  }
-  // @@protoc_insertion_point(field_mutable:MicroWireless.OneM2M.pb.Request.rp)
-  return rp_;
-}
-inline ::google::protobuf::Duration* Request::release_rp() {
-  
-  ::google::protobuf::Duration* temp = rp_;
-  rp_ = NULL;
-  return temp;
-}
-inline void Request::set_allocated_rp(::google::protobuf::Duration* rp) {
-  delete rp_;
-  rp_ = rp;
-  if (rp) {
-    
-  } else {
-    
-  }
-  // @@protoc_insertion_point(field_set_allocated:MicroWireless.OneM2M.pb.Request.rp)
-}
-
-// optional .MicroWireless.OneM2M.pb.CommonTypes.ResultContent rcn = 14;
-inline void Request::clear_rcn() {
-  rcn_ = 0;
-}
-inline ::MicroWireless::OneM2M::pb::CommonTypes_ResultContent Request::rcn() const {
-  // @@protoc_insertion_point(field_get:MicroWireless.OneM2M.pb.Request.rcn)
-  return static_cast< ::MicroWireless::OneM2M::pb::CommonTypes_ResultContent >(rcn_);
-}
-inline void Request::set_rcn(::MicroWireless::OneM2M::pb::CommonTypes_ResultContent value) {
-  
-  rcn_ = value;
-  // @@protoc_insertion_point(field_set:MicroWireless.OneM2M.pb.Request.rcn)
-}
-
-// optional .MicroWireless.OneM2M.pb.CommonTypes.EventCat ec = 15;
-inline void Request::clear_ec() {
-  ec_ = 0;
-}
-inline ::MicroWireless::OneM2M::pb::CommonTypes_EventCat Request::ec() const {
-  // @@protoc_insertion_point(field_get:MicroWireless.OneM2M.pb.Request.ec)
-  return static_cast< ::MicroWireless::OneM2M::pb::CommonTypes_EventCat >(ec_);
-}
-inline void Request::set_ec(::MicroWireless::OneM2M::pb::CommonTypes_EventCat value) {
-  
-  ec_ = value;
-  // @@protoc_insertion_point(field_set:MicroWireless.OneM2M.pb.Request.ec)
-}
-
-// optional bool da = 16;
-inline void Request::clear_da() {
-  da_ = false;
-}
-inline bool Request::da() const {
-  // @@protoc_insertion_point(field_get:MicroWireless.OneM2M.pb.Request.da)
-  return da_;
-}
-inline void Request::set_da(bool value) {
-  
-  da_ = value;
-  // @@protoc_insertion_point(field_set:MicroWireless.OneM2M.pb.Request.da)
-}
-
-// optional string gid = 17;
-inline void Request::clear_gid() {
-  gid_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-}
-inline const ::std::string& Request::gid() const {
-  // @@protoc_insertion_point(field_get:MicroWireless.OneM2M.pb.Request.gid)
-  return gid_.GetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-}
-inline void Request::set_gid(const ::std::string& value) {
-  
-  gid_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
-  // @@protoc_insertion_point(field_set:MicroWireless.OneM2M.pb.Request.gid)
-}
-inline void Request::set_gid(const char* value) {
-  
-  gid_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
-  // @@protoc_insertion_point(field_set_char:MicroWireless.OneM2M.pb.Request.gid)
-}
-inline void Request::set_gid(const char* value, size_t size) {
-  
-  gid_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
-      ::std::string(reinterpret_cast<const char*>(value), size));
-  // @@protoc_insertion_point(field_set_pointer:MicroWireless.OneM2M.pb.Request.gid)
-}
-inline ::std::string* Request::mutable_gid() {
-  
-  // @@protoc_insertion_point(field_mutable:MicroWireless.OneM2M.pb.Request.gid)
-  return gid_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-}
-inline ::std::string* Request::release_gid() {
-  
-  return gid_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-}
-inline void Request::set_allocated_gid(::std::string* gid) {
-  if (gid != NULL) {
-    
-  } else {
-    
-  }
-  gid_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), gid);
-  // @@protoc_insertion_point(field_set_allocated:MicroWireless.OneM2M.pb.Request.gid)
-}
-
-// optional .MicroWireless.OneM2M.pb.CommonTypes.DiscoveryResultType drt = 19;
-inline void Request::clear_drt() {
-  drt_ = 0;
-}
-inline ::MicroWireless::OneM2M::pb::CommonTypes_DiscoveryResultType Request::drt() const {
-  // @@protoc_insertion_point(field_get:MicroWireless.OneM2M.pb.Request.drt)
-  return static_cast< ::MicroWireless::OneM2M::pb::CommonTypes_DiscoveryResultType >(drt_);
-}
-inline void Request::set_drt(::MicroWireless::OneM2M::pb::CommonTypes_DiscoveryResultType value) {
-  
-  drt_ = value;
-  // @@protoc_insertion_point(field_set:MicroWireless.OneM2M.pb.Request.drt)
+  // @@protoc_insertion_point(field_set_allocated:MicroWireless.OneM2M.pb.Request.ol)
 }
 
 #endif  // !PROTOBUF_INLINE_NOT_IN_HEADERS

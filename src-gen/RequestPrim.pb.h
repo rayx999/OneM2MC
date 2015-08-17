@@ -368,11 +368,11 @@ class RequestPrim : public ::google::protobuf::Message {
   ::std::string* release_rqi();
   void set_allocated_rqi(::std::string* rqi);
 
-  // optional .MicroWireless.OneM2M.pb.CommonTypes.ResourceType ty = 5;
+  // optional .MicroWireless.OneM2M.pb.CommonTypes.SupportedResourceType ty = 5;
   void clear_ty();
   static const int kTyFieldNumber = 5;
-  ::MicroWireless::OneM2M::pb::CommonTypes_ResourceType ty() const;
-  void set_ty(::MicroWireless::OneM2M::pb::CommonTypes_ResourceType value);
+  ::MicroWireless::OneM2M::pb::CommonTypes_SupportedResourceType ty() const;
+  void set_ty(::MicroWireless::OneM2M::pb::CommonTypes_SupportedResourceType value);
 
   // optional string nm = 6;
   void clear_nm();
@@ -1128,15 +1128,15 @@ inline void RequestPrim::set_allocated_rqi(::std::string* rqi) {
   // @@protoc_insertion_point(field_set_allocated:MicroWireless.OneM2M.pb.RequestPrim.rqi)
 }
 
-// optional .MicroWireless.OneM2M.pb.CommonTypes.ResourceType ty = 5;
+// optional .MicroWireless.OneM2M.pb.CommonTypes.SupportedResourceType ty = 5;
 inline void RequestPrim::clear_ty() {
   ty_ = 0;
 }
-inline ::MicroWireless::OneM2M::pb::CommonTypes_ResourceType RequestPrim::ty() const {
+inline ::MicroWireless::OneM2M::pb::CommonTypes_SupportedResourceType RequestPrim::ty() const {
   // @@protoc_insertion_point(field_get:MicroWireless.OneM2M.pb.RequestPrim.ty)
-  return static_cast< ::MicroWireless::OneM2M::pb::CommonTypes_ResourceType >(ty_);
+  return static_cast< ::MicroWireless::OneM2M::pb::CommonTypes_SupportedResourceType >(ty_);
 }
-inline void RequestPrim::set_ty(::MicroWireless::OneM2M::pb::CommonTypes_ResourceType value) {
+inline void RequestPrim::set_ty(::MicroWireless::OneM2M::pb::CommonTypes_SupportedResourceType value) {
   
   ty_ = value;
   // @@protoc_insertion_point(field_set:MicroWireless.OneM2M.pb.RequestPrim.ty)

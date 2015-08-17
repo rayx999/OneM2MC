@@ -61,12 +61,19 @@ bool isMatching(const std::string& id, const std::string& regex);
 bool parseIds(const std::string& id_str, const std::string& csi_regex,
 		std::string& domain, std::string& csi, std::string& ri);
 
+
 }	// OneM2M
 }	// MicroWireless
 
 // Protobuf 3 Timestamp operator overloading
-using namespace google::protobuf;
+using google::protobuf::Timestamp;
 
 bool operator == (const Timestamp& ts1, const Timestamp& ts2);
+
+bool operator < (const Timestamp& ts1,	const Timestamp& ts2);
+
+const Timestamp& max(const Timestamp& ts1,	const Timestamp& ts2);
+
+const Timestamp& min(const Timestamp& ts1,	const Timestamp& ts2);
 
 #endif /* INCLUDE_COMMONUTILS_H_ */
