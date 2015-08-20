@@ -23,52 +23,19 @@ class ResponsePrimTest : public ::testing::Test {
 	static const string fr_;
 	string pc_;
 	ResponseStatusCode rsc_ok_;
-	ResponsePrim * p_response_;
+	ResponsePrim * p_rsp_;
 	RequestPrim * p_request_;
 
 	ResponsePrimTest() {
 		rsc_ok_ = RSC_OK;
 		pc_ = request_json;
-		p_response_ = NULL;
+		p_rsp_ = NULL;
 		p_request_ = NULL;
 	}
 
 	virtual void SetUp() {
 		p_request_ = new RequestPrim(request_json);
-		p_response_ = new ResponsePrim(new RequestPrim(request_json), response_json);
-	}
-
-	ResponseStatusCode getResponseStatusCode() {
-		return static_cast<const ResponsePrimTest*>(this)->p_response_->getResponseStatusCode();
-		//return c->p_response_->getResponseStatusCode();
-	}
-
-	const string & getRequestId() {
-		return static_cast<const ResponsePrimTest*>(this)->p_response_->getRequestId();
-	}
-
-	bool setContent(const string & pc) {
-		return p_response_->setContent(pc);
-	}
-
-	const string & getContent() {
-		return static_cast<const ResponsePrimTest*>(this)->p_response_->getContent();
-	}
-
-	bool setTo(const string & to) {
-		return p_response_->setTo(to);
-	}
-
-	const string & getTo() {
-		return static_cast<const ResponsePrimTest*>(this)->p_response_->getTo();
-	}
-
-	bool setFrom(const string & fr) {
-		return p_response_->setFrom(fr);
-	}
-
-	const string & getFrom() {
-		return static_cast<const ResponsePrimTest*>(this)->p_response_->getFrom();
+		p_rsp_ = new ResponsePrim(new RequestPrim(request_json), response_json);
 	}
 
 	virtual void TearDown() {
@@ -162,21 +129,21 @@ TEST_F(ResponsePrimTest, JsonNoRqi) {
 }
 
 TEST_F(ResponsePrimTest, GetAttributes) {
-	ASSERT_EQ(getResponseStatusCode(), rsc_ok_);
-	ASSERT_STREQ(getRequestId().c_str(), rqi_.c_str());
+	ASSERT_EQ(p_rsp_->getResponseStatusCode(), rsc_ok_);
+	ASSERT_STREQ(p_rsp_->getRequestId().c_str(), rqi_.c_str());
 }
 
 TEST_F(ResponsePrimTest, SetGetContent) {
-	ASSERT_TRUE(setContent(request_json));
-	ASSERT_STREQ(getContent().c_str(), request_json.c_str());
+	p_rsp_->setContent(request_json);
+	ASSERT_STREQ(p_rsp_->getContent().c_str(), request_json.c_str());
 }
 
 TEST_F(ResponsePrimTest, SetGetTo) {
-	ASSERT_TRUE(setTo(to_));
-	ASSERT_STREQ(getTo().c_str(), to_.c_str());
+	p_rsp_->setTo(to_);
+	ASSERT_STREQ(p_rsp_->getTo().c_str(), to_.c_str());
 }
 
 TEST_F(ResponsePrimTest, SetGetFr) {
-	ASSERT_TRUE(setFrom(fr_));
-	ASSERT_STREQ(getFrom().c_str(), fr_.c_str());
+	p_rsp_->setFrom(fr_);
+	ASSERT_STREQ(p_rsp_->getFrom().c_str(), fr_.c_str());
 }

@@ -30,13 +30,13 @@ public:
 	const ResponseStatusCode getResponseStatusCode() const;
 	const string & getRequestId() const;
 
-	bool setContent(const string & pc);
+	void setContent(const string & pc);
 	const string & getContent() const;
 
-	bool setTo(const string & to);
+	void setTo(const string & to);
 	const string & getTo() const;
 
-	bool setFrom(const string & fr);
+	void setFrom(const string & fr);
 	const string & getFrom() const;
 
 	bool setOriginatingTimestamp(TimeStamp &ot);

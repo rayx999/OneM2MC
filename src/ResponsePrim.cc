@@ -64,24 +64,24 @@ const string & ResponsePrim::getRequestId() const {
 	return rspp_.rqi();
 }
 
-bool ResponsePrim::setContent(const string & pc) {
-	return setString(pc, &pb::ResponsePrim::set_allocated_pc, rspp_);
+void ResponsePrim::setContent(const string & pc) {
+	rspp_.set_pc(pc);
 }
 
 const string & ResponsePrim::getContent() const {
 	return rspp_.pc();
 }
 
-bool ResponsePrim::setTo(const string & to) {
-	return setString(to, &pb::ResponsePrim::set_allocated_to, rspp_);
+void ResponsePrim::setTo(const string & to) {
+	return rspp_.set_to(to);
 }
 
 const string & ResponsePrim::getTo() const {
 	return rspp_.to();
 }
 
-bool ResponsePrim::setFrom(const string & fr) {
-	return setString(fr, &pb::ResponsePrim::set_allocated_fr, rspp_);
+void ResponsePrim::setFrom(const string & fr) {
+	return rspp_.set_fr(fr);
 }
 
 const string & ResponsePrim::getFrom() const {
