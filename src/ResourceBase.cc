@@ -81,8 +81,18 @@ SupportedResourceType ResourceBase::getResourceType() {
 	return static_cast<SupportedResourceType>(base_.ty());
 }
 
+bool ResourceBase::setResourceType(SupportedResourceType ty) {
+	base_.set_ty(static_cast<pb::CommonTypes_SupportedResourceType>(ty));
+	return setLastModifiedTimestamp();
+}
+
 const string& ResourceBase::getResourceId() {
 	return base_.ri();
+}
+
+bool ResourceBase::setResourceId(const string& ri) {
+	base_.set_ri(ri);
+	return setLastModifiedTimestamp();
 }
 
 const string& ResourceBase::getResourceName() {
@@ -91,6 +101,11 @@ const string& ResourceBase::getResourceName() {
 
 const string& ResourceBase::getParentId() {
 	return base_.pi();
+}
+
+bool ResourceBase::setParentId(const string& pi) {
+	base_.set_pi(pi);
+	return setLastModifiedTimestamp();
 }
 
 bool ResourceBase::getCreateTimestamp(TimeStamp &ct) {
@@ -113,11 +128,6 @@ bool ResourceBase::getLastModifiedTimestamp(TimeStamp &lt) {
 		return true;
 	}
 	return false;
-}
-
-bool ResourceBase::setParentId(const string& pi) {
-	base_.set_pi(pi);
-	return setLastModifiedTimestamp();
 }
 
 bool ResourceBase::setCreateTimestamp() {
@@ -180,10 +190,6 @@ bool ResourceBase::SerializeToString(string* pc) {
 
 string ResourceBase::getJson() {
 	return pb2json(base_);
-}
-
-const string ResourceBase::composeResourceStorePath() {
-	return domain_ + csi_ + "/" + getResourceName();
 }
 
 }	// OneM2M

@@ -25,7 +25,7 @@ class ResponsePrim
 {
 public:
 	ResponsePrim(RequestPrim * p_request, const string &json);
-	ResponsePrim(RequestPrim * p_request, ResponseStatusCode rsc, const string & rqi);
+	ResponsePrim(RequestPrim * p_request, ResponseStatusCode rsc, const string& fr);
 
 	const ResponseStatusCode getResponseStatusCode() const;
 	const string & getRequestId() const;
@@ -55,7 +55,7 @@ public:
 	~ResponsePrim();
 
 private:
-	RequestPrim * p_request_;		// matching request.
+	RequestPrim * p_reqp_;		// matching request.
 	pb::ResponsePrim rspp_;
 };
 

@@ -10,6 +10,9 @@
 
 #include <string>
 #include <boost/algorithm/string/predicate.hpp>
+#include <boost/random/mersenne_twister.hpp>
+#include <boost/random/uniform_int_distribution.hpp>
+#include <boost/format.hpp>
 #include <json2pb.h>
 
 #include "CommonTypes.h"
@@ -28,9 +31,13 @@ using namespace MicroWireless::OneM2M;
 
 class RequestHandler {
 public:
-	RequestHandler(NSEBase& nse) : nse_(nse) { };
+	RequestHandler(NSEBase& nse) : nse_(nse) {
+		gen_.seed(static_cast<long int>(time(0)));
+	};
 
 	virtual ~RequestHandler() {};
+
+	void generateResourceId(SupportedResourceType ty, string& ri);
 
 	template <typename StoreType>
 	bool checkRequest(RequestPrim& req, StoreType& rdb) {
@@ -55,15 +62,15 @@ public:
 		}
 
 		if (rsc_ != RSC_OK) {
-			ResponsePrim rsp_(&req, rsc_, req.getRequestId());
+			string fr_ = rdb.getRoot()->getDomain() + rdb.getRoot()->getCSEId();
+			ResponsePrim rsp_(&req, rsc_, fr_);
 			if (!pc_.empty()) {
 				rsp_.setContent(pc_);
 			}
 			nse_.send(rsp_);
 		}
 
-		return (rsc_ == RSC_OK ||
-				rsc_ == RSC_ACCEPTED);
+		return (rsc_ == RSC_OK);
 }
 
 	template <typename Root>
@@ -114,9 +121,16 @@ public:
 
 private:
 	template <typename StoreType>
-	bool createRequest(RequestPrim& req, string& pc, StoreType &rdb) {
-		Request req_(req, "ri", rdb.getRoot()->getResourceId());
+	bool createRequest(RequestPrim& reqp, string& pc, StoreType &rdb) {
+		string ri_;
+		generateResourceId(REQUEST, ri_, rdb);
 
+		// set a resource to hold ri as response content
+		ResourceBase res_;
+		res_.setResourceId(ri_);
+		res_.SerializeToString(&pc);
+
+		Request req_(reqp, ri_, rdb.getRoot()->getResourceId());
 		if (!req_.outToResourceStore(rdb)) {
 			cerr << "createRequest: outToResourceStore failed.\n";
 			return false;
@@ -124,8 +138,17 @@ private:
 		return true;
 	}
 
+	template <typename StoreType>
+	void generateResourceId(SupportedResourceType ty, string& ri, StoreType& rdb) {
+		boost::random::uniform_int_distribution<> dist(1, 99999);
+		do {
+			ri = boost::str(boost::format("%03d-%05d") % ty % dist(gen_));
+		} while (rdb.isResourceValid(ri));
+	}
+
 protected:
 	NSEBase& nse_;
+	boost::random::mt19937 gen_;
 };
 
 }	// OneM2M

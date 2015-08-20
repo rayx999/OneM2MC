@@ -22,6 +22,12 @@ namespace pb {
 
 namespace {
 
+const ::google::protobuf::Descriptor* MetaInfo_descriptor_ = NULL;
+const ::google::protobuf::internal::GeneratedMessageReflection*
+  MetaInfo_reflection_ = NULL;
+const ::google::protobuf::Descriptor* OperationResult_descriptor_ = NULL;
+const ::google::protobuf::internal::GeneratedMessageReflection*
+  OperationResult_reflection_ = NULL;
 const ::google::protobuf::Descriptor* Request_descriptor_ = NULL;
 const ::google::protobuf::internal::GeneratedMessageReflection*
   Request_reflection_ = NULL;
@@ -35,7 +41,57 @@ void protobuf_AssignDesc_Request_2eproto() {
     ::google::protobuf::DescriptorPool::generated_pool()->FindFileByName(
       "Request.proto");
   GOOGLE_CHECK(file != NULL);
-  Request_descriptor_ = file->message_type(0);
+  MetaInfo_descriptor_ = file->message_type(0);
+  static const int MetaInfo_offsets_[14] = {
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(MetaInfo, ty_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(MetaInfo, nm_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(MetaInfo, ot_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(MetaInfo, rqet_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(MetaInfo, rset_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(MetaInfo, oet_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(MetaInfo, rt_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(MetaInfo, rp_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(MetaInfo, rcn_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(MetaInfo, ec_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(MetaInfo, da_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(MetaInfo, gid_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(MetaInfo, fc_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(MetaInfo, drt_),
+  };
+  MetaInfo_reflection_ =
+    ::google::protobuf::internal::GeneratedMessageReflection::NewGeneratedMessageReflection(
+      MetaInfo_descriptor_,
+      MetaInfo::default_instance_,
+      MetaInfo_offsets_,
+      -1,
+      -1,
+      -1,
+      sizeof(MetaInfo),
+      GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(MetaInfo, _internal_metadata_),
+      GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(MetaInfo, _is_default_instance_));
+  OperationResult_descriptor_ = file->message_type(1);
+  static const int OperationResult_offsets_[8] = {
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(OperationResult, rsc_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(OperationResult, to_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(OperationResult, fr_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(OperationResult, rqi_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(OperationResult, pc_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(OperationResult, ot_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(OperationResult, rset_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(OperationResult, ec_),
+  };
+  OperationResult_reflection_ =
+    ::google::protobuf::internal::GeneratedMessageReflection::NewGeneratedMessageReflection(
+      OperationResult_descriptor_,
+      OperationResult::default_instance_,
+      OperationResult_offsets_,
+      -1,
+      -1,
+      -1,
+      sizeof(OperationResult),
+      GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(OperationResult, _internal_metadata_),
+      GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(OperationResult, _is_default_instance_));
+  Request_descriptor_ = file->message_type(2);
   static const int Request_offsets_[8] = {
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Request, op_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Request, tg_),
@@ -70,12 +126,20 @@ inline void protobuf_AssignDescriptorsOnce() {
 void protobuf_RegisterTypes(const ::std::string&) {
   protobuf_AssignDescriptorsOnce();
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedMessage(
+      MetaInfo_descriptor_, &MetaInfo::default_instance());
+  ::google::protobuf::MessageFactory::InternalRegisterGeneratedMessage(
+      OperationResult_descriptor_, &OperationResult::default_instance());
+  ::google::protobuf::MessageFactory::InternalRegisterGeneratedMessage(
       Request_descriptor_, &Request::default_instance());
 }
 
 }  // namespace
 
 void protobuf_ShutdownFile_Request_2eproto() {
+  delete MetaInfo::default_instance_;
+  delete MetaInfo_reflection_;
+  delete OperationResult::default_instance_;
+  delete OperationResult_reflection_;
   delete Request::default_instance_;
   delete Request_reflection_;
 }
@@ -86,21 +150,53 @@ void protobuf_AddDesc_Request_2eproto() {
   already_here = true;
   GOOGLE_PROTOBUF_VERIFY_VERSION;
 
+  ::google::protobuf::protobuf_AddDesc_google_2fprotobuf_2ftimestamp_2eproto();
+  ::google::protobuf::protobuf_AddDesc_google_2fprotobuf_2fduration_2eproto();
   ::MicroWireless::OneM2M::pb::protobuf_AddDesc_CommonTypes_2eproto();
-  ::MicroWireless::OneM2M::pb::protobuf_AddDesc_ResponsePrim_2eproto();
+  ::MicroWireless::OneM2M::pb::protobuf_AddDesc_FilterCriteria_2eproto();
   ::google::protobuf::DescriptorPool::InternalAddGeneratedFile(
     "\n\rRequest.proto\022\027MicroWireless.OneM2M.pb"
-    "\032\021CommonTypes.proto\032\022ResponsePrim.proto\""
-    "\365\001\n\007Request\022:\n\002op\030\001 \001(\0162..MicroWireless."
-    "OneM2M.pb.CommonTypes.Operation\022\n\n\002tg\030\002 "
-    "\001(\t\022\n\n\002og\030\003 \001(\t\022\013\n\003rid\030\004 \001(\t\022\n\n\002mi\030\005 \001(\t"
-    "\022\n\n\002pc\030\006 \001(\t\022>\n\002rs\030\007 \001(\01622.MicroWireless"
-    ".OneM2M.pb.CommonTypes.RequestStatus\0221\n\002"
-    "ol\030\010 \001(\0132%.MicroWireless.OneM2M.pb.Respo"
-    "nsePrimb\006proto3", 335);
+    "\032\037google/protobuf/timestamp.proto\032\036googl"
+    "e/protobuf/duration.proto\032\021CommonTypes.p"
+    "roto\032\024FilterCriteria.proto\"\371\004\n\010MetaInfo\022"
+    "F\n\002ty\030i \001(\0162:.MicroWireless.OneM2M.pb.Co"
+    "mmonTypes.SupportedResourceType\022\n\n\002nm\030j "
+    "\001(\t\022&\n\002ot\030l \001(\0132\032.google.protobuf.Timest"
+    "amp\022(\n\004rqet\030m \001(\0132\032.google.protobuf.Time"
+    "stamp\022(\n\004rset\030n \001(\0132\032.google.protobuf.Ti"
+    "mestamp\022&\n\003oet\030o \001(\0132\031.google.protobuf.D"
+    "uration\022=\n\002rt\030p \001(\01621.MicroWireless.OneM"
+    "2M.pb.CommonTypes.ResponseType\022%\n\002rp\030q \001"
+    "(\0132\031.google.protobuf.Duration\022\?\n\003rcn\030r \001"
+    "(\01622.MicroWireless.OneM2M.pb.CommonTypes"
+    ".ResultContent\0229\n\002ec\030s \001(\0162-.MicroWirele"
+    "ss.OneM2M.pb.CommonTypes.EventCat\022\n\n\002da\030"
+    "t \001(\010\022\013\n\003gid\030u \001(\t\0223\n\002fc\030v \001(\0132\'.MicroWi"
+    "reless.OneM2M.pb.FilterCriteria\022E\n\003drt\030w"
+    " \001(\01628.MicroWireless.OneM2M.pb.CommonTyp"
+    "es.DiscoveryResultType\"\235\002\n\017OperationResu"
+    "lt\022E\n\003rsc\030\311\001 \001(\01627.MicroWireless.OneM2M."
+    "pb.CommonTypes.ResponseStatusCode\022\013\n\002to\030"
+    "\312\001 \001(\t\022\013\n\002fr\030\313\001 \001(\t\022\014\n\003rqi\030\314\001 \001(\t\022\013\n\002pc\030"
+    "\315\001 \001(\t\022\'\n\002ot\030\316\001 \001(\0132\032.google.protobuf.Ti"
+    "mestamp\022)\n\004rset\030\317\001 \001(\0132\032.google.protobuf"
+    ".Timestamp\022:\n\002ec\030\320\001 \001(\0162-.MicroWireless."
+    "OneM2M.pb.CommonTypes.EventCat\"\233\002\n\007Reque"
+    "st\022:\n\002op\030\001 \001(\0162..MicroWireless.OneM2M.pb"
+    ".CommonTypes.Operation\022\n\n\002tg\030\002 \001(\t\022\n\n\002og"
+    "\030\003 \001(\t\022\013\n\003rid\030\004 \001(\t\022-\n\002mi\030\005 \001(\0132!.MicroW"
+    "ireless.OneM2M.pb.MetaInfo\022\n\n\002pc\030\006 \001(\t\022>"
+    "\n\002rs\030\007 \001(\01622.MicroWireless.OneM2M.pb.Com"
+    "monTypes.RequestStatus\0224\n\002ol\030\010 \001(\0132(.Mic"
+    "roWireless.OneM2M.pb.OperationResultb\006pr"
+    "oto3", 1364);
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedFile(
     "Request.proto", &protobuf_RegisterTypes);
+  MetaInfo::default_instance_ = new MetaInfo();
+  OperationResult::default_instance_ = new OperationResult();
   Request::default_instance_ = new Request();
+  MetaInfo::default_instance_->InitAsDefaultInstance();
+  OperationResult::default_instance_->InitAsDefaultInstance();
   Request::default_instance_->InitAsDefaultInstance();
   ::google::protobuf::internal::OnShutdown(&protobuf_ShutdownFile_Request_2eproto);
 }
@@ -125,6 +221,2032 @@ static void MergeFromFail(int line) {
 // ===================================================================
 
 #ifndef _MSC_VER
+const int MetaInfo::kTyFieldNumber;
+const int MetaInfo::kNmFieldNumber;
+const int MetaInfo::kOtFieldNumber;
+const int MetaInfo::kRqetFieldNumber;
+const int MetaInfo::kRsetFieldNumber;
+const int MetaInfo::kOetFieldNumber;
+const int MetaInfo::kRtFieldNumber;
+const int MetaInfo::kRpFieldNumber;
+const int MetaInfo::kRcnFieldNumber;
+const int MetaInfo::kEcFieldNumber;
+const int MetaInfo::kDaFieldNumber;
+const int MetaInfo::kGidFieldNumber;
+const int MetaInfo::kFcFieldNumber;
+const int MetaInfo::kDrtFieldNumber;
+#endif  // !_MSC_VER
+
+MetaInfo::MetaInfo()
+  : ::google::protobuf::Message(), _internal_metadata_(NULL) {
+  SharedCtor();
+  // @@protoc_insertion_point(constructor:MicroWireless.OneM2M.pb.MetaInfo)
+}
+
+void MetaInfo::InitAsDefaultInstance() {
+  _is_default_instance_ = true;
+  ot_ = const_cast< ::google::protobuf::Timestamp*>(&::google::protobuf::Timestamp::default_instance());
+  rqet_ = const_cast< ::google::protobuf::Timestamp*>(&::google::protobuf::Timestamp::default_instance());
+  rset_ = const_cast< ::google::protobuf::Timestamp*>(&::google::protobuf::Timestamp::default_instance());
+  oet_ = const_cast< ::google::protobuf::Duration*>(&::google::protobuf::Duration::default_instance());
+  rp_ = const_cast< ::google::protobuf::Duration*>(&::google::protobuf::Duration::default_instance());
+  fc_ = const_cast< ::MicroWireless::OneM2M::pb::FilterCriteria*>(&::MicroWireless::OneM2M::pb::FilterCriteria::default_instance());
+}
+
+MetaInfo::MetaInfo(const MetaInfo& from)
+  : ::google::protobuf::Message(),
+    _internal_metadata_(NULL) {
+  SharedCtor();
+  MergeFrom(from);
+  // @@protoc_insertion_point(copy_constructor:MicroWireless.OneM2M.pb.MetaInfo)
+}
+
+void MetaInfo::SharedCtor() {
+    _is_default_instance_ = false;
+  ::google::protobuf::internal::GetEmptyString();
+  _cached_size_ = 0;
+  ty_ = 0;
+  nm_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  ot_ = NULL;
+  rqet_ = NULL;
+  rset_ = NULL;
+  oet_ = NULL;
+  rt_ = 0;
+  rp_ = NULL;
+  rcn_ = 0;
+  ec_ = 0;
+  da_ = false;
+  gid_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  fc_ = NULL;
+  drt_ = 0;
+}
+
+MetaInfo::~MetaInfo() {
+  // @@protoc_insertion_point(destructor:MicroWireless.OneM2M.pb.MetaInfo)
+  SharedDtor();
+}
+
+void MetaInfo::SharedDtor() {
+  nm_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  gid_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  if (this != default_instance_) {
+    delete ot_;
+    delete rqet_;
+    delete rset_;
+    delete oet_;
+    delete rp_;
+    delete fc_;
+  }
+}
+
+void MetaInfo::SetCachedSize(int size) const {
+  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+  _cached_size_ = size;
+  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+}
+const ::google::protobuf::Descriptor* MetaInfo::descriptor() {
+  protobuf_AssignDescriptorsOnce();
+  return MetaInfo_descriptor_;
+}
+
+const MetaInfo& MetaInfo::default_instance() {
+  if (default_instance_ == NULL) protobuf_AddDesc_Request_2eproto();
+  return *default_instance_;
+}
+
+MetaInfo* MetaInfo::default_instance_ = NULL;
+
+MetaInfo* MetaInfo::New(::google::protobuf::Arena* arena) const {
+  MetaInfo* n = new MetaInfo;
+  if (arena != NULL) {
+    arena->Own(n);
+  }
+  return n;
+}
+
+void MetaInfo::Clear() {
+#define ZR_HELPER_(f) reinterpret_cast<char*>(\
+  &reinterpret_cast<MetaInfo*>(16)->f)
+
+#define ZR_(first, last) do {\
+  ::memset(&first, 0,\
+           ZR_HELPER_(last) - ZR_HELPER_(first) + sizeof(last));\
+} while (0)
+
+  ZR_(ty_, rt_);
+  nm_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  if (GetArenaNoVirtual() == NULL && ot_ != NULL) delete ot_;
+  ot_ = NULL;
+  if (GetArenaNoVirtual() == NULL && rqet_ != NULL) delete rqet_;
+  rqet_ = NULL;
+  if (GetArenaNoVirtual() == NULL && rset_ != NULL) delete rset_;
+  rset_ = NULL;
+  if (GetArenaNoVirtual() == NULL && oet_ != NULL) delete oet_;
+  oet_ = NULL;
+  if (GetArenaNoVirtual() == NULL && rp_ != NULL) delete rp_;
+  rp_ = NULL;
+  ZR_(rcn_, ec_);
+  ZR_(da_, drt_);
+  gid_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  if (GetArenaNoVirtual() == NULL && fc_ != NULL) delete fc_;
+  fc_ = NULL;
+
+#undef ZR_HELPER_
+#undef ZR_
+
+}
+
+bool MetaInfo::MergePartialFromCodedStream(
+    ::google::protobuf::io::CodedInputStream* input) {
+#define DO_(EXPRESSION) if (!(EXPRESSION)) goto failure
+  ::google::protobuf::uint32 tag;
+  // @@protoc_insertion_point(parse_start:MicroWireless.OneM2M.pb.MetaInfo)
+  for (;;) {
+    ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoff(16383);
+    tag = p.first;
+    if (!p.second) goto handle_unusual;
+    switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
+      // optional .MicroWireless.OneM2M.pb.CommonTypes.SupportedResourceType ty = 105;
+      case 105: {
+        if (tag == 840) {
+          int value;
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   int, ::google::protobuf::internal::WireFormatLite::TYPE_ENUM>(
+                 input, &value)));
+          set_ty(static_cast< ::MicroWireless::OneM2M::pb::CommonTypes_SupportedResourceType >(value));
+        } else {
+          goto handle_unusual;
+        }
+        if (input->ExpectTag(850)) goto parse_nm;
+        break;
+      }
+
+      // optional string nm = 106;
+      case 106: {
+        if (tag == 850) {
+         parse_nm:
+          DO_(::google::protobuf::internal::WireFormatLite::ReadString(
+                input, this->mutable_nm()));
+          ::google::protobuf::internal::WireFormat::VerifyUTF8StringNamedField(
+            this->nm().data(), this->nm().length(),
+            ::google::protobuf::internal::WireFormat::PARSE,
+            "MicroWireless.OneM2M.pb.MetaInfo.nm");
+        } else {
+          goto handle_unusual;
+        }
+        if (input->ExpectTag(866)) goto parse_ot;
+        break;
+      }
+
+      // optional .google.protobuf.Timestamp ot = 108;
+      case 108: {
+        if (tag == 866) {
+         parse_ot:
+          DO_(::google::protobuf::internal::WireFormatLite::ReadMessageNoVirtual(
+               input, mutable_ot()));
+        } else {
+          goto handle_unusual;
+        }
+        if (input->ExpectTag(874)) goto parse_rqet;
+        break;
+      }
+
+      // optional .google.protobuf.Timestamp rqet = 109;
+      case 109: {
+        if (tag == 874) {
+         parse_rqet:
+          DO_(::google::protobuf::internal::WireFormatLite::ReadMessageNoVirtual(
+               input, mutable_rqet()));
+        } else {
+          goto handle_unusual;
+        }
+        if (input->ExpectTag(882)) goto parse_rset;
+        break;
+      }
+
+      // optional .google.protobuf.Timestamp rset = 110;
+      case 110: {
+        if (tag == 882) {
+         parse_rset:
+          DO_(::google::protobuf::internal::WireFormatLite::ReadMessageNoVirtual(
+               input, mutable_rset()));
+        } else {
+          goto handle_unusual;
+        }
+        if (input->ExpectTag(890)) goto parse_oet;
+        break;
+      }
+
+      // optional .google.protobuf.Duration oet = 111;
+      case 111: {
+        if (tag == 890) {
+         parse_oet:
+          DO_(::google::protobuf::internal::WireFormatLite::ReadMessageNoVirtual(
+               input, mutable_oet()));
+        } else {
+          goto handle_unusual;
+        }
+        if (input->ExpectTag(896)) goto parse_rt;
+        break;
+      }
+
+      // optional .MicroWireless.OneM2M.pb.CommonTypes.ResponseType rt = 112;
+      case 112: {
+        if (tag == 896) {
+         parse_rt:
+          int value;
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   int, ::google::protobuf::internal::WireFormatLite::TYPE_ENUM>(
+                 input, &value)));
+          set_rt(static_cast< ::MicroWireless::OneM2M::pb::CommonTypes_ResponseType >(value));
+        } else {
+          goto handle_unusual;
+        }
+        if (input->ExpectTag(906)) goto parse_rp;
+        break;
+      }
+
+      // optional .google.protobuf.Duration rp = 113;
+      case 113: {
+        if (tag == 906) {
+         parse_rp:
+          DO_(::google::protobuf::internal::WireFormatLite::ReadMessageNoVirtual(
+               input, mutable_rp()));
+        } else {
+          goto handle_unusual;
+        }
+        if (input->ExpectTag(912)) goto parse_rcn;
+        break;
+      }
+
+      // optional .MicroWireless.OneM2M.pb.CommonTypes.ResultContent rcn = 114;
+      case 114: {
+        if (tag == 912) {
+         parse_rcn:
+          int value;
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   int, ::google::protobuf::internal::WireFormatLite::TYPE_ENUM>(
+                 input, &value)));
+          set_rcn(static_cast< ::MicroWireless::OneM2M::pb::CommonTypes_ResultContent >(value));
+        } else {
+          goto handle_unusual;
+        }
+        if (input->ExpectTag(920)) goto parse_ec;
+        break;
+      }
+
+      // optional .MicroWireless.OneM2M.pb.CommonTypes.EventCat ec = 115;
+      case 115: {
+        if (tag == 920) {
+         parse_ec:
+          int value;
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   int, ::google::protobuf::internal::WireFormatLite::TYPE_ENUM>(
+                 input, &value)));
+          set_ec(static_cast< ::MicroWireless::OneM2M::pb::CommonTypes_EventCat >(value));
+        } else {
+          goto handle_unusual;
+        }
+        if (input->ExpectTag(928)) goto parse_da;
+        break;
+      }
+
+      // optional bool da = 116;
+      case 116: {
+        if (tag == 928) {
+         parse_da:
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   bool, ::google::protobuf::internal::WireFormatLite::TYPE_BOOL>(
+                 input, &da_)));
+
+        } else {
+          goto handle_unusual;
+        }
+        if (input->ExpectTag(938)) goto parse_gid;
+        break;
+      }
+
+      // optional string gid = 117;
+      case 117: {
+        if (tag == 938) {
+         parse_gid:
+          DO_(::google::protobuf::internal::WireFormatLite::ReadString(
+                input, this->mutable_gid()));
+          ::google::protobuf::internal::WireFormat::VerifyUTF8StringNamedField(
+            this->gid().data(), this->gid().length(),
+            ::google::protobuf::internal::WireFormat::PARSE,
+            "MicroWireless.OneM2M.pb.MetaInfo.gid");
+        } else {
+          goto handle_unusual;
+        }
+        if (input->ExpectTag(946)) goto parse_fc;
+        break;
+      }
+
+      // optional .MicroWireless.OneM2M.pb.FilterCriteria fc = 118;
+      case 118: {
+        if (tag == 946) {
+         parse_fc:
+          DO_(::google::protobuf::internal::WireFormatLite::ReadMessageNoVirtual(
+               input, mutable_fc()));
+        } else {
+          goto handle_unusual;
+        }
+        if (input->ExpectTag(952)) goto parse_drt;
+        break;
+      }
+
+      // optional .MicroWireless.OneM2M.pb.CommonTypes.DiscoveryResultType drt = 119;
+      case 119: {
+        if (tag == 952) {
+         parse_drt:
+          int value;
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   int, ::google::protobuf::internal::WireFormatLite::TYPE_ENUM>(
+                 input, &value)));
+          set_drt(static_cast< ::MicroWireless::OneM2M::pb::CommonTypes_DiscoveryResultType >(value));
+        } else {
+          goto handle_unusual;
+        }
+        if (input->ExpectAtEnd()) goto success;
+        break;
+      }
+
+      default: {
+      handle_unusual:
+        if (tag == 0 ||
+            ::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
+            ::google::protobuf::internal::WireFormatLite::WIRETYPE_END_GROUP) {
+          goto success;
+        }
+        DO_(::google::protobuf::internal::WireFormatLite::SkipField(input, tag));
+        break;
+      }
+    }
+  }
+success:
+  // @@protoc_insertion_point(parse_success:MicroWireless.OneM2M.pb.MetaInfo)
+  return true;
+failure:
+  // @@protoc_insertion_point(parse_failure:MicroWireless.OneM2M.pb.MetaInfo)
+  return false;
+#undef DO_
+}
+
+void MetaInfo::SerializeWithCachedSizes(
+    ::google::protobuf::io::CodedOutputStream* output) const {
+  // @@protoc_insertion_point(serialize_start:MicroWireless.OneM2M.pb.MetaInfo)
+  // optional .MicroWireless.OneM2M.pb.CommonTypes.SupportedResourceType ty = 105;
+  if (this->ty() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteEnum(
+      105, this->ty(), output);
+  }
+
+  // optional string nm = 106;
+  if (this->nm().size() > 0) {
+    ::google::protobuf::internal::WireFormat::VerifyUTF8StringNamedField(
+      this->nm().data(), this->nm().length(),
+      ::google::protobuf::internal::WireFormat::SERIALIZE,
+      "MicroWireless.OneM2M.pb.MetaInfo.nm");
+    ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
+      106, this->nm(), output);
+  }
+
+  // optional .google.protobuf.Timestamp ot = 108;
+  if (this->has_ot()) {
+    ::google::protobuf::internal::WireFormatLite::WriteMessageMaybeToArray(
+      108, *this->ot_, output);
+  }
+
+  // optional .google.protobuf.Timestamp rqet = 109;
+  if (this->has_rqet()) {
+    ::google::protobuf::internal::WireFormatLite::WriteMessageMaybeToArray(
+      109, *this->rqet_, output);
+  }
+
+  // optional .google.protobuf.Timestamp rset = 110;
+  if (this->has_rset()) {
+    ::google::protobuf::internal::WireFormatLite::WriteMessageMaybeToArray(
+      110, *this->rset_, output);
+  }
+
+  // optional .google.protobuf.Duration oet = 111;
+  if (this->has_oet()) {
+    ::google::protobuf::internal::WireFormatLite::WriteMessageMaybeToArray(
+      111, *this->oet_, output);
+  }
+
+  // optional .MicroWireless.OneM2M.pb.CommonTypes.ResponseType rt = 112;
+  if (this->rt() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteEnum(
+      112, this->rt(), output);
+  }
+
+  // optional .google.protobuf.Duration rp = 113;
+  if (this->has_rp()) {
+    ::google::protobuf::internal::WireFormatLite::WriteMessageMaybeToArray(
+      113, *this->rp_, output);
+  }
+
+  // optional .MicroWireless.OneM2M.pb.CommonTypes.ResultContent rcn = 114;
+  if (this->rcn() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteEnum(
+      114, this->rcn(), output);
+  }
+
+  // optional .MicroWireless.OneM2M.pb.CommonTypes.EventCat ec = 115;
+  if (this->ec() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteEnum(
+      115, this->ec(), output);
+  }
+
+  // optional bool da = 116;
+  if (this->da() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteBool(116, this->da(), output);
+  }
+
+  // optional string gid = 117;
+  if (this->gid().size() > 0) {
+    ::google::protobuf::internal::WireFormat::VerifyUTF8StringNamedField(
+      this->gid().data(), this->gid().length(),
+      ::google::protobuf::internal::WireFormat::SERIALIZE,
+      "MicroWireless.OneM2M.pb.MetaInfo.gid");
+    ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
+      117, this->gid(), output);
+  }
+
+  // optional .MicroWireless.OneM2M.pb.FilterCriteria fc = 118;
+  if (this->has_fc()) {
+    ::google::protobuf::internal::WireFormatLite::WriteMessageMaybeToArray(
+      118, *this->fc_, output);
+  }
+
+  // optional .MicroWireless.OneM2M.pb.CommonTypes.DiscoveryResultType drt = 119;
+  if (this->drt() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteEnum(
+      119, this->drt(), output);
+  }
+
+  // @@protoc_insertion_point(serialize_end:MicroWireless.OneM2M.pb.MetaInfo)
+}
+
+::google::protobuf::uint8* MetaInfo::SerializeWithCachedSizesToArray(
+    ::google::protobuf::uint8* target) const {
+  // @@protoc_insertion_point(serialize_to_array_start:MicroWireless.OneM2M.pb.MetaInfo)
+  // optional .MicroWireless.OneM2M.pb.CommonTypes.SupportedResourceType ty = 105;
+  if (this->ty() != 0) {
+    target = ::google::protobuf::internal::WireFormatLite::WriteEnumToArray(
+      105, this->ty(), target);
+  }
+
+  // optional string nm = 106;
+  if (this->nm().size() > 0) {
+    ::google::protobuf::internal::WireFormat::VerifyUTF8StringNamedField(
+      this->nm().data(), this->nm().length(),
+      ::google::protobuf::internal::WireFormat::SERIALIZE,
+      "MicroWireless.OneM2M.pb.MetaInfo.nm");
+    target =
+      ::google::protobuf::internal::WireFormatLite::WriteStringToArray(
+        106, this->nm(), target);
+  }
+
+  // optional .google.protobuf.Timestamp ot = 108;
+  if (this->has_ot()) {
+    target = ::google::protobuf::internal::WireFormatLite::
+      WriteMessageNoVirtualToArray(
+        108, *this->ot_, target);
+  }
+
+  // optional .google.protobuf.Timestamp rqet = 109;
+  if (this->has_rqet()) {
+    target = ::google::protobuf::internal::WireFormatLite::
+      WriteMessageNoVirtualToArray(
+        109, *this->rqet_, target);
+  }
+
+  // optional .google.protobuf.Timestamp rset = 110;
+  if (this->has_rset()) {
+    target = ::google::protobuf::internal::WireFormatLite::
+      WriteMessageNoVirtualToArray(
+        110, *this->rset_, target);
+  }
+
+  // optional .google.protobuf.Duration oet = 111;
+  if (this->has_oet()) {
+    target = ::google::protobuf::internal::WireFormatLite::
+      WriteMessageNoVirtualToArray(
+        111, *this->oet_, target);
+  }
+
+  // optional .MicroWireless.OneM2M.pb.CommonTypes.ResponseType rt = 112;
+  if (this->rt() != 0) {
+    target = ::google::protobuf::internal::WireFormatLite::WriteEnumToArray(
+      112, this->rt(), target);
+  }
+
+  // optional .google.protobuf.Duration rp = 113;
+  if (this->has_rp()) {
+    target = ::google::protobuf::internal::WireFormatLite::
+      WriteMessageNoVirtualToArray(
+        113, *this->rp_, target);
+  }
+
+  // optional .MicroWireless.OneM2M.pb.CommonTypes.ResultContent rcn = 114;
+  if (this->rcn() != 0) {
+    target = ::google::protobuf::internal::WireFormatLite::WriteEnumToArray(
+      114, this->rcn(), target);
+  }
+
+  // optional .MicroWireless.OneM2M.pb.CommonTypes.EventCat ec = 115;
+  if (this->ec() != 0) {
+    target = ::google::protobuf::internal::WireFormatLite::WriteEnumToArray(
+      115, this->ec(), target);
+  }
+
+  // optional bool da = 116;
+  if (this->da() != 0) {
+    target = ::google::protobuf::internal::WireFormatLite::WriteBoolToArray(116, this->da(), target);
+  }
+
+  // optional string gid = 117;
+  if (this->gid().size() > 0) {
+    ::google::protobuf::internal::WireFormat::VerifyUTF8StringNamedField(
+      this->gid().data(), this->gid().length(),
+      ::google::protobuf::internal::WireFormat::SERIALIZE,
+      "MicroWireless.OneM2M.pb.MetaInfo.gid");
+    target =
+      ::google::protobuf::internal::WireFormatLite::WriteStringToArray(
+        117, this->gid(), target);
+  }
+
+  // optional .MicroWireless.OneM2M.pb.FilterCriteria fc = 118;
+  if (this->has_fc()) {
+    target = ::google::protobuf::internal::WireFormatLite::
+      WriteMessageNoVirtualToArray(
+        118, *this->fc_, target);
+  }
+
+  // optional .MicroWireless.OneM2M.pb.CommonTypes.DiscoveryResultType drt = 119;
+  if (this->drt() != 0) {
+    target = ::google::protobuf::internal::WireFormatLite::WriteEnumToArray(
+      119, this->drt(), target);
+  }
+
+  // @@protoc_insertion_point(serialize_to_array_end:MicroWireless.OneM2M.pb.MetaInfo)
+  return target;
+}
+
+int MetaInfo::ByteSize() const {
+  int total_size = 0;
+
+  // optional .MicroWireless.OneM2M.pb.CommonTypes.SupportedResourceType ty = 105;
+  if (this->ty() != 0) {
+    total_size += 2 +
+      ::google::protobuf::internal::WireFormatLite::EnumSize(this->ty());
+  }
+
+  // optional string nm = 106;
+  if (this->nm().size() > 0) {
+    total_size += 2 +
+      ::google::protobuf::internal::WireFormatLite::StringSize(
+        this->nm());
+  }
+
+  // optional .google.protobuf.Timestamp ot = 108;
+  if (this->has_ot()) {
+    total_size += 2 +
+      ::google::protobuf::internal::WireFormatLite::MessageSizeNoVirtual(
+        *this->ot_);
+  }
+
+  // optional .google.protobuf.Timestamp rqet = 109;
+  if (this->has_rqet()) {
+    total_size += 2 +
+      ::google::protobuf::internal::WireFormatLite::MessageSizeNoVirtual(
+        *this->rqet_);
+  }
+
+  // optional .google.protobuf.Timestamp rset = 110;
+  if (this->has_rset()) {
+    total_size += 2 +
+      ::google::protobuf::internal::WireFormatLite::MessageSizeNoVirtual(
+        *this->rset_);
+  }
+
+  // optional .google.protobuf.Duration oet = 111;
+  if (this->has_oet()) {
+    total_size += 2 +
+      ::google::protobuf::internal::WireFormatLite::MessageSizeNoVirtual(
+        *this->oet_);
+  }
+
+  // optional .MicroWireless.OneM2M.pb.CommonTypes.ResponseType rt = 112;
+  if (this->rt() != 0) {
+    total_size += 2 +
+      ::google::protobuf::internal::WireFormatLite::EnumSize(this->rt());
+  }
+
+  // optional .google.protobuf.Duration rp = 113;
+  if (this->has_rp()) {
+    total_size += 2 +
+      ::google::protobuf::internal::WireFormatLite::MessageSizeNoVirtual(
+        *this->rp_);
+  }
+
+  // optional .MicroWireless.OneM2M.pb.CommonTypes.ResultContent rcn = 114;
+  if (this->rcn() != 0) {
+    total_size += 2 +
+      ::google::protobuf::internal::WireFormatLite::EnumSize(this->rcn());
+  }
+
+  // optional .MicroWireless.OneM2M.pb.CommonTypes.EventCat ec = 115;
+  if (this->ec() != 0) {
+    total_size += 2 +
+      ::google::protobuf::internal::WireFormatLite::EnumSize(this->ec());
+  }
+
+  // optional bool da = 116;
+  if (this->da() != 0) {
+    total_size += 2 + 1;
+  }
+
+  // optional string gid = 117;
+  if (this->gid().size() > 0) {
+    total_size += 2 +
+      ::google::protobuf::internal::WireFormatLite::StringSize(
+        this->gid());
+  }
+
+  // optional .MicroWireless.OneM2M.pb.FilterCriteria fc = 118;
+  if (this->has_fc()) {
+    total_size += 2 +
+      ::google::protobuf::internal::WireFormatLite::MessageSizeNoVirtual(
+        *this->fc_);
+  }
+
+  // optional .MicroWireless.OneM2M.pb.CommonTypes.DiscoveryResultType drt = 119;
+  if (this->drt() != 0) {
+    total_size += 2 +
+      ::google::protobuf::internal::WireFormatLite::EnumSize(this->drt());
+  }
+
+  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+  _cached_size_ = total_size;
+  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+  return total_size;
+}
+
+void MetaInfo::MergeFrom(const ::google::protobuf::Message& from) {
+  if (GOOGLE_PREDICT_FALSE(&from == this)) MergeFromFail(__LINE__);
+  const MetaInfo* source = 
+      ::google::protobuf::internal::DynamicCastToGenerated<const MetaInfo>(
+          &from);
+  if (source == NULL) {
+    ::google::protobuf::internal::ReflectionOps::Merge(from, this);
+  } else {
+    MergeFrom(*source);
+  }
+}
+
+void MetaInfo::MergeFrom(const MetaInfo& from) {
+  if (GOOGLE_PREDICT_FALSE(&from == this)) MergeFromFail(__LINE__);
+  if (from.ty() != 0) {
+    set_ty(from.ty());
+  }
+  if (from.nm().size() > 0) {
+
+    nm_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.nm_);
+  }
+  if (from.has_ot()) {
+    mutable_ot()->::google::protobuf::Timestamp::MergeFrom(from.ot());
+  }
+  if (from.has_rqet()) {
+    mutable_rqet()->::google::protobuf::Timestamp::MergeFrom(from.rqet());
+  }
+  if (from.has_rset()) {
+    mutable_rset()->::google::protobuf::Timestamp::MergeFrom(from.rset());
+  }
+  if (from.has_oet()) {
+    mutable_oet()->::google::protobuf::Duration::MergeFrom(from.oet());
+  }
+  if (from.rt() != 0) {
+    set_rt(from.rt());
+  }
+  if (from.has_rp()) {
+    mutable_rp()->::google::protobuf::Duration::MergeFrom(from.rp());
+  }
+  if (from.rcn() != 0) {
+    set_rcn(from.rcn());
+  }
+  if (from.ec() != 0) {
+    set_ec(from.ec());
+  }
+  if (from.da() != 0) {
+    set_da(from.da());
+  }
+  if (from.gid().size() > 0) {
+
+    gid_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.gid_);
+  }
+  if (from.has_fc()) {
+    mutable_fc()->::MicroWireless::OneM2M::pb::FilterCriteria::MergeFrom(from.fc());
+  }
+  if (from.drt() != 0) {
+    set_drt(from.drt());
+  }
+}
+
+void MetaInfo::CopyFrom(const ::google::protobuf::Message& from) {
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+void MetaInfo::CopyFrom(const MetaInfo& from) {
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool MetaInfo::IsInitialized() const {
+
+  return true;
+}
+
+void MetaInfo::Swap(MetaInfo* other) {
+  if (other == this) return;
+  InternalSwap(other);
+}
+void MetaInfo::InternalSwap(MetaInfo* other) {
+  std::swap(ty_, other->ty_);
+  nm_.Swap(&other->nm_);
+  std::swap(ot_, other->ot_);
+  std::swap(rqet_, other->rqet_);
+  std::swap(rset_, other->rset_);
+  std::swap(oet_, other->oet_);
+  std::swap(rt_, other->rt_);
+  std::swap(rp_, other->rp_);
+  std::swap(rcn_, other->rcn_);
+  std::swap(ec_, other->ec_);
+  std::swap(da_, other->da_);
+  gid_.Swap(&other->gid_);
+  std::swap(fc_, other->fc_);
+  std::swap(drt_, other->drt_);
+  _internal_metadata_.Swap(&other->_internal_metadata_);
+  std::swap(_cached_size_, other->_cached_size_);
+}
+
+::google::protobuf::Metadata MetaInfo::GetMetadata() const {
+  protobuf_AssignDescriptorsOnce();
+  ::google::protobuf::Metadata metadata;
+  metadata.descriptor = MetaInfo_descriptor_;
+  metadata.reflection = MetaInfo_reflection_;
+  return metadata;
+}
+
+#if PROTOBUF_INLINE_NOT_IN_HEADERS
+// MetaInfo
+
+// optional .MicroWireless.OneM2M.pb.CommonTypes.SupportedResourceType ty = 105;
+void MetaInfo::clear_ty() {
+  ty_ = 0;
+}
+ ::MicroWireless::OneM2M::pb::CommonTypes_SupportedResourceType MetaInfo::ty() const {
+  // @@protoc_insertion_point(field_get:MicroWireless.OneM2M.pb.MetaInfo.ty)
+  return static_cast< ::MicroWireless::OneM2M::pb::CommonTypes_SupportedResourceType >(ty_);
+}
+ void MetaInfo::set_ty(::MicroWireless::OneM2M::pb::CommonTypes_SupportedResourceType value) {
+  
+  ty_ = value;
+  // @@protoc_insertion_point(field_set:MicroWireless.OneM2M.pb.MetaInfo.ty)
+}
+
+// optional string nm = 106;
+void MetaInfo::clear_nm() {
+  nm_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+ const ::std::string& MetaInfo::nm() const {
+  // @@protoc_insertion_point(field_get:MicroWireless.OneM2M.pb.MetaInfo.nm)
+  return nm_.GetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+ void MetaInfo::set_nm(const ::std::string& value) {
+  
+  nm_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
+  // @@protoc_insertion_point(field_set:MicroWireless.OneM2M.pb.MetaInfo.nm)
+}
+ void MetaInfo::set_nm(const char* value) {
+  
+  nm_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
+  // @@protoc_insertion_point(field_set_char:MicroWireless.OneM2M.pb.MetaInfo.nm)
+}
+ void MetaInfo::set_nm(const char* value, size_t size) {
+  
+  nm_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
+      ::std::string(reinterpret_cast<const char*>(value), size));
+  // @@protoc_insertion_point(field_set_pointer:MicroWireless.OneM2M.pb.MetaInfo.nm)
+}
+ ::std::string* MetaInfo::mutable_nm() {
+  
+  // @@protoc_insertion_point(field_mutable:MicroWireless.OneM2M.pb.MetaInfo.nm)
+  return nm_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+ ::std::string* MetaInfo::release_nm() {
+  
+  return nm_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+ void MetaInfo::set_allocated_nm(::std::string* nm) {
+  if (nm != NULL) {
+    
+  } else {
+    
+  }
+  nm_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), nm);
+  // @@protoc_insertion_point(field_set_allocated:MicroWireless.OneM2M.pb.MetaInfo.nm)
+}
+
+// optional .google.protobuf.Timestamp ot = 108;
+bool MetaInfo::has_ot() const {
+  return !_is_default_instance_ && ot_ != NULL;
+}
+void MetaInfo::clear_ot() {
+  if (GetArenaNoVirtual() == NULL && ot_ != NULL) delete ot_;
+  ot_ = NULL;
+}
+ const ::google::protobuf::Timestamp& MetaInfo::ot() const {
+  // @@protoc_insertion_point(field_get:MicroWireless.OneM2M.pb.MetaInfo.ot)
+  return ot_ != NULL ? *ot_ : *default_instance_->ot_;
+}
+ ::google::protobuf::Timestamp* MetaInfo::mutable_ot() {
+  
+  if (ot_ == NULL) {
+    ot_ = new ::google::protobuf::Timestamp;
+  }
+  // @@protoc_insertion_point(field_mutable:MicroWireless.OneM2M.pb.MetaInfo.ot)
+  return ot_;
+}
+ ::google::protobuf::Timestamp* MetaInfo::release_ot() {
+  
+  ::google::protobuf::Timestamp* temp = ot_;
+  ot_ = NULL;
+  return temp;
+}
+ void MetaInfo::set_allocated_ot(::google::protobuf::Timestamp* ot) {
+  delete ot_;
+  ot_ = ot;
+  if (ot) {
+    
+  } else {
+    
+  }
+  // @@protoc_insertion_point(field_set_allocated:MicroWireless.OneM2M.pb.MetaInfo.ot)
+}
+
+// optional .google.protobuf.Timestamp rqet = 109;
+bool MetaInfo::has_rqet() const {
+  return !_is_default_instance_ && rqet_ != NULL;
+}
+void MetaInfo::clear_rqet() {
+  if (GetArenaNoVirtual() == NULL && rqet_ != NULL) delete rqet_;
+  rqet_ = NULL;
+}
+ const ::google::protobuf::Timestamp& MetaInfo::rqet() const {
+  // @@protoc_insertion_point(field_get:MicroWireless.OneM2M.pb.MetaInfo.rqet)
+  return rqet_ != NULL ? *rqet_ : *default_instance_->rqet_;
+}
+ ::google::protobuf::Timestamp* MetaInfo::mutable_rqet() {
+  
+  if (rqet_ == NULL) {
+    rqet_ = new ::google::protobuf::Timestamp;
+  }
+  // @@protoc_insertion_point(field_mutable:MicroWireless.OneM2M.pb.MetaInfo.rqet)
+  return rqet_;
+}
+ ::google::protobuf::Timestamp* MetaInfo::release_rqet() {
+  
+  ::google::protobuf::Timestamp* temp = rqet_;
+  rqet_ = NULL;
+  return temp;
+}
+ void MetaInfo::set_allocated_rqet(::google::protobuf::Timestamp* rqet) {
+  delete rqet_;
+  rqet_ = rqet;
+  if (rqet) {
+    
+  } else {
+    
+  }
+  // @@protoc_insertion_point(field_set_allocated:MicroWireless.OneM2M.pb.MetaInfo.rqet)
+}
+
+// optional .google.protobuf.Timestamp rset = 110;
+bool MetaInfo::has_rset() const {
+  return !_is_default_instance_ && rset_ != NULL;
+}
+void MetaInfo::clear_rset() {
+  if (GetArenaNoVirtual() == NULL && rset_ != NULL) delete rset_;
+  rset_ = NULL;
+}
+ const ::google::protobuf::Timestamp& MetaInfo::rset() const {
+  // @@protoc_insertion_point(field_get:MicroWireless.OneM2M.pb.MetaInfo.rset)
+  return rset_ != NULL ? *rset_ : *default_instance_->rset_;
+}
+ ::google::protobuf::Timestamp* MetaInfo::mutable_rset() {
+  
+  if (rset_ == NULL) {
+    rset_ = new ::google::protobuf::Timestamp;
+  }
+  // @@protoc_insertion_point(field_mutable:MicroWireless.OneM2M.pb.MetaInfo.rset)
+  return rset_;
+}
+ ::google::protobuf::Timestamp* MetaInfo::release_rset() {
+  
+  ::google::protobuf::Timestamp* temp = rset_;
+  rset_ = NULL;
+  return temp;
+}
+ void MetaInfo::set_allocated_rset(::google::protobuf::Timestamp* rset) {
+  delete rset_;
+  rset_ = rset;
+  if (rset) {
+    
+  } else {
+    
+  }
+  // @@protoc_insertion_point(field_set_allocated:MicroWireless.OneM2M.pb.MetaInfo.rset)
+}
+
+// optional .google.protobuf.Duration oet = 111;
+bool MetaInfo::has_oet() const {
+  return !_is_default_instance_ && oet_ != NULL;
+}
+void MetaInfo::clear_oet() {
+  if (GetArenaNoVirtual() == NULL && oet_ != NULL) delete oet_;
+  oet_ = NULL;
+}
+ const ::google::protobuf::Duration& MetaInfo::oet() const {
+  // @@protoc_insertion_point(field_get:MicroWireless.OneM2M.pb.MetaInfo.oet)
+  return oet_ != NULL ? *oet_ : *default_instance_->oet_;
+}
+ ::google::protobuf::Duration* MetaInfo::mutable_oet() {
+  
+  if (oet_ == NULL) {
+    oet_ = new ::google::protobuf::Duration;
+  }
+  // @@protoc_insertion_point(field_mutable:MicroWireless.OneM2M.pb.MetaInfo.oet)
+  return oet_;
+}
+ ::google::protobuf::Duration* MetaInfo::release_oet() {
+  
+  ::google::protobuf::Duration* temp = oet_;
+  oet_ = NULL;
+  return temp;
+}
+ void MetaInfo::set_allocated_oet(::google::protobuf::Duration* oet) {
+  delete oet_;
+  oet_ = oet;
+  if (oet) {
+    
+  } else {
+    
+  }
+  // @@protoc_insertion_point(field_set_allocated:MicroWireless.OneM2M.pb.MetaInfo.oet)
+}
+
+// optional .MicroWireless.OneM2M.pb.CommonTypes.ResponseType rt = 112;
+void MetaInfo::clear_rt() {
+  rt_ = 0;
+}
+ ::MicroWireless::OneM2M::pb::CommonTypes_ResponseType MetaInfo::rt() const {
+  // @@protoc_insertion_point(field_get:MicroWireless.OneM2M.pb.MetaInfo.rt)
+  return static_cast< ::MicroWireless::OneM2M::pb::CommonTypes_ResponseType >(rt_);
+}
+ void MetaInfo::set_rt(::MicroWireless::OneM2M::pb::CommonTypes_ResponseType value) {
+  
+  rt_ = value;
+  // @@protoc_insertion_point(field_set:MicroWireless.OneM2M.pb.MetaInfo.rt)
+}
+
+// optional .google.protobuf.Duration rp = 113;
+bool MetaInfo::has_rp() const {
+  return !_is_default_instance_ && rp_ != NULL;
+}
+void MetaInfo::clear_rp() {
+  if (GetArenaNoVirtual() == NULL && rp_ != NULL) delete rp_;
+  rp_ = NULL;
+}
+ const ::google::protobuf::Duration& MetaInfo::rp() const {
+  // @@protoc_insertion_point(field_get:MicroWireless.OneM2M.pb.MetaInfo.rp)
+  return rp_ != NULL ? *rp_ : *default_instance_->rp_;
+}
+ ::google::protobuf::Duration* MetaInfo::mutable_rp() {
+  
+  if (rp_ == NULL) {
+    rp_ = new ::google::protobuf::Duration;
+  }
+  // @@protoc_insertion_point(field_mutable:MicroWireless.OneM2M.pb.MetaInfo.rp)
+  return rp_;
+}
+ ::google::protobuf::Duration* MetaInfo::release_rp() {
+  
+  ::google::protobuf::Duration* temp = rp_;
+  rp_ = NULL;
+  return temp;
+}
+ void MetaInfo::set_allocated_rp(::google::protobuf::Duration* rp) {
+  delete rp_;
+  rp_ = rp;
+  if (rp) {
+    
+  } else {
+    
+  }
+  // @@protoc_insertion_point(field_set_allocated:MicroWireless.OneM2M.pb.MetaInfo.rp)
+}
+
+// optional .MicroWireless.OneM2M.pb.CommonTypes.ResultContent rcn = 114;
+void MetaInfo::clear_rcn() {
+  rcn_ = 0;
+}
+ ::MicroWireless::OneM2M::pb::CommonTypes_ResultContent MetaInfo::rcn() const {
+  // @@protoc_insertion_point(field_get:MicroWireless.OneM2M.pb.MetaInfo.rcn)
+  return static_cast< ::MicroWireless::OneM2M::pb::CommonTypes_ResultContent >(rcn_);
+}
+ void MetaInfo::set_rcn(::MicroWireless::OneM2M::pb::CommonTypes_ResultContent value) {
+  
+  rcn_ = value;
+  // @@protoc_insertion_point(field_set:MicroWireless.OneM2M.pb.MetaInfo.rcn)
+}
+
+// optional .MicroWireless.OneM2M.pb.CommonTypes.EventCat ec = 115;
+void MetaInfo::clear_ec() {
+  ec_ = 0;
+}
+ ::MicroWireless::OneM2M::pb::CommonTypes_EventCat MetaInfo::ec() const {
+  // @@protoc_insertion_point(field_get:MicroWireless.OneM2M.pb.MetaInfo.ec)
+  return static_cast< ::MicroWireless::OneM2M::pb::CommonTypes_EventCat >(ec_);
+}
+ void MetaInfo::set_ec(::MicroWireless::OneM2M::pb::CommonTypes_EventCat value) {
+  
+  ec_ = value;
+  // @@protoc_insertion_point(field_set:MicroWireless.OneM2M.pb.MetaInfo.ec)
+}
+
+// optional bool da = 116;
+void MetaInfo::clear_da() {
+  da_ = false;
+}
+ bool MetaInfo::da() const {
+  // @@protoc_insertion_point(field_get:MicroWireless.OneM2M.pb.MetaInfo.da)
+  return da_;
+}
+ void MetaInfo::set_da(bool value) {
+  
+  da_ = value;
+  // @@protoc_insertion_point(field_set:MicroWireless.OneM2M.pb.MetaInfo.da)
+}
+
+// optional string gid = 117;
+void MetaInfo::clear_gid() {
+  gid_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+ const ::std::string& MetaInfo::gid() const {
+  // @@protoc_insertion_point(field_get:MicroWireless.OneM2M.pb.MetaInfo.gid)
+  return gid_.GetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+ void MetaInfo::set_gid(const ::std::string& value) {
+  
+  gid_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
+  // @@protoc_insertion_point(field_set:MicroWireless.OneM2M.pb.MetaInfo.gid)
+}
+ void MetaInfo::set_gid(const char* value) {
+  
+  gid_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
+  // @@protoc_insertion_point(field_set_char:MicroWireless.OneM2M.pb.MetaInfo.gid)
+}
+ void MetaInfo::set_gid(const char* value, size_t size) {
+  
+  gid_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
+      ::std::string(reinterpret_cast<const char*>(value), size));
+  // @@protoc_insertion_point(field_set_pointer:MicroWireless.OneM2M.pb.MetaInfo.gid)
+}
+ ::std::string* MetaInfo::mutable_gid() {
+  
+  // @@protoc_insertion_point(field_mutable:MicroWireless.OneM2M.pb.MetaInfo.gid)
+  return gid_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+ ::std::string* MetaInfo::release_gid() {
+  
+  return gid_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+ void MetaInfo::set_allocated_gid(::std::string* gid) {
+  if (gid != NULL) {
+    
+  } else {
+    
+  }
+  gid_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), gid);
+  // @@protoc_insertion_point(field_set_allocated:MicroWireless.OneM2M.pb.MetaInfo.gid)
+}
+
+// optional .MicroWireless.OneM2M.pb.FilterCriteria fc = 118;
+bool MetaInfo::has_fc() const {
+  return !_is_default_instance_ && fc_ != NULL;
+}
+void MetaInfo::clear_fc() {
+  if (GetArenaNoVirtual() == NULL && fc_ != NULL) delete fc_;
+  fc_ = NULL;
+}
+ const ::MicroWireless::OneM2M::pb::FilterCriteria& MetaInfo::fc() const {
+  // @@protoc_insertion_point(field_get:MicroWireless.OneM2M.pb.MetaInfo.fc)
+  return fc_ != NULL ? *fc_ : *default_instance_->fc_;
+}
+ ::MicroWireless::OneM2M::pb::FilterCriteria* MetaInfo::mutable_fc() {
+  
+  if (fc_ == NULL) {
+    fc_ = new ::MicroWireless::OneM2M::pb::FilterCriteria;
+  }
+  // @@protoc_insertion_point(field_mutable:MicroWireless.OneM2M.pb.MetaInfo.fc)
+  return fc_;
+}
+ ::MicroWireless::OneM2M::pb::FilterCriteria* MetaInfo::release_fc() {
+  
+  ::MicroWireless::OneM2M::pb::FilterCriteria* temp = fc_;
+  fc_ = NULL;
+  return temp;
+}
+ void MetaInfo::set_allocated_fc(::MicroWireless::OneM2M::pb::FilterCriteria* fc) {
+  delete fc_;
+  fc_ = fc;
+  if (fc) {
+    
+  } else {
+    
+  }
+  // @@protoc_insertion_point(field_set_allocated:MicroWireless.OneM2M.pb.MetaInfo.fc)
+}
+
+// optional .MicroWireless.OneM2M.pb.CommonTypes.DiscoveryResultType drt = 119;
+void MetaInfo::clear_drt() {
+  drt_ = 0;
+}
+ ::MicroWireless::OneM2M::pb::CommonTypes_DiscoveryResultType MetaInfo::drt() const {
+  // @@protoc_insertion_point(field_get:MicroWireless.OneM2M.pb.MetaInfo.drt)
+  return static_cast< ::MicroWireless::OneM2M::pb::CommonTypes_DiscoveryResultType >(drt_);
+}
+ void MetaInfo::set_drt(::MicroWireless::OneM2M::pb::CommonTypes_DiscoveryResultType value) {
+  
+  drt_ = value;
+  // @@protoc_insertion_point(field_set:MicroWireless.OneM2M.pb.MetaInfo.drt)
+}
+
+#endif  // PROTOBUF_INLINE_NOT_IN_HEADERS
+
+// ===================================================================
+
+#ifndef _MSC_VER
+const int OperationResult::kRscFieldNumber;
+const int OperationResult::kToFieldNumber;
+const int OperationResult::kFrFieldNumber;
+const int OperationResult::kRqiFieldNumber;
+const int OperationResult::kPcFieldNumber;
+const int OperationResult::kOtFieldNumber;
+const int OperationResult::kRsetFieldNumber;
+const int OperationResult::kEcFieldNumber;
+#endif  // !_MSC_VER
+
+OperationResult::OperationResult()
+  : ::google::protobuf::Message(), _internal_metadata_(NULL) {
+  SharedCtor();
+  // @@protoc_insertion_point(constructor:MicroWireless.OneM2M.pb.OperationResult)
+}
+
+void OperationResult::InitAsDefaultInstance() {
+  _is_default_instance_ = true;
+  ot_ = const_cast< ::google::protobuf::Timestamp*>(&::google::protobuf::Timestamp::default_instance());
+  rset_ = const_cast< ::google::protobuf::Timestamp*>(&::google::protobuf::Timestamp::default_instance());
+}
+
+OperationResult::OperationResult(const OperationResult& from)
+  : ::google::protobuf::Message(),
+    _internal_metadata_(NULL) {
+  SharedCtor();
+  MergeFrom(from);
+  // @@protoc_insertion_point(copy_constructor:MicroWireless.OneM2M.pb.OperationResult)
+}
+
+void OperationResult::SharedCtor() {
+    _is_default_instance_ = false;
+  ::google::protobuf::internal::GetEmptyString();
+  _cached_size_ = 0;
+  rsc_ = 0;
+  to_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  fr_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  rqi_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  pc_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  ot_ = NULL;
+  rset_ = NULL;
+  ec_ = 0;
+}
+
+OperationResult::~OperationResult() {
+  // @@protoc_insertion_point(destructor:MicroWireless.OneM2M.pb.OperationResult)
+  SharedDtor();
+}
+
+void OperationResult::SharedDtor() {
+  to_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  fr_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  rqi_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  pc_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  if (this != default_instance_) {
+    delete ot_;
+    delete rset_;
+  }
+}
+
+void OperationResult::SetCachedSize(int size) const {
+  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+  _cached_size_ = size;
+  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+}
+const ::google::protobuf::Descriptor* OperationResult::descriptor() {
+  protobuf_AssignDescriptorsOnce();
+  return OperationResult_descriptor_;
+}
+
+const OperationResult& OperationResult::default_instance() {
+  if (default_instance_ == NULL) protobuf_AddDesc_Request_2eproto();
+  return *default_instance_;
+}
+
+OperationResult* OperationResult::default_instance_ = NULL;
+
+OperationResult* OperationResult::New(::google::protobuf::Arena* arena) const {
+  OperationResult* n = new OperationResult;
+  if (arena != NULL) {
+    arena->Own(n);
+  }
+  return n;
+}
+
+void OperationResult::Clear() {
+#define ZR_HELPER_(f) reinterpret_cast<char*>(\
+  &reinterpret_cast<OperationResult*>(16)->f)
+
+#define ZR_(first, last) do {\
+  ::memset(&first, 0,\
+           ZR_HELPER_(last) - ZR_HELPER_(first) + sizeof(last));\
+} while (0)
+
+  ZR_(rsc_, ec_);
+  to_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  fr_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  rqi_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  pc_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  if (GetArenaNoVirtual() == NULL && ot_ != NULL) delete ot_;
+  ot_ = NULL;
+  if (GetArenaNoVirtual() == NULL && rset_ != NULL) delete rset_;
+  rset_ = NULL;
+
+#undef ZR_HELPER_
+#undef ZR_
+
+}
+
+bool OperationResult::MergePartialFromCodedStream(
+    ::google::protobuf::io::CodedInputStream* input) {
+#define DO_(EXPRESSION) if (!(EXPRESSION)) goto failure
+  ::google::protobuf::uint32 tag;
+  // @@protoc_insertion_point(parse_start:MicroWireless.OneM2M.pb.OperationResult)
+  for (;;) {
+    ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoff(16383);
+    tag = p.first;
+    if (!p.second) goto handle_unusual;
+    switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
+      // optional .MicroWireless.OneM2M.pb.CommonTypes.ResponseStatusCode rsc = 201;
+      case 201: {
+        if (tag == 1608) {
+          int value;
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   int, ::google::protobuf::internal::WireFormatLite::TYPE_ENUM>(
+                 input, &value)));
+          set_rsc(static_cast< ::MicroWireless::OneM2M::pb::CommonTypes_ResponseStatusCode >(value));
+        } else {
+          goto handle_unusual;
+        }
+        if (input->ExpectTag(1618)) goto parse_to;
+        break;
+      }
+
+      // optional string to = 202;
+      case 202: {
+        if (tag == 1618) {
+         parse_to:
+          DO_(::google::protobuf::internal::WireFormatLite::ReadString(
+                input, this->mutable_to()));
+          ::google::protobuf::internal::WireFormat::VerifyUTF8StringNamedField(
+            this->to().data(), this->to().length(),
+            ::google::protobuf::internal::WireFormat::PARSE,
+            "MicroWireless.OneM2M.pb.OperationResult.to");
+        } else {
+          goto handle_unusual;
+        }
+        if (input->ExpectTag(1626)) goto parse_fr;
+        break;
+      }
+
+      // optional string fr = 203;
+      case 203: {
+        if (tag == 1626) {
+         parse_fr:
+          DO_(::google::protobuf::internal::WireFormatLite::ReadString(
+                input, this->mutable_fr()));
+          ::google::protobuf::internal::WireFormat::VerifyUTF8StringNamedField(
+            this->fr().data(), this->fr().length(),
+            ::google::protobuf::internal::WireFormat::PARSE,
+            "MicroWireless.OneM2M.pb.OperationResult.fr");
+        } else {
+          goto handle_unusual;
+        }
+        if (input->ExpectTag(1634)) goto parse_rqi;
+        break;
+      }
+
+      // optional string rqi = 204;
+      case 204: {
+        if (tag == 1634) {
+         parse_rqi:
+          DO_(::google::protobuf::internal::WireFormatLite::ReadString(
+                input, this->mutable_rqi()));
+          ::google::protobuf::internal::WireFormat::VerifyUTF8StringNamedField(
+            this->rqi().data(), this->rqi().length(),
+            ::google::protobuf::internal::WireFormat::PARSE,
+            "MicroWireless.OneM2M.pb.OperationResult.rqi");
+        } else {
+          goto handle_unusual;
+        }
+        if (input->ExpectTag(1642)) goto parse_pc;
+        break;
+      }
+
+      // optional string pc = 205;
+      case 205: {
+        if (tag == 1642) {
+         parse_pc:
+          DO_(::google::protobuf::internal::WireFormatLite::ReadString(
+                input, this->mutable_pc()));
+          ::google::protobuf::internal::WireFormat::VerifyUTF8StringNamedField(
+            this->pc().data(), this->pc().length(),
+            ::google::protobuf::internal::WireFormat::PARSE,
+            "MicroWireless.OneM2M.pb.OperationResult.pc");
+        } else {
+          goto handle_unusual;
+        }
+        if (input->ExpectTag(1650)) goto parse_ot;
+        break;
+      }
+
+      // optional .google.protobuf.Timestamp ot = 206;
+      case 206: {
+        if (tag == 1650) {
+         parse_ot:
+          DO_(::google::protobuf::internal::WireFormatLite::ReadMessageNoVirtual(
+               input, mutable_ot()));
+        } else {
+          goto handle_unusual;
+        }
+        if (input->ExpectTag(1658)) goto parse_rset;
+        break;
+      }
+
+      // optional .google.protobuf.Timestamp rset = 207;
+      case 207: {
+        if (tag == 1658) {
+         parse_rset:
+          DO_(::google::protobuf::internal::WireFormatLite::ReadMessageNoVirtual(
+               input, mutable_rset()));
+        } else {
+          goto handle_unusual;
+        }
+        if (input->ExpectTag(1664)) goto parse_ec;
+        break;
+      }
+
+      // optional .MicroWireless.OneM2M.pb.CommonTypes.EventCat ec = 208;
+      case 208: {
+        if (tag == 1664) {
+         parse_ec:
+          int value;
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   int, ::google::protobuf::internal::WireFormatLite::TYPE_ENUM>(
+                 input, &value)));
+          set_ec(static_cast< ::MicroWireless::OneM2M::pb::CommonTypes_EventCat >(value));
+        } else {
+          goto handle_unusual;
+        }
+        if (input->ExpectAtEnd()) goto success;
+        break;
+      }
+
+      default: {
+      handle_unusual:
+        if (tag == 0 ||
+            ::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
+            ::google::protobuf::internal::WireFormatLite::WIRETYPE_END_GROUP) {
+          goto success;
+        }
+        DO_(::google::protobuf::internal::WireFormatLite::SkipField(input, tag));
+        break;
+      }
+    }
+  }
+success:
+  // @@protoc_insertion_point(parse_success:MicroWireless.OneM2M.pb.OperationResult)
+  return true;
+failure:
+  // @@protoc_insertion_point(parse_failure:MicroWireless.OneM2M.pb.OperationResult)
+  return false;
+#undef DO_
+}
+
+void OperationResult::SerializeWithCachedSizes(
+    ::google::protobuf::io::CodedOutputStream* output) const {
+  // @@protoc_insertion_point(serialize_start:MicroWireless.OneM2M.pb.OperationResult)
+  // optional .MicroWireless.OneM2M.pb.CommonTypes.ResponseStatusCode rsc = 201;
+  if (this->rsc() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteEnum(
+      201, this->rsc(), output);
+  }
+
+  // optional string to = 202;
+  if (this->to().size() > 0) {
+    ::google::protobuf::internal::WireFormat::VerifyUTF8StringNamedField(
+      this->to().data(), this->to().length(),
+      ::google::protobuf::internal::WireFormat::SERIALIZE,
+      "MicroWireless.OneM2M.pb.OperationResult.to");
+    ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
+      202, this->to(), output);
+  }
+
+  // optional string fr = 203;
+  if (this->fr().size() > 0) {
+    ::google::protobuf::internal::WireFormat::VerifyUTF8StringNamedField(
+      this->fr().data(), this->fr().length(),
+      ::google::protobuf::internal::WireFormat::SERIALIZE,
+      "MicroWireless.OneM2M.pb.OperationResult.fr");
+    ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
+      203, this->fr(), output);
+  }
+
+  // optional string rqi = 204;
+  if (this->rqi().size() > 0) {
+    ::google::protobuf::internal::WireFormat::VerifyUTF8StringNamedField(
+      this->rqi().data(), this->rqi().length(),
+      ::google::protobuf::internal::WireFormat::SERIALIZE,
+      "MicroWireless.OneM2M.pb.OperationResult.rqi");
+    ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
+      204, this->rqi(), output);
+  }
+
+  // optional string pc = 205;
+  if (this->pc().size() > 0) {
+    ::google::protobuf::internal::WireFormat::VerifyUTF8StringNamedField(
+      this->pc().data(), this->pc().length(),
+      ::google::protobuf::internal::WireFormat::SERIALIZE,
+      "MicroWireless.OneM2M.pb.OperationResult.pc");
+    ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
+      205, this->pc(), output);
+  }
+
+  // optional .google.protobuf.Timestamp ot = 206;
+  if (this->has_ot()) {
+    ::google::protobuf::internal::WireFormatLite::WriteMessageMaybeToArray(
+      206, *this->ot_, output);
+  }
+
+  // optional .google.protobuf.Timestamp rset = 207;
+  if (this->has_rset()) {
+    ::google::protobuf::internal::WireFormatLite::WriteMessageMaybeToArray(
+      207, *this->rset_, output);
+  }
+
+  // optional .MicroWireless.OneM2M.pb.CommonTypes.EventCat ec = 208;
+  if (this->ec() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteEnum(
+      208, this->ec(), output);
+  }
+
+  // @@protoc_insertion_point(serialize_end:MicroWireless.OneM2M.pb.OperationResult)
+}
+
+::google::protobuf::uint8* OperationResult::SerializeWithCachedSizesToArray(
+    ::google::protobuf::uint8* target) const {
+  // @@protoc_insertion_point(serialize_to_array_start:MicroWireless.OneM2M.pb.OperationResult)
+  // optional .MicroWireless.OneM2M.pb.CommonTypes.ResponseStatusCode rsc = 201;
+  if (this->rsc() != 0) {
+    target = ::google::protobuf::internal::WireFormatLite::WriteEnumToArray(
+      201, this->rsc(), target);
+  }
+
+  // optional string to = 202;
+  if (this->to().size() > 0) {
+    ::google::protobuf::internal::WireFormat::VerifyUTF8StringNamedField(
+      this->to().data(), this->to().length(),
+      ::google::protobuf::internal::WireFormat::SERIALIZE,
+      "MicroWireless.OneM2M.pb.OperationResult.to");
+    target =
+      ::google::protobuf::internal::WireFormatLite::WriteStringToArray(
+        202, this->to(), target);
+  }
+
+  // optional string fr = 203;
+  if (this->fr().size() > 0) {
+    ::google::protobuf::internal::WireFormat::VerifyUTF8StringNamedField(
+      this->fr().data(), this->fr().length(),
+      ::google::protobuf::internal::WireFormat::SERIALIZE,
+      "MicroWireless.OneM2M.pb.OperationResult.fr");
+    target =
+      ::google::protobuf::internal::WireFormatLite::WriteStringToArray(
+        203, this->fr(), target);
+  }
+
+  // optional string rqi = 204;
+  if (this->rqi().size() > 0) {
+    ::google::protobuf::internal::WireFormat::VerifyUTF8StringNamedField(
+      this->rqi().data(), this->rqi().length(),
+      ::google::protobuf::internal::WireFormat::SERIALIZE,
+      "MicroWireless.OneM2M.pb.OperationResult.rqi");
+    target =
+      ::google::protobuf::internal::WireFormatLite::WriteStringToArray(
+        204, this->rqi(), target);
+  }
+
+  // optional string pc = 205;
+  if (this->pc().size() > 0) {
+    ::google::protobuf::internal::WireFormat::VerifyUTF8StringNamedField(
+      this->pc().data(), this->pc().length(),
+      ::google::protobuf::internal::WireFormat::SERIALIZE,
+      "MicroWireless.OneM2M.pb.OperationResult.pc");
+    target =
+      ::google::protobuf::internal::WireFormatLite::WriteStringToArray(
+        205, this->pc(), target);
+  }
+
+  // optional .google.protobuf.Timestamp ot = 206;
+  if (this->has_ot()) {
+    target = ::google::protobuf::internal::WireFormatLite::
+      WriteMessageNoVirtualToArray(
+        206, *this->ot_, target);
+  }
+
+  // optional .google.protobuf.Timestamp rset = 207;
+  if (this->has_rset()) {
+    target = ::google::protobuf::internal::WireFormatLite::
+      WriteMessageNoVirtualToArray(
+        207, *this->rset_, target);
+  }
+
+  // optional .MicroWireless.OneM2M.pb.CommonTypes.EventCat ec = 208;
+  if (this->ec() != 0) {
+    target = ::google::protobuf::internal::WireFormatLite::WriteEnumToArray(
+      208, this->ec(), target);
+  }
+
+  // @@protoc_insertion_point(serialize_to_array_end:MicroWireless.OneM2M.pb.OperationResult)
+  return target;
+}
+
+int OperationResult::ByteSize() const {
+  int total_size = 0;
+
+  // optional .MicroWireless.OneM2M.pb.CommonTypes.ResponseStatusCode rsc = 201;
+  if (this->rsc() != 0) {
+    total_size += 2 +
+      ::google::protobuf::internal::WireFormatLite::EnumSize(this->rsc());
+  }
+
+  // optional string to = 202;
+  if (this->to().size() > 0) {
+    total_size += 2 +
+      ::google::protobuf::internal::WireFormatLite::StringSize(
+        this->to());
+  }
+
+  // optional string fr = 203;
+  if (this->fr().size() > 0) {
+    total_size += 2 +
+      ::google::protobuf::internal::WireFormatLite::StringSize(
+        this->fr());
+  }
+
+  // optional string rqi = 204;
+  if (this->rqi().size() > 0) {
+    total_size += 2 +
+      ::google::protobuf::internal::WireFormatLite::StringSize(
+        this->rqi());
+  }
+
+  // optional string pc = 205;
+  if (this->pc().size() > 0) {
+    total_size += 2 +
+      ::google::protobuf::internal::WireFormatLite::StringSize(
+        this->pc());
+  }
+
+  // optional .google.protobuf.Timestamp ot = 206;
+  if (this->has_ot()) {
+    total_size += 2 +
+      ::google::protobuf::internal::WireFormatLite::MessageSizeNoVirtual(
+        *this->ot_);
+  }
+
+  // optional .google.protobuf.Timestamp rset = 207;
+  if (this->has_rset()) {
+    total_size += 2 +
+      ::google::protobuf::internal::WireFormatLite::MessageSizeNoVirtual(
+        *this->rset_);
+  }
+
+  // optional .MicroWireless.OneM2M.pb.CommonTypes.EventCat ec = 208;
+  if (this->ec() != 0) {
+    total_size += 2 +
+      ::google::protobuf::internal::WireFormatLite::EnumSize(this->ec());
+  }
+
+  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+  _cached_size_ = total_size;
+  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+  return total_size;
+}
+
+void OperationResult::MergeFrom(const ::google::protobuf::Message& from) {
+  if (GOOGLE_PREDICT_FALSE(&from == this)) MergeFromFail(__LINE__);
+  const OperationResult* source = 
+      ::google::protobuf::internal::DynamicCastToGenerated<const OperationResult>(
+          &from);
+  if (source == NULL) {
+    ::google::protobuf::internal::ReflectionOps::Merge(from, this);
+  } else {
+    MergeFrom(*source);
+  }
+}
+
+void OperationResult::MergeFrom(const OperationResult& from) {
+  if (GOOGLE_PREDICT_FALSE(&from == this)) MergeFromFail(__LINE__);
+  if (from.rsc() != 0) {
+    set_rsc(from.rsc());
+  }
+  if (from.to().size() > 0) {
+
+    to_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.to_);
+  }
+  if (from.fr().size() > 0) {
+
+    fr_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.fr_);
+  }
+  if (from.rqi().size() > 0) {
+
+    rqi_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.rqi_);
+  }
+  if (from.pc().size() > 0) {
+
+    pc_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.pc_);
+  }
+  if (from.has_ot()) {
+    mutable_ot()->::google::protobuf::Timestamp::MergeFrom(from.ot());
+  }
+  if (from.has_rset()) {
+    mutable_rset()->::google::protobuf::Timestamp::MergeFrom(from.rset());
+  }
+  if (from.ec() != 0) {
+    set_ec(from.ec());
+  }
+}
+
+void OperationResult::CopyFrom(const ::google::protobuf::Message& from) {
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+void OperationResult::CopyFrom(const OperationResult& from) {
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool OperationResult::IsInitialized() const {
+
+  return true;
+}
+
+void OperationResult::Swap(OperationResult* other) {
+  if (other == this) return;
+  InternalSwap(other);
+}
+void OperationResult::InternalSwap(OperationResult* other) {
+  std::swap(rsc_, other->rsc_);
+  to_.Swap(&other->to_);
+  fr_.Swap(&other->fr_);
+  rqi_.Swap(&other->rqi_);
+  pc_.Swap(&other->pc_);
+  std::swap(ot_, other->ot_);
+  std::swap(rset_, other->rset_);
+  std::swap(ec_, other->ec_);
+  _internal_metadata_.Swap(&other->_internal_metadata_);
+  std::swap(_cached_size_, other->_cached_size_);
+}
+
+::google::protobuf::Metadata OperationResult::GetMetadata() const {
+  protobuf_AssignDescriptorsOnce();
+  ::google::protobuf::Metadata metadata;
+  metadata.descriptor = OperationResult_descriptor_;
+  metadata.reflection = OperationResult_reflection_;
+  return metadata;
+}
+
+#if PROTOBUF_INLINE_NOT_IN_HEADERS
+// OperationResult
+
+// optional .MicroWireless.OneM2M.pb.CommonTypes.ResponseStatusCode rsc = 201;
+void OperationResult::clear_rsc() {
+  rsc_ = 0;
+}
+ ::MicroWireless::OneM2M::pb::CommonTypes_ResponseStatusCode OperationResult::rsc() const {
+  // @@protoc_insertion_point(field_get:MicroWireless.OneM2M.pb.OperationResult.rsc)
+  return static_cast< ::MicroWireless::OneM2M::pb::CommonTypes_ResponseStatusCode >(rsc_);
+}
+ void OperationResult::set_rsc(::MicroWireless::OneM2M::pb::CommonTypes_ResponseStatusCode value) {
+  
+  rsc_ = value;
+  // @@protoc_insertion_point(field_set:MicroWireless.OneM2M.pb.OperationResult.rsc)
+}
+
+// optional string to = 202;
+void OperationResult::clear_to() {
+  to_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+ const ::std::string& OperationResult::to() const {
+  // @@protoc_insertion_point(field_get:MicroWireless.OneM2M.pb.OperationResult.to)
+  return to_.GetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+ void OperationResult::set_to(const ::std::string& value) {
+  
+  to_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
+  // @@protoc_insertion_point(field_set:MicroWireless.OneM2M.pb.OperationResult.to)
+}
+ void OperationResult::set_to(const char* value) {
+  
+  to_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
+  // @@protoc_insertion_point(field_set_char:MicroWireless.OneM2M.pb.OperationResult.to)
+}
+ void OperationResult::set_to(const char* value, size_t size) {
+  
+  to_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
+      ::std::string(reinterpret_cast<const char*>(value), size));
+  // @@protoc_insertion_point(field_set_pointer:MicroWireless.OneM2M.pb.OperationResult.to)
+}
+ ::std::string* OperationResult::mutable_to() {
+  
+  // @@protoc_insertion_point(field_mutable:MicroWireless.OneM2M.pb.OperationResult.to)
+  return to_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+ ::std::string* OperationResult::release_to() {
+  
+  return to_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+ void OperationResult::set_allocated_to(::std::string* to) {
+  if (to != NULL) {
+    
+  } else {
+    
+  }
+  to_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), to);
+  // @@protoc_insertion_point(field_set_allocated:MicroWireless.OneM2M.pb.OperationResult.to)
+}
+
+// optional string fr = 203;
+void OperationResult::clear_fr() {
+  fr_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+ const ::std::string& OperationResult::fr() const {
+  // @@protoc_insertion_point(field_get:MicroWireless.OneM2M.pb.OperationResult.fr)
+  return fr_.GetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+ void OperationResult::set_fr(const ::std::string& value) {
+  
+  fr_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
+  // @@protoc_insertion_point(field_set:MicroWireless.OneM2M.pb.OperationResult.fr)
+}
+ void OperationResult::set_fr(const char* value) {
+  
+  fr_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
+  // @@protoc_insertion_point(field_set_char:MicroWireless.OneM2M.pb.OperationResult.fr)
+}
+ void OperationResult::set_fr(const char* value, size_t size) {
+  
+  fr_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
+      ::std::string(reinterpret_cast<const char*>(value), size));
+  // @@protoc_insertion_point(field_set_pointer:MicroWireless.OneM2M.pb.OperationResult.fr)
+}
+ ::std::string* OperationResult::mutable_fr() {
+  
+  // @@protoc_insertion_point(field_mutable:MicroWireless.OneM2M.pb.OperationResult.fr)
+  return fr_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+ ::std::string* OperationResult::release_fr() {
+  
+  return fr_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+ void OperationResult::set_allocated_fr(::std::string* fr) {
+  if (fr != NULL) {
+    
+  } else {
+    
+  }
+  fr_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), fr);
+  // @@protoc_insertion_point(field_set_allocated:MicroWireless.OneM2M.pb.OperationResult.fr)
+}
+
+// optional string rqi = 204;
+void OperationResult::clear_rqi() {
+  rqi_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+ const ::std::string& OperationResult::rqi() const {
+  // @@protoc_insertion_point(field_get:MicroWireless.OneM2M.pb.OperationResult.rqi)
+  return rqi_.GetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+ void OperationResult::set_rqi(const ::std::string& value) {
+  
+  rqi_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
+  // @@protoc_insertion_point(field_set:MicroWireless.OneM2M.pb.OperationResult.rqi)
+}
+ void OperationResult::set_rqi(const char* value) {
+  
+  rqi_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
+  // @@protoc_insertion_point(field_set_char:MicroWireless.OneM2M.pb.OperationResult.rqi)
+}
+ void OperationResult::set_rqi(const char* value, size_t size) {
+  
+  rqi_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
+      ::std::string(reinterpret_cast<const char*>(value), size));
+  // @@protoc_insertion_point(field_set_pointer:MicroWireless.OneM2M.pb.OperationResult.rqi)
+}
+ ::std::string* OperationResult::mutable_rqi() {
+  
+  // @@protoc_insertion_point(field_mutable:MicroWireless.OneM2M.pb.OperationResult.rqi)
+  return rqi_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+ ::std::string* OperationResult::release_rqi() {
+  
+  return rqi_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+ void OperationResult::set_allocated_rqi(::std::string* rqi) {
+  if (rqi != NULL) {
+    
+  } else {
+    
+  }
+  rqi_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), rqi);
+  // @@protoc_insertion_point(field_set_allocated:MicroWireless.OneM2M.pb.OperationResult.rqi)
+}
+
+// optional string pc = 205;
+void OperationResult::clear_pc() {
+  pc_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+ const ::std::string& OperationResult::pc() const {
+  // @@protoc_insertion_point(field_get:MicroWireless.OneM2M.pb.OperationResult.pc)
+  return pc_.GetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+ void OperationResult::set_pc(const ::std::string& value) {
+  
+  pc_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
+  // @@protoc_insertion_point(field_set:MicroWireless.OneM2M.pb.OperationResult.pc)
+}
+ void OperationResult::set_pc(const char* value) {
+  
+  pc_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
+  // @@protoc_insertion_point(field_set_char:MicroWireless.OneM2M.pb.OperationResult.pc)
+}
+ void OperationResult::set_pc(const char* value, size_t size) {
+  
+  pc_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
+      ::std::string(reinterpret_cast<const char*>(value), size));
+  // @@protoc_insertion_point(field_set_pointer:MicroWireless.OneM2M.pb.OperationResult.pc)
+}
+ ::std::string* OperationResult::mutable_pc() {
+  
+  // @@protoc_insertion_point(field_mutable:MicroWireless.OneM2M.pb.OperationResult.pc)
+  return pc_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+ ::std::string* OperationResult::release_pc() {
+  
+  return pc_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+ void OperationResult::set_allocated_pc(::std::string* pc) {
+  if (pc != NULL) {
+    
+  } else {
+    
+  }
+  pc_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), pc);
+  // @@protoc_insertion_point(field_set_allocated:MicroWireless.OneM2M.pb.OperationResult.pc)
+}
+
+// optional .google.protobuf.Timestamp ot = 206;
+bool OperationResult::has_ot() const {
+  return !_is_default_instance_ && ot_ != NULL;
+}
+void OperationResult::clear_ot() {
+  if (GetArenaNoVirtual() == NULL && ot_ != NULL) delete ot_;
+  ot_ = NULL;
+}
+ const ::google::protobuf::Timestamp& OperationResult::ot() const {
+  // @@protoc_insertion_point(field_get:MicroWireless.OneM2M.pb.OperationResult.ot)
+  return ot_ != NULL ? *ot_ : *default_instance_->ot_;
+}
+ ::google::protobuf::Timestamp* OperationResult::mutable_ot() {
+  
+  if (ot_ == NULL) {
+    ot_ = new ::google::protobuf::Timestamp;
+  }
+  // @@protoc_insertion_point(field_mutable:MicroWireless.OneM2M.pb.OperationResult.ot)
+  return ot_;
+}
+ ::google::protobuf::Timestamp* OperationResult::release_ot() {
+  
+  ::google::protobuf::Timestamp* temp = ot_;
+  ot_ = NULL;
+  return temp;
+}
+ void OperationResult::set_allocated_ot(::google::protobuf::Timestamp* ot) {
+  delete ot_;
+  ot_ = ot;
+  if (ot) {
+    
+  } else {
+    
+  }
+  // @@protoc_insertion_point(field_set_allocated:MicroWireless.OneM2M.pb.OperationResult.ot)
+}
+
+// optional .google.protobuf.Timestamp rset = 207;
+bool OperationResult::has_rset() const {
+  return !_is_default_instance_ && rset_ != NULL;
+}
+void OperationResult::clear_rset() {
+  if (GetArenaNoVirtual() == NULL && rset_ != NULL) delete rset_;
+  rset_ = NULL;
+}
+ const ::google::protobuf::Timestamp& OperationResult::rset() const {
+  // @@protoc_insertion_point(field_get:MicroWireless.OneM2M.pb.OperationResult.rset)
+  return rset_ != NULL ? *rset_ : *default_instance_->rset_;
+}
+ ::google::protobuf::Timestamp* OperationResult::mutable_rset() {
+  
+  if (rset_ == NULL) {
+    rset_ = new ::google::protobuf::Timestamp;
+  }
+  // @@protoc_insertion_point(field_mutable:MicroWireless.OneM2M.pb.OperationResult.rset)
+  return rset_;
+}
+ ::google::protobuf::Timestamp* OperationResult::release_rset() {
+  
+  ::google::protobuf::Timestamp* temp = rset_;
+  rset_ = NULL;
+  return temp;
+}
+ void OperationResult::set_allocated_rset(::google::protobuf::Timestamp* rset) {
+  delete rset_;
+  rset_ = rset;
+  if (rset) {
+    
+  } else {
+    
+  }
+  // @@protoc_insertion_point(field_set_allocated:MicroWireless.OneM2M.pb.OperationResult.rset)
+}
+
+// optional .MicroWireless.OneM2M.pb.CommonTypes.EventCat ec = 208;
+void OperationResult::clear_ec() {
+  ec_ = 0;
+}
+ ::MicroWireless::OneM2M::pb::CommonTypes_EventCat OperationResult::ec() const {
+  // @@protoc_insertion_point(field_get:MicroWireless.OneM2M.pb.OperationResult.ec)
+  return static_cast< ::MicroWireless::OneM2M::pb::CommonTypes_EventCat >(ec_);
+}
+ void OperationResult::set_ec(::MicroWireless::OneM2M::pb::CommonTypes_EventCat value) {
+  
+  ec_ = value;
+  // @@protoc_insertion_point(field_set:MicroWireless.OneM2M.pb.OperationResult.ec)
+}
+
+#endif  // PROTOBUF_INLINE_NOT_IN_HEADERS
+
+// ===================================================================
+
+#ifndef _MSC_VER
 const int Request::kOpFieldNumber;
 const int Request::kTgFieldNumber;
 const int Request::kOgFieldNumber;
@@ -143,7 +2265,8 @@ Request::Request()
 
 void Request::InitAsDefaultInstance() {
   _is_default_instance_ = true;
-  ol_ = const_cast< ::MicroWireless::OneM2M::pb::ResponsePrim*>(&::MicroWireless::OneM2M::pb::ResponsePrim::default_instance());
+  mi_ = const_cast< ::MicroWireless::OneM2M::pb::MetaInfo*>(&::MicroWireless::OneM2M::pb::MetaInfo::default_instance());
+  ol_ = const_cast< ::MicroWireless::OneM2M::pb::OperationResult*>(&::MicroWireless::OneM2M::pb::OperationResult::default_instance());
 }
 
 Request::Request(const Request& from)
@@ -162,7 +2285,7 @@ void Request::SharedCtor() {
   tg_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   og_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   rid_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-  mi_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  mi_ = NULL;
   pc_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   rs_ = 0;
   ol_ = NULL;
@@ -177,9 +2300,9 @@ void Request::SharedDtor() {
   tg_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   og_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   rid_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-  mi_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   pc_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   if (this != default_instance_) {
+    delete mi_;
     delete ol_;
   }
 }
@@ -222,7 +2345,8 @@ void Request::Clear() {
   tg_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   og_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   rid_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-  mi_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  if (GetArenaNoVirtual() == NULL && mi_ != NULL) delete mi_;
+  mi_ = NULL;
   pc_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   if (GetArenaNoVirtual() == NULL && ol_ != NULL) delete ol_;
   ol_ = NULL;
@@ -308,16 +2432,12 @@ bool Request::MergePartialFromCodedStream(
         break;
       }
 
-      // optional string mi = 5;
+      // optional .MicroWireless.OneM2M.pb.MetaInfo mi = 5;
       case 5: {
         if (tag == 42) {
          parse_mi:
-          DO_(::google::protobuf::internal::WireFormatLite::ReadString(
-                input, this->mutable_mi()));
-          ::google::protobuf::internal::WireFormat::VerifyUTF8StringNamedField(
-            this->mi().data(), this->mi().length(),
-            ::google::protobuf::internal::WireFormat::PARSE,
-            "MicroWireless.OneM2M.pb.Request.mi");
+          DO_(::google::protobuf::internal::WireFormatLite::ReadMessageNoVirtual(
+               input, mutable_mi()));
         } else {
           goto handle_unusual;
         }
@@ -358,7 +2478,7 @@ bool Request::MergePartialFromCodedStream(
         break;
       }
 
-      // optional .MicroWireless.OneM2M.pb.ResponsePrim ol = 8;
+      // optional .MicroWireless.OneM2M.pb.OperationResult ol = 8;
       case 8: {
         if (tag == 66) {
          parse_ol:
@@ -431,14 +2551,10 @@ void Request::SerializeWithCachedSizes(
       4, this->rid(), output);
   }
 
-  // optional string mi = 5;
-  if (this->mi().size() > 0) {
-    ::google::protobuf::internal::WireFormat::VerifyUTF8StringNamedField(
-      this->mi().data(), this->mi().length(),
-      ::google::protobuf::internal::WireFormat::SERIALIZE,
-      "MicroWireless.OneM2M.pb.Request.mi");
-    ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
-      5, this->mi(), output);
+  // optional .MicroWireless.OneM2M.pb.MetaInfo mi = 5;
+  if (this->has_mi()) {
+    ::google::protobuf::internal::WireFormatLite::WriteMessageMaybeToArray(
+      5, *this->mi_, output);
   }
 
   // optional string pc = 6;
@@ -457,7 +2573,7 @@ void Request::SerializeWithCachedSizes(
       7, this->rs(), output);
   }
 
-  // optional .MicroWireless.OneM2M.pb.ResponsePrim ol = 8;
+  // optional .MicroWireless.OneM2M.pb.OperationResult ol = 8;
   if (this->has_ol()) {
     ::google::protobuf::internal::WireFormatLite::WriteMessageMaybeToArray(
       8, *this->ol_, output);
@@ -508,15 +2624,11 @@ void Request::SerializeWithCachedSizes(
         4, this->rid(), target);
   }
 
-  // optional string mi = 5;
-  if (this->mi().size() > 0) {
-    ::google::protobuf::internal::WireFormat::VerifyUTF8StringNamedField(
-      this->mi().data(), this->mi().length(),
-      ::google::protobuf::internal::WireFormat::SERIALIZE,
-      "MicroWireless.OneM2M.pb.Request.mi");
-    target =
-      ::google::protobuf::internal::WireFormatLite::WriteStringToArray(
-        5, this->mi(), target);
+  // optional .MicroWireless.OneM2M.pb.MetaInfo mi = 5;
+  if (this->has_mi()) {
+    target = ::google::protobuf::internal::WireFormatLite::
+      WriteMessageNoVirtualToArray(
+        5, *this->mi_, target);
   }
 
   // optional string pc = 6;
@@ -536,7 +2648,7 @@ void Request::SerializeWithCachedSizes(
       7, this->rs(), target);
   }
 
-  // optional .MicroWireless.OneM2M.pb.ResponsePrim ol = 8;
+  // optional .MicroWireless.OneM2M.pb.OperationResult ol = 8;
   if (this->has_ol()) {
     target = ::google::protobuf::internal::WireFormatLite::
       WriteMessageNoVirtualToArray(
@@ -577,11 +2689,11 @@ int Request::ByteSize() const {
         this->rid());
   }
 
-  // optional string mi = 5;
-  if (this->mi().size() > 0) {
+  // optional .MicroWireless.OneM2M.pb.MetaInfo mi = 5;
+  if (this->has_mi()) {
     total_size += 1 +
-      ::google::protobuf::internal::WireFormatLite::StringSize(
-        this->mi());
+      ::google::protobuf::internal::WireFormatLite::MessageSizeNoVirtual(
+        *this->mi_);
   }
 
   // optional string pc = 6;
@@ -597,7 +2709,7 @@ int Request::ByteSize() const {
       ::google::protobuf::internal::WireFormatLite::EnumSize(this->rs());
   }
 
-  // optional .MicroWireless.OneM2M.pb.ResponsePrim ol = 8;
+  // optional .MicroWireless.OneM2M.pb.OperationResult ol = 8;
   if (this->has_ol()) {
     total_size += 1 +
       ::google::protobuf::internal::WireFormatLite::MessageSizeNoVirtual(
@@ -639,9 +2751,8 @@ void Request::MergeFrom(const Request& from) {
 
     rid_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.rid_);
   }
-  if (from.mi().size() > 0) {
-
-    mi_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.mi_);
+  if (from.has_mi()) {
+    mutable_mi()->::MicroWireless::OneM2M::pb::MetaInfo::MergeFrom(from.mi());
   }
   if (from.pc().size() > 0) {
 
@@ -651,7 +2762,7 @@ void Request::MergeFrom(const Request& from) {
     set_rs(from.rs());
   }
   if (from.has_ol()) {
-    mutable_ol()->::MicroWireless::OneM2M::pb::ResponsePrim::MergeFrom(from.ol());
+    mutable_ol()->::MicroWireless::OneM2M::pb::OperationResult::MergeFrom(from.ol());
   }
 }
 
@@ -681,7 +2792,7 @@ void Request::InternalSwap(Request* other) {
   tg_.Swap(&other->tg_);
   og_.Swap(&other->og_);
   rid_.Swap(&other->rid_);
-  mi_.Swap(&other->mi_);
+  std::swap(mi_, other->mi_);
   pc_.Swap(&other->pc_);
   std::swap(rs_, other->rs_);
   std::swap(ol_, other->ol_);
@@ -843,46 +2954,40 @@ void Request::clear_rid() {
   // @@protoc_insertion_point(field_set_allocated:MicroWireless.OneM2M.pb.Request.rid)
 }
 
-// optional string mi = 5;
+// optional .MicroWireless.OneM2M.pb.MetaInfo mi = 5;
+bool Request::has_mi() const {
+  return !_is_default_instance_ && mi_ != NULL;
+}
 void Request::clear_mi() {
-  mi_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  if (GetArenaNoVirtual() == NULL && mi_ != NULL) delete mi_;
+  mi_ = NULL;
 }
- const ::std::string& Request::mi() const {
+ const ::MicroWireless::OneM2M::pb::MetaInfo& Request::mi() const {
   // @@protoc_insertion_point(field_get:MicroWireless.OneM2M.pb.Request.mi)
-  return mi_.GetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  return mi_ != NULL ? *mi_ : *default_instance_->mi_;
 }
- void Request::set_mi(const ::std::string& value) {
+ ::MicroWireless::OneM2M::pb::MetaInfo* Request::mutable_mi() {
   
-  mi_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
-  // @@protoc_insertion_point(field_set:MicroWireless.OneM2M.pb.Request.mi)
-}
- void Request::set_mi(const char* value) {
-  
-  mi_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
-  // @@protoc_insertion_point(field_set_char:MicroWireless.OneM2M.pb.Request.mi)
-}
- void Request::set_mi(const char* value, size_t size) {
-  
-  mi_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
-      ::std::string(reinterpret_cast<const char*>(value), size));
-  // @@protoc_insertion_point(field_set_pointer:MicroWireless.OneM2M.pb.Request.mi)
-}
- ::std::string* Request::mutable_mi() {
-  
+  if (mi_ == NULL) {
+    mi_ = new ::MicroWireless::OneM2M::pb::MetaInfo;
+  }
   // @@protoc_insertion_point(field_mutable:MicroWireless.OneM2M.pb.Request.mi)
-  return mi_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  return mi_;
 }
- ::std::string* Request::release_mi() {
+ ::MicroWireless::OneM2M::pb::MetaInfo* Request::release_mi() {
   
-  return mi_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  ::MicroWireless::OneM2M::pb::MetaInfo* temp = mi_;
+  mi_ = NULL;
+  return temp;
 }
- void Request::set_allocated_mi(::std::string* mi) {
-  if (mi != NULL) {
+ void Request::set_allocated_mi(::MicroWireless::OneM2M::pb::MetaInfo* mi) {
+  delete mi_;
+  mi_ = mi;
+  if (mi) {
     
   } else {
     
   }
-  mi_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), mi);
   // @@protoc_insertion_point(field_set_allocated:MicroWireless.OneM2M.pb.Request.mi)
 }
 
@@ -943,7 +3048,7 @@ void Request::clear_rs() {
   // @@protoc_insertion_point(field_set:MicroWireless.OneM2M.pb.Request.rs)
 }
 
-// optional .MicroWireless.OneM2M.pb.ResponsePrim ol = 8;
+// optional .MicroWireless.OneM2M.pb.OperationResult ol = 8;
 bool Request::has_ol() const {
   return !_is_default_instance_ && ol_ != NULL;
 }
@@ -951,25 +3056,25 @@ void Request::clear_ol() {
   if (GetArenaNoVirtual() == NULL && ol_ != NULL) delete ol_;
   ol_ = NULL;
 }
- const ::MicroWireless::OneM2M::pb::ResponsePrim& Request::ol() const {
+ const ::MicroWireless::OneM2M::pb::OperationResult& Request::ol() const {
   // @@protoc_insertion_point(field_get:MicroWireless.OneM2M.pb.Request.ol)
   return ol_ != NULL ? *ol_ : *default_instance_->ol_;
 }
- ::MicroWireless::OneM2M::pb::ResponsePrim* Request::mutable_ol() {
+ ::MicroWireless::OneM2M::pb::OperationResult* Request::mutable_ol() {
   
   if (ol_ == NULL) {
-    ol_ = new ::MicroWireless::OneM2M::pb::ResponsePrim;
+    ol_ = new ::MicroWireless::OneM2M::pb::OperationResult;
   }
   // @@protoc_insertion_point(field_mutable:MicroWireless.OneM2M.pb.Request.ol)
   return ol_;
 }
- ::MicroWireless::OneM2M::pb::ResponsePrim* Request::release_ol() {
+ ::MicroWireless::OneM2M::pb::OperationResult* Request::release_ol() {
   
-  ::MicroWireless::OneM2M::pb::ResponsePrim* temp = ol_;
+  ::MicroWireless::OneM2M::pb::OperationResult* temp = ol_;
   ol_ = NULL;
   return temp;
 }
- void Request::set_allocated_ol(::MicroWireless::OneM2M::pb::ResponsePrim* ol) {
+ void Request::set_allocated_ol(::MicroWireless::OneM2M::pb::OperationResult* ol) {
   delete ol_;
   ol_ = ol;
   if (ol) {

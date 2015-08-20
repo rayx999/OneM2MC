@@ -167,6 +167,10 @@ TEST_F(CSEBaseTest, SetupRoot) {
 	}
 }
 
+TEST_F(CSEBaseTest, TurnOnFixture) {
+	setup = true;
+}
+
 const string CSEBaseTest::json2("{"
 		"\"ty\" 	: 5,"
 		"\"ri\" 	: \"X0005\","
@@ -207,10 +211,6 @@ TEST_F(CSEBaseTest, CheckOutResource) {
 	ASSERT_TSEQ(_ct1, _ct2);
 
 	// supported resource
-}
-
-TEST_F(CSEBaseTest, TurnOnFixture) {
-	setup = true;
 }
 
 TEST_F(CSEBaseTest, GetAttributes) {

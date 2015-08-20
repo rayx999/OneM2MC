@@ -65,20 +65,28 @@ public:
 	const string& getIntRi();
 
 	SupportedResourceType getResourceType();
+	bool setResourceType(SupportedResourceType ty);
+
 	const string& getResourceId();
+	bool setResourceId(const string& ri);
+
 	const string& getResourceName();
+	bool setResourceName(const string& rn);
+
 	const string& getParentId();
+	bool setParentId(const string& pi);
 
 	bool getCreateTimestamp(TimeStamp &create_time);
 	bool getLastModifiedTimestamp(TimeStamp &create_time);
-
-	bool setParentId(const string& pi);
 
 	template <typename StoreType>
 	bool outToResourceStore(StoreType& rdb) {
 		string res_str;
 		if (base_.SerializeToString(&res_str)) {
-			const string res_path(composeResourceStorePath());
+			const string res_path = rdb.getRoot()->getDomain()
+					+ rdb.getRoot()->getCSEId()
+					+ "/" + getResourceName();
+
 			return rdb.putResource(res_path, ri_, res_str);
 		} else {
 			cerr << "Serialization failed.\n";
@@ -90,7 +98,6 @@ public:
 	string getJson();
 
 private:
-	const string composeResourceStorePath();
 
 protected:
 	bool setCreateTimestamp();

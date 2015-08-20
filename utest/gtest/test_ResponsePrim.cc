@@ -104,11 +104,11 @@ TEST_F(ResponsePrimTest, FullCtor) {
 	}
 }
 
-TEST_F(ResponsePrimTest, CtorNoRqi) {
-	string rqi_none;
+TEST_F(ResponsePrimTest, CtorNoFr) {
+	string fr_none;
 
 	try {
-		ResponsePrim response_(p_request_, rsc_ok_, rqi_none);
+		ResponsePrim response_(p_request_, rsc_ok_, fr_none);
 	} catch (const exception &e) {
 		cout << "Expected exception:" << e.what() << endl;
 		return;

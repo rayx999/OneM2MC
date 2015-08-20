@@ -4,8 +4,40 @@ syntax = "proto3";
 
 package MicroWireless.OneM2M.pb;
 
+import "google/protobuf/timestamp.proto";
+import "google/protobuf/duration.proto";
 import "CommonTypes.proto";
-import "ResponsePrim.proto";
+import "FilterCriteria.proto";
+
+message MetaInfo
+{
+  CommonTypes.SupportedResourceType ty = 105;    // resource_type = 5;
+  string nm = 106;                               // name = 6;
+  google.protobuf.Timestamp ot = 108;            // originating_timestamp = 8;
+  google.protobuf.Timestamp rqet = 109;          // request_expire_timestamp = 9;
+  google.protobuf.Timestamp rset = 110;          // result_expire_timestamp = 10;
+  google.protobuf.Duration oet = 111;            // operation_execution_time = 11;
+  CommonTypes.ResponseType rt = 112;             // response_type = 12;
+  google.protobuf.Duration rp = 113;             // result_persistence = 13;
+  CommonTypes.ResultContent rcn = 114;           // result_content = 14;
+  CommonTypes.EventCat ec = 115;                 // event_cat = 15;
+  bool da = 116;                                 // delivery_aggregation = 16;
+  string gid = 117;                              // group_request_id = 17;
+  FilterCriteria fc = 118;                       // filter_criteria = 18;
+  CommonTypes.DiscoveryResultType drt = 119;     // discovery_result_type = 19;
+}
+
+message OperationResult
+{
+  CommonTypes.ResponseStatusCode rsc = 201;       // response status code;
+  string to = 202;                                // to;
+  string fr = 203;                                // from
+  string rqi = 204;                               // request_id;
+  string pc = 205;                                // content;
+  google.protobuf.Timestamp ot = 206;             // originating_timestamp;
+  google.protobuf.Timestamp rset = 207;           // result_expire_timestamp;
+  CommonTypes.EventCat ec = 208;                  // event_cat;
+}
 
 message Request
 {
@@ -13,8 +45,8 @@ message Request
 	string tg = 2;								        // target = 2; same as to in request primitive
 	string og = 3;							          // originator = 3; same as fr in request primitive
 	string rid = 4;								        // request_id = 4; same rqi in request primitive
-	string mi = 5;			                  // meta info = 5;
+	MetaInfo mi = 5;			                // meta info = 5;
 	string pc = 6;                        // content = 6;
 	CommonTypes.RequestStatus rs = 7;			// RequestStatus = 7;
-	ResponsePrim ol = 8;			            // operationResult = 8;
+	OperationResult ol = 8;			          // operationResult = 8;
 }

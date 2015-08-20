@@ -35,40 +35,75 @@ using ::testing::Property;
 using ::testing::Eq;
 using ::testing::_;
 
-// Matcher for pb::ResourceBase
-MATCHER_P(PbCseEq, exp_cse, "") {
-	pb::ResourceBase act_cse;
-	if (!act_cse.ParseFromString(arg)) {
+// Matcher for keep test arg to val
+MATCHER_P(StrGood, val, "") {
+	if (arg.empty()) {
+		return false;
+	} else {
+		*val = arg;
+		return true;
+	}
+}
+
+bool matcher_cse(const pb::CSEBase& act, const pb::CSEBase& exp) {
+	return  act.cst() == exp.cst() &&
+			act.csi() == exp.csi();
+}
+
+bool matcher_req(const pb::Request& act, const pb::Request& exp) {
+	string act_str_;
+	string exp_str_;
+	if (act.SerializeToString(&act_str_) &&
+		exp.SerializeToString(&exp_str_)) {
+		return  act_str_ == exp_str_;
+	}
+	cerr << "macher_req: can't serialize to string\n";
+	return false;
+}
+
+MATCHER_P(PbEq, exp_res, "") {
+	pb::ResourceBase act_res_;
+	if (!act_res_.ParseFromString(arg)) {
 		return false;
 	}
 
-	return  act_cse.ty() == exp_cse.ty() &&
-			act_cse.ri() == exp_cse.ri() &&
-			act_cse.rn() == exp_cse.rn() &&
-			act_cse.ct() == exp_cse.ct() &&
-			act_cse.has_csb() &&
-			act_cse.csb().cst() == exp_cse.csb().cst() &&
-			act_cse.csb().csi() == exp_cse.csb().csi();
+	if  (act_res_.ty() == exp_res.ty() &&
+		 act_res_.ri() == exp_res.ri() &&
+		 act_res_.rn() == exp_res.rn() )
+	{
+		if (act_res_.has_csb()) {
+			return matcher_cse(act_res_.csb(), exp_res.csb());
+		} if (act_res_.has_req()) {
+			return matcher_req(act_res_.req(), exp_res.req());
+		} else {
+			return true;
+		}
+	}
+	return false;
 }
+
 
 class NSEBaseMockTest : public ::testing::Test {
 protected:
 	static const std::string retrieve_json;
 	static const std::string cse_content;
+	static const string exp_to_, exp_fr_;
+
+	static CSEResourceStore * rdb_;
+	static NSEBaseMock * nse_;
+	static CSEHandler * hdl_;
+	static CSEServer * server_;
+	static pb::ResourceBase exp_pc_;
+	static bool last_test_bad_;
+	static string req_ri_;
 
 	const string* json_;
-
-	ResponsePrim * rsp_;
-	CSEResourceStore * rdb_;
-	NSEBaseMock * nse_;
-	CSEHandler * hdl_;
-	CSEServer * server_;
-	pb::ResourceBase exp_pc_;
 
 public:
 	NSEBaseMockTest() : json_() {}
 
-    virtual void SetUp()
+    //virtual void SetUp()
+    static void SetUpTestCase()
     {
         rdb_ = new CSEResourceStore("data/.store");
         nse_ = new NiceMock<NSEBaseMock>("127.0.0.1", "1234");
@@ -78,12 +113,17 @@ public:
         json2pb(exp_pc_, cse_content.c_str(), cse_content.length());
     }
 
-    virtual void TearDown()
+    //virtual void TearDown()
+    static void TearDownTestCase()
     {
         delete rdb_;
         delete nse_;
         delete hdl_;
         delete server_;
+    }
+
+    virtual void TearDown() {
+    	last_test_bad_ = HasFailure();
     }
 
     void setJson(const string* json) {
@@ -100,16 +140,46 @@ public:
     	}
     }
 
-    void retrieveTestBody() {
+    void retrieveTestBody(ResponseStatusCode rsc, const string& rqi, const pb::ResourceBase& exp)
+    {
 		EXPECT_CALL(*nse_, run())
 				.WillOnce(Invoke(this, &NSEBaseMockTest::handleRequest));
 
-		EXPECT_CALL(*nse_, send(AllOf(Property(&ResponsePrim::getResponseStatusCode, Eq(RSC_OK)),
-								Property(&ResponsePrim::getRequestId, StrEq("ab3f124a")),
-								Property(&ResponsePrim::getContent, PbCseEq(exp_pc_)))))
+		EXPECT_CALL(*nse_, send(AllOf(Property(&ResponsePrim::getResponseStatusCode, Eq(rsc)),
+								Property(&ResponsePrim::getTo, StrEq(exp_to_)),
+								Property(&ResponsePrim::getFrom, StrEq(exp_fr_)),
+								Property(&ResponsePrim::getRequestId, StrEq(rqi)),
+								Property(&ResponsePrim::getContent, PbEq(exp)))))
 			  .Times(1);
 
 		server_->run();
+    }
+
+    void retrieveTestBody(ResponseStatusCode rsc, const string& rqi) {
+    	 EXPECT_CALL(*nse_, run())
+    		  .WillOnce(Invoke(this, &NSEBaseMockTest::handleRequest));
+
+ 		EXPECT_CALL(*nse_, send(AllOf(Property(&ResponsePrim::getResponseStatusCode, Eq(rsc)),
+ 								Property(&ResponsePrim::getTo, StrEq(exp_to_)),
+ 								Property(&ResponsePrim::getFrom, StrEq(exp_fr_)),
+ 								Property(&ResponsePrim::getRequestId, StrEq(rqi)))))
+    		  .Times(1);
+
+    	  server_->run();
+    }
+
+    void retrieveTestBody(ResponseStatusCode rsc, const string& rqi, string& pc) {
+    	 EXPECT_CALL(*nse_, run())
+    		  .WillOnce(Invoke(this, &NSEBaseMockTest::handleRequest));
+
+ 		EXPECT_CALL(*nse_, send(AllOf(Property(&ResponsePrim::getResponseStatusCode, Eq(rsc)),
+ 								Property(&ResponsePrim::getTo, StrEq(exp_to_)),
+ 								Property(&ResponsePrim::getFrom, StrEq(exp_fr_)),
+ 								Property(&ResponsePrim::getRequestId, StrEq(rqi)),
+								Property(&ResponsePrim::getContent, StrGood(&pc)))))
+    		  .Times(1);
+
+    	  server_->run();
     }
 
     void printResponse(ResponsePrim rsp) {
@@ -117,12 +187,23 @@ public:
     }
 };
 
+CSEResourceStore * NSEBaseMockTest::rdb_;
+NSEBaseMock * NSEBaseMockTest::nse_;
+CSEHandler * NSEBaseMockTest::hdl_;
+CSEServer * NSEBaseMockTest::server_;
+pb::ResourceBase NSEBaseMockTest::exp_pc_;
+bool NSEBaseMockTest::last_test_bad_ = true;
+string NSEBaseMockTest::req_ri_;
+
 const string NSEBaseMockTest::retrieve_json("{"
 		"\"op\": 2,"
 		"\"to\": \"//microwireless.com/IN-CSE-01/Z0005\","
 		"\"rqi\": \"ab3f124a\","
 		"\"fr\": \"//microwireless.com/AE-01\""
 	"}");
+
+const string NSEBaseMockTest::exp_to_("//microwireless.com/AE-01");
+const string NSEBaseMockTest::exp_fr_("//microwireless.com/IN-CSE-01");
 
 const string NSEBaseMockTest::cse_content("{"
 			"\"ty\" 	: 5,"
@@ -138,7 +219,7 @@ const string NSEBaseMockTest::cse_content("{"
 
 TEST_F(NSEBaseMockTest, RetrieveCSE) {
   setJson(&retrieve_json);
-  retrieveTestBody();
+  retrieveTestBody(RSC_OK, "ab3f124a", exp_pc_);
 }
 
 TEST_F(NSEBaseMockTest, RetrieveCSE2) {
@@ -149,7 +230,7 @@ TEST_F(NSEBaseMockTest, RetrieveCSE2) {
 			"\"fr\": \"//microwireless.com/AE-01\""
 		"}");
   setJson(&json);
-  retrieveTestBody();
+  retrieveTestBody(RSC_OK, "ab3f124a", exp_pc_);
 }
 
 TEST_F(NSEBaseMockTest, RetrieveCSE3) {
@@ -160,7 +241,19 @@ TEST_F(NSEBaseMockTest, RetrieveCSE3) {
 			"\"fr\": \"//microwireless.com/AE-01\""
 		"}");
   setJson(&json);
-  retrieveTestBody();
+  retrieveTestBody(RSC_OK, "ab3f124a", exp_pc_);
+}
+
+TEST_F(NSEBaseMockTest, RetrieveCSE4) {
+  static const string json("{"
+			"\"op\": 2,"
+			"\"to\": \"//microwireless.com/IN-CSE-01/Z0005\","
+			"\"rqi\": \"ab3f124a\","
+			"\"fr\": \"//microwireless.com/AE-01\", "
+		    "\"rt\": 3"
+		  "}");
+  setJson(&json);
+  retrieveTestBody(RSC_OK, "ab3f124a", exp_pc_);
 }
 
 TEST_F(NSEBaseMockTest, NotExistResource) {
@@ -172,12 +265,60 @@ TEST_F(NSEBaseMockTest, NotExistResource) {
 		"}");
 
   setJson(&not_exist_json);
-  EXPECT_CALL(*nse_, run())
-	  .WillOnce(Invoke(this, &NSEBaseMockTest::handleRequest));
+  retrieveTestBody(RSC_NOT_FOUND, "ab3f124a");
+}
 
-  EXPECT_CALL(*nse_, send(Property(&ResponsePrim::getResponseStatusCode, Eq(RSC_NOT_FOUND))))
-	  .Times(1);
+TEST_F(NSEBaseMockTest, RetrieveCSENonBlockSync) {
+  static const string json("{"
+			"\"op\": 2,"
+			"\"to\": \"/IN-CSE-01/Z0005\","
+			"\"rqi\": \"ab3f124a\","
+			"\"fr\": \"//microwireless.com/AE-01\", "
+		    "\"rt\": 1"
+		"}");
+  string pc_str_;
+  pb::ResourceBase pc_;
 
-  server_->run();
+  setJson(&json);
+  retrieveTestBody(RSC_ACCEPTED, "ab3f124a", pc_str_);
+  ASSERT_TRUE(pc_.ParseFromString(pc_str_));
+  req_ri_ = pc_.ri();
+  cout << "Accepted Request RI = " << req_ri_ << endl;
+}
+
+TEST_F(NSEBaseMockTest, RetrieveNonBlockRequest) {
+  // last test must be good
+  ASSERT_FALSE(last_test_bad_);
+
+  static const string json = string("{"
+			"\"op\": 2,"
+			"\"to\": \"/IN-CSE-01/") + req_ri_ +
+   string("\","
+			"\"rqi\": \"ab3f124a\","
+			"\"fr\": \"//microwireless.com/AE-01\" "
+		"}");
+
+  static const string exp_json("{"
+		  "\"ty\": 17, "
+		  "\"req\": {\"op\": 2, "
+		            "\"tg\": \"/IN-CSE-01/Z0005\", "
+		            "\"rs\": 3, "
+		            "\"mi\": {\"rcn\": 1, "
+		                     "\"rt\": 1}, "
+		            "\"og\": \"//microwireless.com/AE-01\", "
+		            "\"rid\": \"ab3f124a\"}, "
+		  "\"ri\": \"" + req_ri_ + "\", "
+		  "\"rn\": \"Request/ab3f124a\", "
+		  "\"pi\": \"Z0005\" "
+		  "}");
+
+  pb::ResourceBase exp_req_;
+  json2pb(exp_req_, exp_json.c_str(), exp_json.length());
+
+  setJson(&json);
+  retrieveTestBody(RSC_OK, "ab3f124a", exp_req_);
+//  pb::ResourceBase res_;
+//  ASSERT_TRUE(res_.ParseFromString(str_));
+//  cout << pb2json(res_) << endl;
 }
 

@@ -31,8 +31,8 @@ public:
 
 	Operation getOperation();
 
-	bool setResourceType(ResourceType ty);
-	ResourceType getResourceType();
+	bool setResourceType(SupportedResourceType ty);
+	SupportedResourceType getResourceType();
 
 	const string & getTo();
 	const string & getFrom();
@@ -44,8 +44,8 @@ public:
 	bool setName(string &nm);
 	bool getName(string &nm);
 
-	bool setContent(string & pc);
-	bool getContent(string & pc);
+	void setContent(const string & pc);
+	const string& getContent();
 
 	bool setOriginatingTimestamp(TimeStamp &ot);
 	bool getOriginatingTimestamp(TimeStamp &ot);

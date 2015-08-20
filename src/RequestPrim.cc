@@ -99,22 +99,28 @@ Operation RequestPrim::getOperation() {
 	return static_cast<Operation>(reqp_.op());
 }
 
-bool RequestPrim::setResourceType(ResourceType ty) {
+bool RequestPrim::setResourceType(SupportedResourceType ty) {
 	reqp_.set_ty(static_cast<pb::CommonTypes_SupportedResourceType>(ty));
 	return true;
 }
 
-ResourceType RequestPrim::getResourceType() {
-	return static_cast<ResourceType>(reqp_.ty());
+SupportedResourceType RequestPrim::getResourceType() {
+	return static_cast<SupportedResourceType>(reqp_.ty());
 }
 
 /*
 bool setName(string &nm);
 bool getName(string &nm);
+*/
+void RequestPrim::setContent(const string & pc) {
+	reqp_.set_pc(pc);
+}
 
-bool setContent(string & pc);
-bool getContent(string & pc);
+const string& RequestPrim::getContent() {
+	return reqp_.pc();
+}
 
+/*
 bool setOriginatingTimestamp(TimeStamp &ot);
 bool getOriginatingTimestamp(TimeStamp &ot);
 

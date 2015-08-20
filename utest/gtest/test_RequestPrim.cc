@@ -189,8 +189,8 @@ TEST_F(RequestPrimTest, TurnOnFixture) {
 }
 
 TEST_F(RequestPrimTest, SetGetResourceType) {
-	ASSERT_TRUE(p_req_->setResourceType(NORMAL));
-	ASSERT_EQ(p_req_->getResourceType(), NORMAL);
+	ASSERT_TRUE(p_req_->setResourceType(CSE_BASE));
+	ASSERT_EQ(p_req_->getResourceType(), CSE_BASE);
 }
 
 TEST_F(RequestPrimTest, GetAttributes) {

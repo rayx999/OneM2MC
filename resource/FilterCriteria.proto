@@ -1,0 +1,28 @@
+// Filter Criteria message definition
+
+syntax = "proto3";
+
+package MicroWireless.OneM2M.pb;
+
+import "google/protobuf/timestamp.proto";
+import "CommonTypes.proto";
+
+message FilterCriteria
+{
+  google.protobuf.Timestamp crb = 1;           // created_before = 1;
+  google.protobuf.Timestamp cra = 2;           // created_after = 2;
+  google.protobuf.Timestamp ms = 3;            // modified_since = 3;
+  google.protobuf.Timestamp us = 4;            // unmodified_since = 4;
+  uint32 sts = 5;                              // state_tag_smaller = 5;
+  uint32 stb = 6;                              // state_tag_bigger = 6;
+  google.protobuf.Timestamp exb = 7;           // expire_before = 7;
+  google.protobuf.Timestamp exa = 8;           // expire_after = 8;
+  repeated string lbl = 9;                     // labels = 9;
+  repeated CommonTypes.ResourceType rty = 10;  // resource_types = 10;
+  uint64 sza = 11;                             // size_above = 11;
+  uint64 szb = 12;                             // size_below = 12;
+  repeated CommonTypes.ContentType cty = 13;   // content_type = 13;
+  repeated Attribute atr = 14;                 // attributes = 14;
+  CommonTypes.FilterUsage fu = 15;             // filter_usage = 15;
+  uint32 lim = 16;                             // limit = 16;
+}

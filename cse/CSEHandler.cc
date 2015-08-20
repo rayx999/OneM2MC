@@ -59,7 +59,8 @@ void CSEHandler::handleRequest(RequestPrim& req) {
 		break;
 	}
 
-	ResponsePrim rsp_(&req, rsc_, req.getRequestId());	// FIX ME: remove rqi
+	string fr_ = rdb_.getRoot()->getDomain() + rdb_.getRoot()->getCSEId();
+	ResponsePrim rsp_(&req, rsc_, fr_);
 	if (rsc_ == RSC_OK && !pc_.empty()) {
 		rsp_.setContent(pc_);
 	}

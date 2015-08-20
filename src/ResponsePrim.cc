@@ -23,12 +23,12 @@ namespace MicroWireless {
 
 namespace OneM2M {
 
-ResponsePrim::ResponsePrim(RequestPrim *p_request, const string &json) {
+ResponsePrim::ResponsePrim(RequestPrim *p_reqp, const string &json) {
 	// keep original request reference
-	if (p_request == NULL || !p_request->isValid()) {
+	if (p_reqp == NULL || !p_reqp->isValid()) {
 		throw runtime_error("Matching request is invalid!");
 	}
-	p_request_ = p_request;
+	p_reqp_ = p_reqp;
 
 	// parse to PB buffer
 	json2pb(rspp_, json.c_str(), json.length());
@@ -38,22 +38,22 @@ ResponsePrim::ResponsePrim(RequestPrim *p_request, const string &json) {
 	}
 }
 
-ResponsePrim::ResponsePrim(RequestPrim *p_request, ResponseStatusCode rsc, const string & rqi){
+ResponsePrim::ResponsePrim(RequestPrim *p_reqp, ResponseStatusCode rsc, const string& fr){
+	if (fr.empty()) {
+		throw runtime_error("ResponsePrim::ResponsePrim: From field is empty!");
+	}
 	if (rsc != RSC_BAD_REQUEST) {
-		if (rqi.empty()) {
-			throw runtime_error("ResponsePrim mandatory field: requestId missing!");
-		}
 		// keep original request reference
-		if (p_request == NULL || !p_request->isValid()) {
-			throw runtime_error("Matching request is invalid!");
+		if (p_reqp == NULL || !p_reqp->isValid()) {
+			throw runtime_error("ResponsePrim::ResponsePrim: Matching request is invalid!");
 		}
-		p_request_ = p_request;
+		p_reqp_ = p_reqp;
 	}
 	// Mandatory fields
 	rspp_.set_rsc(static_cast<pb::CommonTypes_ResponseStatusCode>(rsc));
-	if (!setString(rqi, &pb::ResponsePrim::set_allocated_rqi, rspp_)) {
-		throw runtime_error("ResponsePrim(status_code, req_id) failed.");
-	}
+	rspp_.set_rqi(p_reqp->getRequestId());
+	setTo(p_reqp->getFrom());
+	setFrom(fr);
 }
 
 const ResponseStatusCode ResponsePrim::getResponseStatusCode() const {
@@ -109,7 +109,7 @@ bool ResponsePrim::isValid(ValidateType vt) {
 		return true;
 	}
 
-	switch (p_request_->getOperation()) {
+	switch (p_reqp_->getOperation()) {
 	case OPERATION_CREATE:
 		break;
 	case OPERATION_RETRIEVE:
@@ -125,7 +125,7 @@ bool ResponsePrim::isValid(ValidateType vt) {
 	case OPERATION_NOTIFY:
 		break;
 	default:
-		cerr << "Invalid response operation: " << p_request_->getOperation() << endl;
+		cerr << "Invalid response operation: " << p_reqp_->getOperation() << endl;
 		return false;
 	}
 
@@ -137,9 +137,9 @@ string ResponsePrim::getJson() {
 }
 
 ResponsePrim::~ResponsePrim() {
-/*	if (p_request_ != NULL) {
-		delete p_request_;
-		p_request_ = NULL;
+/*	if (p_reqp_ != NULL) {
+		delete p_reqp_;
+		p_reqp_ = NULL;
 	} */
 }
 
