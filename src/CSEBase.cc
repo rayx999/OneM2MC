@@ -7,11 +7,7 @@
 
 #include <stdexcept>
 #include <iostream>
-#include <fstream>
-#include <sstream>
-#include <boost/regex.hpp>
 #include <boost/algorithm/string/predicate.hpp>
-#include <json2pb.h>
 
 #include "CommonTypes.pb.h"
 #include "ResourceBase.pb.h"

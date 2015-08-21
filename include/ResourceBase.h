@@ -16,7 +16,7 @@
 
 #include "CommonTypes.pb.h"
 #include "ResourceBase.pb.h"
-#include "CSEBase.pb.h"
+//#include "CSEBase.pb.h"
 #include "CommonTypes.h"
 #include "ResourceStore.h"
 
@@ -25,6 +25,10 @@ namespace MicroWireless {
 namespace OneM2M {
 
 using namespace std;
+
+//class pb::CSEBase;
+//class pb::AE;
+//class pb::Request;
 
 class ResourceBase {
 public:
@@ -57,6 +61,8 @@ public:
 	}
 
 	pb::CSEBase* getCSEBase();
+	pb::AE* getAE();
+	pb::Request* getRequest();
 
 	const string& getDomain();
 	// get CSE id parsed from ResourceId

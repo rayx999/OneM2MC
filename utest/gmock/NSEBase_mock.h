@@ -8,14 +8,19 @@
 #ifndef UTEST_GMOCK_NSEBASE_MOCK_H_
 #define UTEST_GMOCK_NSEBASE_MOCK_H_
 
-#include "../../include/RequestPrim.h"
-#include "../../include/ResponsePrim.h"
+#include <iostream>
+#include <string>
+
 #include "gmock/gmock.h"
 
+#include "ResourceBase.pb.h"
 #include "CommonTypes.h"
 #include "NSEBase.h"
+#include "CSEResourceStore.h"
+#include "CSEHandler.h"
+#include "CSEServer.h"
 
-
+using namespace std;
 using namespace MicroWireless::OneM2M;
 
 class NSEBaseMock : public NSEBase {
@@ -23,6 +28,39 @@ public:
   NSEBaseMock(const char* ip, const char* port) : NSEBase(ip, port) {};
   MOCK_METHOD0(run, void());
   MOCK_METHOD1(send, void(ResponsePrim& rsp));
+};
+
+class NSEBaseMockTest : public ::testing::Test {
+protected:
+	static CSEResourceStore * rdb_;
+	static NSEBaseMock * nse_;
+	static CSEHandler * hdl_;
+	static CSEServer * server_;
+	static bool last_test_bad_;
+
+	const string* json_;
+
+public:
+	NSEBaseMockTest() : json_() {}
+
+    static void SetUpTestCase();
+    static void TearDownTestCase();
+
+    virtual void SetUp() {}
+    virtual void TearDown();
+
+    void setJson(const string* json);
+
+    void handleRequest();
+
+    void retrieveTestBody(ResponseStatusCode rsc, const string& rqi,
+    		const string& to, const string& fr, const pb::ResourceBase& exp);
+    void retrieveTestBody(ResponseStatusCode rsc, const string& rqi,
+    		const string& to, const string& fr);
+    void retrieveTestBody(ResponseStatusCode rsc, const string& rqi,
+    		const string& to, const string& fr, string& pc);
+
+    void printResponse(ResponsePrim rsp);
 };
 
 #endif /* UTEST_GMOCK_NSEBASE_MOCK_H_ */

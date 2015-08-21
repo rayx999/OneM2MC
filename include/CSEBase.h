@@ -8,7 +8,6 @@
 #ifndef INCLUDE_CSEBASE_H_
 #define INCLUDE_CSEBASE_H_
 
-#include <sys/time.h>
 #include <iostream>
 #include <fstream>
 #include <sstream>
@@ -44,11 +43,7 @@ public:
 	int getSupportedResource(SupportedResourceType *&rt);
 	bool isResourceSupported(SupportedResourceType rt);
 
-	string getJson();
-
 protected:
-	bool setCreateTimestamp(TimeStamp &ct);
-	bool setLastModifiedTimestamp(TimeStamp &lt);
 
 private:
 	bool checkIdConsistency();

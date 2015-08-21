@@ -25,6 +25,10 @@ namespace OneM2M {
 using namespace std;
 using namespace MicroWireless::OneM2M;
 
+//class pb::AE;
+//class pb::CSEBase;
+//class pb::Request;
+
 const int ResourceBase::ResourceBaseOffset = 30000;
 
 ResourceBase::ResourceBase() : base_() {
@@ -63,6 +67,14 @@ bool ResourceBase::setResourceBase(const string &json, const string& id_str) {
 
 pb::CSEBase* ResourceBase::getCSEBase() {
 	return base_.mutable_csb();
+}
+
+pb::AE* ResourceBase::getAE() {
+	return base_.mutable_ae();
+}
+
+pb::Request* ResourceBase::getRequest() {
+	return base_.mutable_req();
 }
 
 const string& ResourceBase::getDomain() {
