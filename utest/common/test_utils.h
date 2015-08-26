@@ -9,6 +9,8 @@
 #define GTEST_UTEST_TEST_UTILS_H_
 
 #include <iostream>
+#include <string>
+
 #include "CommonTypes.h"
 
 namespace MicroWireless {
@@ -41,6 +43,8 @@ void PrintArray(const T * array, int size) {
 }
 
 bool CopyFile(const char * srcFn, const char * destFn);
+
+bool Resource2String(const std::string& json, std::string& str);
 
 }	// UTest
 

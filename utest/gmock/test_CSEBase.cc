@@ -21,15 +21,6 @@
 using namespace std;
 using namespace MicroWireless::OneM2M;
 
-using ::testing::NiceMock;
-using ::testing::AllOf;
-using ::testing::StrEq;
-using ::testing::Invoke;
-using ::testing::Matcher;
-using ::testing::Property;
-using ::testing::Eq;
-using ::testing::_;
-
 class CSEBaseTest : public NSEBaseMockTest {
 protected:
 	static const std::string retrieve_json;
@@ -45,10 +36,6 @@ public:
     virtual void SetUp()
     {
          json2pb(exp_pc_, cse_content.c_str(), cse_content.length());
-    }
-
-    virtual void TearDown() {
-    	last_test_bad_ = HasFailure();
     }
 };
 
@@ -78,7 +65,7 @@ const string CSEBaseTest::cse_content("{"
 		"}");
 
 TEST_F(CSEBaseTest, RetrieveCSE) {
-  setJson(&retrieve_json);
+  setupRequestPrim(retrieve_json);
   retrieveTestBody(RSC_OK, "ab3f124a", exp_to_, exp_fr_, exp_pc_);
 }
 
@@ -89,7 +76,7 @@ TEST_F(CSEBaseTest, RetrieveCSE2) {
 			"\"rqi\": \"ab3f124a\","
 			"\"fr\": \"//microwireless.com/AE-01\""
 		"}");
-  setJson(&json);
+  setupRequestPrim(json);
   retrieveTestBody(RSC_OK, "ab3f124a", exp_to_, exp_fr_, exp_pc_);
 }
 
@@ -100,7 +87,7 @@ TEST_F(CSEBaseTest, RetrieveCSE3) {
 			"\"rqi\": \"ab3f124a\","
 			"\"fr\": \"//microwireless.com/AE-01\""
 		"}");
-  setJson(&json);
+  setupRequestPrim(json);
   retrieveTestBody(RSC_OK, "ab3f124a", exp_to_, exp_fr_, exp_pc_);
 }
 
@@ -112,7 +99,7 @@ TEST_F(CSEBaseTest, RetrieveCSE4) {
 			"\"fr\": \"//microwireless.com/AE-01\", "
 		    "\"rt\": 3"
 		  "}");
-  setJson(&json);
+  setupRequestPrim(json);
   retrieveTestBody(RSC_OK, "ab3f124a", exp_to_, exp_fr_, exp_pc_);
 }
 
@@ -124,7 +111,7 @@ TEST_F(CSEBaseTest, NotExistResource) {
 			"\"fr\": \"//microwireless.com/AE-01\""
 		"}");
 
-  setJson(&not_exist_json);
+  setupRequestPrim(not_exist_json);
   retrieveTestBody(RSC_NOT_FOUND, "ab3f124a", exp_to_, exp_fr_);
 }
 
@@ -139,7 +126,7 @@ TEST_F(CSEBaseTest, RetrieveCSENonBlockSync) {
   string pc_str_;
   pb::ResourceBase pc_;
 
-  setJson(&json);
+  setupRequestPrim(json);
   retrieveTestBody(RSC_ACCEPTED, "ab3f124a", exp_to_, exp_fr_, pc_str_);
   ASSERT_TRUE(pc_.ParseFromString(pc_str_));
   req_ri_ = pc_.ri();
@@ -175,7 +162,7 @@ TEST_F(CSEBaseTest, RetrieveNonBlockRequest) {
   pb::ResourceBase exp_req_;
   json2pb(exp_req_, exp_json.c_str(), exp_json.length());
 
-  setJson(&json);
+  setupRequestPrim(json);
   retrieveTestBody(RSC_OK, "ab3f124a", exp_to_, exp_fr_, exp_req_);
 //  pb::ResourceBase res_;
 //  ASSERT_TRUE(res_.ParseFromString(str_));

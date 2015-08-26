@@ -35,14 +35,19 @@ public:
 	SupportedResourceType getResourceType();
 
 	const string & getTo();
+	bool setTo(const string& to);
+
 	const string & getFrom();
+	void setFrom(const string& fr);
+
 	const string & getRequestId();
+	void setRequestId(const string& rqi);
 
 	const string & getTargetResource();
 	void setTargetResource(const string& target);
 
-	bool setName(string &nm);
-	bool getName(string &nm);
+	void setName(const string &nm);
+	const string& getName();
 
 	void setContent(const string & pc);
 	const string& getContent();

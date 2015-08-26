@@ -38,14 +38,14 @@ GF_OBJ    := $(patsubst %.cc,build/%.o,$(GF_SRC))
 GF_INC    := $(addprefix -I, $(GF_DIR))
 
 # gtest
-GT_DIR    := utest/gtest
+GT_DIR    := utest/gtest utest/common
 GT_SRC    := $(foreach sdir,$(GT_DIR),$(wildcard $(sdir)/*.cc))
 GT_OBJ    := $(patsubst %.cc,build/%.o,$(GT_SRC))
 GT_INC    := $(addprefix -I, $(GT_DIR))
 GT_LIB    := 
 
 # gmock
-GM_DIR    := utest/gmock
+GM_DIR    := utest/gmock utest/common
 GM_SRC    := $(foreach sdir,$(GM_DIR),$(wildcard $(sdir)/*.cc))
 GM_OBJ    := $(patsubst %.cc,build/%.o,$(GM_SRC))
 GM_INC    := $(addprefix -I, $(GM_DIR))

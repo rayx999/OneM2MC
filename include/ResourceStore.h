@@ -9,13 +9,15 @@
 #define INCLUDE_RESOURCESTORE_H_
 
 #include <iostream>
-
+#include <string>
 
 namespace MicroWireless {
 namespace OneM2M {
 
 using namespace MicroWireless::OneM2M;
 using namespace std;
+
+class ResourceBase;
 
 template <typename Root>
 class ResourceStore {
@@ -36,6 +38,7 @@ public:
 	bool putResource(const string& ri, const string& lnk, const string& res_str);
 	Root* getRoot() { return p_root_; }
 	const string getResourcePath(const string& ri);
+	bool getParentResource(const string& path, ResourceBase& parent);
 
 protected:
 	const string normalizeRi(const string& ri, const string& ext = "res", int level = 999);

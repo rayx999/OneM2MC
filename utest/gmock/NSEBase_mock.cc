@@ -67,6 +67,12 @@ bool matcher_req(const pb::Request& act, const pb::Request& exp) {
 	return false;
 }
 
+bool matcher_ae(const pb::AE& act, const pb::AE& exp) {
+	return act.apn() == exp.apn() &&
+			act.api() == exp.api() &&
+			act.aei() == exp.aei();
+}
+
 MATCHER_P(PbEq, exp_res, "") {
 	pb::ResourceBase act_res_;
 	if (!act_res_.ParseFromString(arg)) {
@@ -75,14 +81,17 @@ MATCHER_P(PbEq, exp_res, "") {
 
 	if  (act_res_.ty() == exp_res.ty() &&
 		 act_res_.ri() == exp_res.ri() &&
-		 act_res_.rn() == exp_res.rn() )
+		 act_res_.rn() == exp_res.rn() &&
+		 act_res_.pi() == exp_res.pi() )
 	{
 		if (act_res_.has_csb()) {
 			return matcher_cse(act_res_.csb(), exp_res.csb());
-		} if (act_res_.has_req()) {
+		} else if (act_res_.has_req()) {
 			return matcher_req(act_res_.req(), exp_res.req());
+		} else if (act_res_.has_ae()) {
+			return matcher_ae(act_res_.ae(), exp_res.ae());
 		} else {
-			return true;
+			cerr << "PbEq: No sub-resource.\n";
 		}
 	}
 	return false;
@@ -107,16 +116,20 @@ void NSEBaseMockTest::TearDownTestCase()
 
 void NSEBaseMockTest::TearDown() {
 	last_test_bad_ = HasFailure();
+	if (p_reqp_ != NULL) {
+		delete p_reqp_;
+		p_reqp_ = NULL;
+	}
 }
 
-void NSEBaseMockTest::setJson(const string* json) {
-	json_ = json;
+void NSEBaseMockTest::setupRequestPrim(const string& json) {
+	p_reqp_ = new RequestPrim(json);
+	ASSERT_TRUE(p_reqp_ != NULL);
 }
 
 void NSEBaseMockTest::handleRequest() {
 	try {
-		RequestPrim req_(*json_);
-     	hdl_->handleRequest(req_);
+     	hdl_->handleRequest(*p_reqp_);
 	} catch (exception &e) {
 		cerr << "Unexpected exception: " << e.what() << endl;
 		ASSERT_TRUE(false);

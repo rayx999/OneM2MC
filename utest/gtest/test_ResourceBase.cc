@@ -12,6 +12,8 @@
 #include "gtest/gtest.h"
 #include "test_utils.h"
 #include "ResourceBase.h"
+#include "RequestPrim.h"
+#include "CSEResourceStore.h"
 
 using namespace MicroWireless::OneM2M;
 
@@ -23,9 +25,29 @@ protected:
 	static const string valid_path;
 
 	ResourceBase res_base_;
-//	ResourceStore<CSEBase> rdb;
+	CSEResourceStore rdb;
 
-	ResourceBaseTest() : res_base_()/*, rdb("data/.store")*/ {}
+	ResourceBaseTest() : res_base_(), rdb("data/.store") {}
+
+	void testRequest2Resource(const string& res_json, const string& reqp_json, const string &rn) {
+		string res_pc_str;
+		ASSERT_TRUE(UTest::Resource2String(res_json, res_pc_str));
+
+		try {
+			RequestPrim reqp(reqp_json);
+			reqp.setContent(res_pc_str);
+			ResourceBase res_;
+			ASSERT_TRUE(res_.setResourceBase(reqp, *rdb.cse()));
+			if (rn.empty()) {
+				ASSERT_TRUE(res_.getIntRi().empty());
+			} else {
+				ASSERT_STREQ(res_.getIntRi().c_str(), rn.c_str());
+			}
+		} catch (exception &e) {
+			cout << "Unexpected exception: " << e.what() << endl;
+			ASSERT_TRUE(false);
+		}
+	}
 
 	virtual void SetUp() {
 		if (setup) {
@@ -104,6 +126,87 @@ TEST_F(ResourceBaseTest, JsonWrongElement) {
 	}
 }
 
+TEST_F(ResourceBaseTest, RequestWithName) {
+	const string reqp_pc("{"
+					"\"ty\" 	: 2,"
+					"\"ae\"     : {"
+						"\"apn\" 	: \"APP-01\","
+						"\"api\" 	: \"APP-01\","
+						"\"aei\" 	: \"AE-01\" "
+					             "}"
+					"}");
+
+	const string reqp_json("{"
+			"\"op\": 1, "
+			"\"to\": \"//microwireless.com/IN-CSE-01\", "
+			"\"rqi\": \"ab3f124a\", "
+			"\"fr\": \"//microwireless.com/AE-01\", "
+			"\"nm\": \"AE-01\" "
+		"}");
+
+	testRequest2Resource(reqp_pc, reqp_json, "AE-01");
+}
+
+TEST_F(ResourceBaseTest, RequestWithRn) {
+	const string reqp_pc("{"
+					"\"ty\" 	: 2,"
+					"\"rn\"     :\"AE-01\", "
+					"\"ae\"     : {"
+						"\"apn\" 	: \"APP-01\","
+						"\"api\" 	: \"APP-01\","
+						"\"aei\" 	: \"AE-01\" "
+					             "}"
+					"}");
+
+	const string reqp_json("{"
+			"\"op\": 1, "
+			"\"to\": \"//microwireless.com/IN-CSE-01\", "
+			"\"rqi\": \"ab3f124a\", "
+			"\"fr\": \"//microwireless.com/AE-01\" "
+		"}");
+
+	testRequest2Resource(reqp_pc, reqp_json, "AE-01");
+}
+
+TEST_F(ResourceBaseTest, RequestWithTo) {
+	const string reqp_pc("{"
+					"\"ty\" 	: 2,"
+					"\"ae\"     : {"
+						"\"apn\" 	: \"APP-01\","
+						"\"api\" 	: \"APP-01\","
+						"\"aei\" 	: \"AE-01\" "
+					             "}"
+					"}");
+
+	const string reqp_json("{"
+			"\"op\": 1, "
+			"\"to\": \"//microwireless.com/IN-CSE-01/AE-01\", "
+			"\"rqi\": \"ab3f124a\", "
+			"\"fr\": \"//microwireless.com/AE-01\" "
+		"}");
+
+	testRequest2Resource(reqp_pc, reqp_json, "AE-01");
+}
+
+TEST_F(ResourceBaseTest, RequestNoRn) {
+	const string reqp_pc("{"
+					"\"ty\" 	: 2,"
+					"\"ae\"     : {"
+						"\"apn\" 	: \"APP-01\","
+						"\"api\" 	: \"APP-01\","
+						"\"aei\" 	: \"AE-01\" "
+					             "}"
+					"}");
+
+	const string reqp_json("{"
+			"\"op\": 1, "
+			"\"to\": \"//microwireless.com/IN-CSE-01\", "
+			"\"rqi\": \"ab3f124a\", "
+			"\"fr\": \"//microwireless.com/AE-01\" "
+		"}");
+
+	testRequest2Resource(reqp_pc, reqp_json, string());
+}
 
 TEST_F(ResourceBaseTest, checkCreateTime) {
 	ResourceBase res_base_;
@@ -170,7 +273,7 @@ TEST_F(ResourceBaseTest, CheckLastModifyTime) {
 TEST_F(ResourceBaseTest, CheckDomainCsiRi) {
 	ASSERT_STREQ(res_base_.getDomain().c_str(), "//microwireless.com");
 	ASSERT_STREQ(res_base_.getIntCsi().c_str(), "/IN-CSE-01");
-	ASSERT_STREQ(res_base_.getIntRi().c_str(), "IN-CSE-01");
+	ASSERT_STREQ(res_base_.getIntRi().c_str(), "Z0005");
 	ASSERT_STREQ(res_base_.getResourceId().c_str(), "Z0005");
 	ASSERT_STREQ(res_base_.getResourceName().c_str(), "IN-CSE-01");
 }

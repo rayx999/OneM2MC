@@ -37,7 +37,7 @@ public:
 
 	virtual ~RequestHandler() {};
 
-	void generateResourceId(SupportedResourceType ty, string& ri);
+	bool composeContent(ResourceBase& res_pc, ResourceBase& res, string& pc);
 
 	template <typename StoreType>
 	bool checkRequest(RequestPrim& req, StoreType& rdb) {
@@ -98,7 +98,7 @@ public:
 	};
 
 	template <typename StoreType>
-	bool composeContent(RequestPrim& req, string& pc, StoreType& rdb) {
+	bool composeContent(RequestPrim& req, string& pc, ResourceStore<StoreType>& rdb) {
 		bool ret_ = false;
 		ResourceBase base_;
 		if (!base_.setResourceBase(req.getTargetResource(), rdb)) {
@@ -119,7 +119,66 @@ public:
 		return ret_;
 	}
 
-private:
+	template <typename StoreType>
+	ResponseStatusCode setResourceToBeCreated(ResourceBase& res, RequestPrim& reqp,
+			ResourceStore<StoreType>& rdb, ResourceBase& ret, ResourceBase& parent)
+	{
+		const string sp_id_ = rdb.getRoot()->getDomain() + rdb.getRoot()->getCSEId();
+		const string pc_ = reqp.getContent();
+		string full_path = sp_id_;
+
+		if (pc_.empty()) {
+			return RSC_BAD_REQUEST;
+		} else if (!res.setResourceBase(pc_, sp_id_)) {
+			return RSC_BAD_REQUEST;
+		} else if (!reqp.getIntRn().empty()) {
+			if (rdb.isResourceValid(reqp.getTo())) {
+				return RSC_CONFLICT;
+			} else {
+				full_path += "/" + reqp.getIntRn();
+			}
+		} else if (!reqp.getName().empty()) {
+			if (rdb.isResourceValid(sp_id_ + "/" + reqp.getName())) {
+				return RSC_CONFLICT;
+			} else {
+				full_path += "/" + reqp.getName();
+			}
+		} else if (!res.getResourceName().empty()) {
+			if (rdb.isResourceValid(sp_id_ + "/" + res.getResourceName())) {
+				return RSC_CONFLICT;
+			} else {
+				full_path += "/" + res.getResourceName();
+			}
+		}
+
+		// set parent id, default to CSEBase
+		if (!rdb.getParentResource(full_path, parent)) {
+			return RSC_NOT_FOUND;
+		}
+		string pi_ = parent.getResourceId();
+		res.setParentId(pi_);
+		ret.setParentId(pi_);
+
+		// generate ri and rn
+		string ri_;
+		generateResourceId(res.getResourceType(), ri_, rdb);
+		res.setResourceId(ri_);
+		ret.setResourceId(ri_);
+
+		string domain_, csi_, rn_;
+		parseIds(full_path, CSERegex, domain_, csi_, rn_);
+		// no resource name, set resource id as resource name
+		if (rn_.empty()) {
+			rn_ = ri_;
+		}
+		if (rn_ != res.getResourceName()) {
+			res.setResourceName(rn_);
+			ret.setResourceName(rn_);
+		}
+		return RSC_OK;
+	}
+
+protected:
 	template <typename StoreType>
 	bool createRequest(RequestPrim& reqp, string& pc, StoreType &rdb) {
 		string ri_;
@@ -131,6 +190,9 @@ private:
 		res_.SerializeToString(&pc);
 
 		Request req_(reqp, ri_, rdb.getRoot()->getResourceId());
+		if (req_.getResourceName().empty()) {
+			req_.setResourceName(ri_);
+		}
 		if (!req_.outToResourceStore(rdb)) {
 			cerr << "createRequest: outToResourceStore failed.\n";
 			return false;
@@ -144,6 +206,8 @@ private:
 		do {
 			ri = boost::str(boost::format("%03d-%05d") % ty % dist(gen_));
 		} while (rdb.isResourceValid(ri));
+
+		ri = (ty == AE ? string("C") + ri : ri);
 	}
 
 protected:

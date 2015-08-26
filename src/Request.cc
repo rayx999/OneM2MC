@@ -147,7 +147,7 @@ bool Request::getOperationResult_rsc(ResponseStatusCode& rsc) {
 bool Request::setOperationResult_rsc(ResponseStatusCode rsc) {
 	if (p_ol_ != NULL) {
 		p_ol_->set_rsc(static_cast<pb::CommonTypes_ResponseStatusCode>(rsc));
-		return setLastModifiedTimestamp();
+		return setCreateTimestamp();
 	}
 	return false;
 }

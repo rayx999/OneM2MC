@@ -54,7 +54,7 @@ TEST_F(CommonUtilsTest, Parse2Subdomains) {
 	ASSERT_STREQ(ri.c_str(), "95847");
 }
 
-TEST_F(CommonUtilsTest, Parse4SubdomainsFullRespurcePath) {
+TEST_F(CommonUtilsTest, Parse4SubdomainsFullResourcePath) {
 	const string id_("//in-cse-01.o2o.microwireless.com/fresh/fish/shark");
 	string domain, csi, ri;
 
@@ -181,7 +181,10 @@ TEST_F(CommonUtilsTest, NoResourceId1) {
 	const string id_("//microwireless.com/in-cse-01");
 	string domain, csi, ri;
 
-	ASSERT_FALSE(parseIds(id_, cse_regex, domain, csi, ri));
+	ASSERT_TRUE(parseIds(id_, cse_regex, domain, csi, ri));
+	ASSERT_STREQ(domain.c_str(), "//microwireless.com");
+	ASSERT_STREQ(csi.c_str(), "/in-cse-01");
+	ASSERT_TRUE(ri.empty());
 }
 
 TEST_F(CommonUtilsTest, NoResourceId2) {

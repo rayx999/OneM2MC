@@ -25,7 +25,7 @@ bool isMatching(const string& id, const string& regex) {
 bool parseFullIds(const string& id_str, const string& csi_regex,
 		string& domain, string& csi, string& ri)
 {
-	static boost::regex pattern_("^(//([\\w-]*?)\\.?([\\w-]*?)\\.?([\\w-]+\\.[\\w-]+))/([\\w-]+)(/[\\w/-]+)*");
+	boost::regex pattern_("^(//([\\w-]*?)\\.?([\\w-]*?)\\.?([\\w-]+\\.[\\w-]+))/([\\w-]+)(/[\\w/-]+)*");
 	boost::smatch sm_;
 
 	boost::regex_match(id_str, sm_, pattern_);
@@ -42,7 +42,7 @@ bool parseFullIds(const string& id_str, const string& csi_regex,
 	}
 
 	if (sm_[4].str().empty()) {
-		cerr << "parseFullIds: missing domain.\n";
+		cerr << "parseFullIds: missing domain. id_str:" << id_str << endl;
 		return false;
 	}
 
@@ -95,15 +95,15 @@ bool parseFullIds(const string& id_str, const string& csi_regex,
 	}
 
 	ri += sm_[6].str();
-
+/*
 	if (ri.empty()) {
 		cerr << "parseFullIds: missing resource id in " << id_str << endl;
 		return false;
 	}
-
+*/
 	domain = "//" + domain;
 	csi = "/" + csi;
-	if (ri.at(0) == '/') {
+	if (!ri.empty() && ri.at(0) == '/') {
 		ri = ri.substr(1);
 	}
 	return true;
@@ -148,13 +148,18 @@ bool parseIds(const string& id_str, const string& csi_regex,
 	csi.clear();
 	ri.clear();
 
-	if (id_str.substr(0,2) == "//") {
-		return parseFullIds(id_str, csi_regex, domain, csi, ri);
-	} else if (id_str.at(0) == '/') {
-		return parsePartialIds(id_str, csi_regex, csi, ri);
-	} else {
-		ri = id_str;
-		return true;
+	try {
+		if (id_str.substr(0,2) == "//") {
+			return parseFullIds(id_str, csi_regex, domain, csi, ri);
+		} else if (id_str.at(0) == '/') {
+			return parsePartialIds(id_str, csi_regex, csi, ri);
+		} else {
+			ri = id_str;
+			return true;
+		}
+	} catch (exception &e) {
+		cerr << "Parseids exception:" << e.what() << endl;
+		return false;
 	}
 }
 

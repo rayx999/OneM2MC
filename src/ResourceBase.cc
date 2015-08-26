@@ -17,6 +17,7 @@
 #include "ResourceBase.pb.h"
 #include "CommonUtils.h"
 #include "ResourceBase.h"
+#include "RequestPrim.h"
 
 namespace MicroWireless {
 
@@ -44,22 +45,24 @@ ResourceBase::ResourceBase(const string& json, const string& id_str) : base_() {
 	}
 }
 
-bool ResourceBase::setResourceBase(const string &json, const string& id_str) {
+bool ResourceBase::setResourceBase(const string &str, const string& id_str) {
 	// keep original create time
 	TimeStamp _ct;
 	getCreateTimestamp(_ct);
 
-	// parse to PB buffer
-	try {
-		json2pb(base_, json.c_str(), json.length());
-	} catch (exception &e) {
-		cerr << "json2pb failed." << e.what() << endl;
-		return false;
+	// parse to PB buffer, try pb in string first
+	if (!base_.ParseFromString(str)) {
+		try {
+			json2pb(base_, str.c_str(), str.length());
+		} catch (exception &e) {
+			cerr << "try json2pb failed." << e.what() << endl;
+			return false;
+		}
 	}
 	// need to keep original create time if Json file
 	// doesn't have create time set up
 	if (!base_.has_ct()) {
-		setCreateTimestamp();
+		setCreateTimestamp(&_ct);
 	}
 
 	return checkResourceConsistency(id_str);
@@ -104,11 +107,17 @@ const string& ResourceBase::getResourceId() {
 
 bool ResourceBase::setResourceId(const string& ri) {
 	base_.set_ri(ri);
+	ri_ = ri;
 	return setLastModifiedTimestamp();
 }
 
 const string& ResourceBase::getResourceName() {
 	return base_.rn();
+}
+
+bool ResourceBase::setResourceName(const string& rn) {
+	base_.set_rn(rn);
+	return setLastModifiedTimestamp();
 }
 
 const string& ResourceBase::getParentId() {
@@ -142,9 +151,13 @@ bool ResourceBase::getLastModifiedTimestamp(TimeStamp &lt) {
 	return false;
 }
 
-bool ResourceBase::setCreateTimestamp() {
+bool ResourceBase::setCreateTimestamp(TimeStamp* p_ts) {
 	TimeStamp ts_;
-	gettimeofday(&ts_, NULL);
+	if (p_ts == NULL) {
+		gettimeofday(&ts_, NULL);
+	} else {
+		ts_ = *p_ts;
+	}
 	google::protobuf::Timestamp * ct_ = base_.mutable_ct();
 
 	if (ct_ != NULL) {
@@ -157,9 +170,13 @@ bool ResourceBase::setCreateTimestamp() {
 	}
 }
 
-bool ResourceBase::setLastModifiedTimestamp() {
+bool ResourceBase::setLastModifiedTimestamp(TimeStamp* p_ts) {
 	TimeStamp ts_;
-	gettimeofday(&ts_, NULL);
+	if (p_ts == NULL) {
+		gettimeofday(&ts_, NULL);
+	} else {
+		ts_ = *p_ts;
+	}
 	google::protobuf::Timestamp * lt_ = base_.mutable_lt();
 	if (lt_ != NULL) {
 		lt_->set_seconds(ts_.tv_sec);
@@ -186,18 +203,30 @@ bool ResourceBase::checkResourceConsistency(const string& id_str) {
 		cerr << "checkResourceConsistency: parseIds failed. res_path: " << id_str << endl;
 		return false;
 	}
-	if (!boost::iequals(getResourceId(), ri_) && !boost::iequals(getResourceName(), ri_)) {
+
+	if (!(boost::iequals(getResourceId(), ri_) ||
+		  boost::iequals(getResourceName(), ri_) ||
+		  (getResourceId().empty() && getResourceName().empty()))) {
 		cerr << "checkResourceConsistency failed. ";
 		cerr << " ri/rn in resource: " << getResourceId();
 		cerr << "  " << getResourceName();
 		cerr << " vs. ri in store:" << ri_ << endl;
 		return false;
 	}
+
+	if (!getResourceId().empty()) {
+		ri_ = getResourceId();
+	}
 	return true;
 }
 
 bool ResourceBase::SerializeToString(string* pc) {
 	return base_.SerializeToString(pc);
+}
+
+void ResourceBase::CopyResourceTimeStamps(ResourceBase& src) {
+	*base_.mutable_ct() = src.base_.ct();
+	*base_.mutable_lt() = src.base_.lt();
 }
 
 string ResourceBase::getJson() {

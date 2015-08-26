@@ -1,5 +1,5 @@
 /*
- * AE.cc
+ * AEClass.cc
  *
  *  Created on: 2015年8月21日
  *      Author: weimi_000
@@ -7,35 +7,36 @@
 
 #include <stdexcept>
 #include <iostream>
+#include <boost/algorithm/string/predicate.hpp>
 
 #include "CommonTypes.pb.h"
 #include "ResourceBase.pb.h"
 #include "AE.pb.h"
 #include "CommonTypes.h"
-#include "AE.h"
 #include "ResourceBase.h"
-
-using namespace std;
-using namespace MicroWireless::OneM2M::pb;
+#include "AE.h"
 
 namespace MicroWireless {
 
 namespace OneM2M {
 
-AE::AE() : p_ae_(getAE()) { }
+using namespace std;
+using namespace MicroWireless::OneM2M;
 
-AE::AE(const string& json, const string& id_str) : ResourceBase(json, id_str) {
+AEClass::AEClass() : p_ae_(getAE()) { }
+
+AEClass::AEClass(const string& json, const string& id_str) : ResourceBase(json, id_str) {
 	p_ae_ = getAE();
 	if (!checkIdConsistency()) {
-		throw runtime_error("AE: checkIdConsistency failed.");
+		throw runtime_error("AEClass: checkIdConsistency failed.");
 	}
 }
 
-AE::AE(const string& ri, ResourceStore<CSEBase>& rdb) : ResourceBase(ri, rdb) {
+AEClass::AEClass(const string& ri, ResourceStore<CSEBase>& rdb) : ResourceBase(ri, rdb) {
 	p_ae_ = getAE();
 }
 
-bool AE::setAE(const string& ri, ResourceStore<CSEBase>& rdb) {
+bool AEClass::setAE(const string& ri, ResourceStore<CSEBase>& rdb) {
 	bool ret_ = false;
 	if (setResourceBase(ri, rdb)) {
 		p_ae_ = getAE();
@@ -44,7 +45,7 @@ bool AE::setAE(const string& ri, ResourceStore<CSEBase>& rdb) {
 	return ret_;
 }
 
-bool AE::setAE(const string &json, const string& id_str) {
+bool AEClass::setAE(const string &json, const string& id_str) {
 	bool ret_ = false;
 	if (setResourceBase(json, id_str)) {
 		p_ae_ = getAE();
@@ -53,23 +54,29 @@ bool AE::setAE(const string &json, const string& id_str) {
 	return ret_;
 }
 
-const string& AE::getAppName() {
+const string& AEClass::getAppName() {
 	return p_ae_->apn();
 }
 
-const string& AE::getAppId() {
+const string& AEClass::getAppId() {
 	return p_ae_->api();
 }
 
-const string& AE::getAEId() {
+const string& AEClass::getAEId() {
 	return p_ae_->aei();
 }
 
-bool AE::checkIdConsistency() {
+bool AEClass::checkIdConsistency() {
+	if (!getResourceName().empty() &&
+		!boost::iequals(getAEId(), getResourceName())) {
+		cerr << "checkIdConsistency: AEId conflicts.";
+		cerr << getAEId() << " vs. " << getResourceName() << endl;
+		return false;
+	}
 	return true;
 }
 
-AE::~AE() { }
+AEClass::~AEClass() { }
 
 }	// OneM2M
 

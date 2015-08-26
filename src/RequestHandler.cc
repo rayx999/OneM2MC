@@ -8,8 +8,7 @@
 
 #include <string>
 
-#include "Request.h"
-#include "RequestPrim.h"
+#include "ResourceBase.h"
 #include "RequestHandler.h"
 
 namespace MicroWireless {
@@ -17,6 +16,13 @@ namespace OneM2M {
 
 using namespace MicroWireless::OneM2M;
 
+// add modified/created resources to content pc
+bool RequestHandler::composeContent(ResourceBase& res_pc, ResourceBase& res, string& pc) {
+	// get all timestamps
+	res_pc.CopyResourceTimeStamps(res);
+	return res_pc.SerializeToString(&pc);
+}
 
 }	// OneM2M
+
 }	// MicroWireless

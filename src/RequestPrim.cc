@@ -79,12 +79,34 @@ const string & RequestPrim::getTo() {
 	return reqp_.to();
 }
 
+bool  RequestPrim::setTo(const string& to) {
+	string domain_, csi_, rn_;
+	if (parseIds(to, CSERegex, domain_, csi_, rn_)) {
+		reqp_.set_to(to);
+		RequestPrim::domain_ = domain_;
+		RequestPrim::csi_ = csi_;
+		RequestPrim::rn_ = rn_;
+		return true;
+	} else {
+		cerr << "setTo failed.\n";
+		return false;
+	}
+}
+
 const string & RequestPrim::getFrom() {
 	return reqp_.fr();
 }
 
+void  RequestPrim::setFrom(const string& fr) {
+	reqp_.set_fr(fr);
+}
+
 const string & RequestPrim::getRequestId() {
 	return reqp_.rqi();
+}
+
+void  RequestPrim::setRequestId(const string& rqi) {
+	reqp_.set_rqi(rqi);
 }
 
 const string & RequestPrim::getTargetResource() {
@@ -108,10 +130,15 @@ SupportedResourceType RequestPrim::getResourceType() {
 	return static_cast<SupportedResourceType>(reqp_.ty());
 }
 
-/*
-bool setName(string &nm);
-bool getName(string &nm);
-*/
+
+void  RequestPrim::setName(const string& nm) {
+	reqp_.set_nm(nm);
+}
+
+const string&  RequestPrim::getName() {
+	return reqp_.nm();
+}
+
 void RequestPrim::setContent(const string & pc) {
 	reqp_.set_pc(pc);
 }

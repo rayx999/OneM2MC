@@ -5,10 +5,12 @@
  *      Author: weimi_000
  */
 
-#include <RequestPrim.h>
-#include <ResponsePrim.h>
+#include <iostream>
 #include <string>
 
+#include "RequestPrim.h"
+#include "ResponsePrim.h"
+#include "ResourceBase.h"
 #include "RequestHandler.h"
 #include "CSEHandler.h"
 #include "NSEBase.h"
@@ -24,10 +26,23 @@ void CSEHandler::handleRequest(RequestPrim& req) {
 	}
 
 	string pc_, target_;
+	ResourceBase res_, ret_, parent_;
 	ResponseStatusCode rsc_ = RSC_OK;
 
 	switch (req.getOperation()) {
 	case OPERATION_CREATE:
+		rsc_ = setResourceToBeCreated(res_, req, rdb_, ret_, parent_);
+		if (rsc_ == RSC_OK) {
+			if (!res_.outToResourceStore(rdb_)) {
+				rsc_ = RSC_INTERNAL_SERVER_ERROR;
+			} else if (!composeContent(ret_, res_, pc_)) {
+				rsc_ = RSC_INTERNAL_SERVER_ERROR;
+			} else {
+				rsc_ = RSC_CREATED;
+				parent_.setLastModifiedTimestamp();
+				parent_.outToResourceStore(rdb_, true);
+			}
+		}
 		break;
 	case OPERATION_RETRIEVE:
 		getResourceHAddress(req, target_, *rdb_.cse());
@@ -61,7 +76,7 @@ void CSEHandler::handleRequest(RequestPrim& req) {
 
 	string fr_ = rdb_.getRoot()->getDomain() + rdb_.getRoot()->getCSEId();
 	ResponsePrim rsp_(&req, rsc_, fr_);
-	if (rsc_ == RSC_OK && !pc_.empty()) {
+	if ((rsc_ == RSC_OK || rsc_ == RSC_CREATED) && !pc_.empty()) {
 		rsp_.setContent(pc_);
 	}
 	nse_.send(rsp_);

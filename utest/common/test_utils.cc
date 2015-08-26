@@ -7,7 +7,11 @@
 
 #include <fstream>
 #include <iostream>
+#include <string>
+#include <json2pb.h>
+
 #include "test_utils.h"
+#include "ResourceBase.pb.h"
 
 using namespace std;
 
@@ -29,6 +33,12 @@ bool CopyFile(const char * srcFn, const char * dstFn) {
 		return false;
 	}
     return true;
+}
+
+bool Resource2String(const string& json, string& str) {
+	pb::ResourceBase res_pc;
+	json2pb(res_pc, json.c_str(), json.length());
+	return res_pc.SerializeToString(&str);
 }
 
 }	// UTest

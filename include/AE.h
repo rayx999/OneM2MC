@@ -1,5 +1,5 @@
 /*
- * AE.h
+ * AEClass.h
  *
  *  Created on: 2015年8月21日
  *      Author: weimi_000
@@ -8,10 +8,8 @@
 #ifndef INCLUDE_AE_H_
 #define INCLUDE_AE_H_
 
-#include <sys/time.h>
 #include <iostream>
-#include <fstream>
-#include <sstream>
+#include <string>
 
 #include "CommonTypes.pb.h"
 #include "AE.pb.h"
@@ -23,17 +21,18 @@ namespace MicroWireless {
 namespace OneM2M {
 
 using namespace std;
+using namespace MicroWireless::OneM2M;
 
 class CSEBase;
 
-class AE : public ResourceBase {
+class AEClass : public ResourceBase {
 
 public:
-	AE();
-	~AE();
+	AEClass();
+	~AEClass();
 
-	AE(const string& json, const string& id_str);
-	AE(const string& ri, ResourceStore<CSEBase>& rdb);
+	AEClass(const string& json, const string& id_str);
+	AEClass(const string& ri, ResourceStore<CSEBase>& rdb);
 
 	bool setAE(const string& ri, ResourceStore<CSEBase>& rdb);
 	bool setAE(const string &json, const string& id_str);

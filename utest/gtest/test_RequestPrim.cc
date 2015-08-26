@@ -209,3 +209,24 @@ TEST_F(RequestPrimTest, GetIdInfoAndTargetResource) {
 	ASSERT_STREQ(csiC_.c_str(), csi_.c_str());
 	//ASSERT_STREQ(p_req_->getTargetResource().c_str(), rn_.c_str());
 }
+
+TEST_F(RequestPrimTest, CheckSetTo) {
+	static const string to_("//foo.com/in-cse-99/fresh/fruit/mango");
+
+	ASSERT_TRUE(p_req_->setTo(to_));
+	ASSERT_STREQ(p_req_->getTo().c_str(), to_.c_str());
+}
+
+TEST_F(RequestPrimTest, CheckSetFr) {
+	static const string fr_("//foo.com/ae-989");
+
+	p_req_->setFrom(fr_);
+	ASSERT_STREQ(p_req_->getFrom().c_str(), fr_.c_str());
+}
+
+TEST_F(RequestPrimTest, CheckSetRequestId) {
+	static const string rqi_("ryuru564554");
+
+	p_req_->setRequestId(rqi_);
+	ASSERT_STREQ(p_req_->getRequestId().c_str(), rqi_.c_str());
+}

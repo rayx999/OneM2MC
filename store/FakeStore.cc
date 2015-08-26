@@ -12,7 +12,9 @@
 #include <boost/filesystem.hpp>
 #include <boost/algorithm/string.hpp>
 
+
 #include "CommonUtils.h"
+#include "ResourceBase.h"
 #include "CSEBase.h"
 #include "ResourceStore.h"
 
@@ -116,8 +118,10 @@ bool ResourceStore<Root>::putResource(const string& ri, const string& lnk, const
 	fstream ous(norm_ri_, ios::out | ios::trunc | ios::binary);
 	ous << res_str;
 	// create link resource
-	fstream oul(normalizeRi(lnk, "lnk"), ios::out | ios::trunc | ios::binary);
-	oul << ri;
+	if (!lnk.empty()) {
+		fstream oul(normalizeRi(lnk, "lnk"), ios::out | ios::trunc | ios::binary);
+		oul << ri;
+	}
 	return true;
 }
 
@@ -131,16 +135,38 @@ const string ResourceStore<Root>::getResourcePath(const string& ri) {
 	return norm_ri_;
 }
 
+// get parent resource, default to CSEBase
+template <typename Root>
+bool ResourceStore<Root>::getParentResource(const string& path, ResourceBase& parent) {
+	size_t pos = path.find_last_of("/\\");
+	string parent_path_ = path.substr(0, pos);
+	string sp_id_ = p_root_->getDomain() + p_root_->getCSEId();
+	if (boost::iequals(path, sp_id_) || boost::iequals(parent_path_, sp_id_)) {
+		// parent is root
+		parent = *p_root_;
+		return true;
+	} else if (isResourceValid(parent_path_)) {
+		string parent_str_;
+		if (getResource(parent_path_, parent_str_) &&
+			parent.setResourceBase(parent_str_, sp_id_)) {
+			return true;
+		}
+	}
+	return false;
+}
+
 // ghost func to get around template implementation in cc file problem.
 void TemporaryFunction ()
 {
 	string tmp;
     ResourceStore<CSEBase> TempObj("");
+    ResourceBase res;
     TempObj.setupRoot();
     TempObj.isResourceValid("");
     TempObj.getResource("", tmp);
     TempObj.putResource("", "", "");
     TempObj.getResourcePath("");
+    TempObj.getParentResource("", res);
 }
 
 }	// OneM2M

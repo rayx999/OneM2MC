@@ -38,10 +38,10 @@ protected:
 	static CSEServer * server_;
 	static bool last_test_bad_;
 
-	const string* json_;
+	RequestPrim* p_reqp_;
 
 public:
-	NSEBaseMockTest() : json_() {}
+	NSEBaseMockTest() : p_reqp_() {}
 
     static void SetUpTestCase();
     static void TearDownTestCase();
@@ -49,7 +49,7 @@ public:
     virtual void SetUp() {}
     virtual void TearDown();
 
-    void setJson(const string* json);
+    void setupRequestPrim(const string& json);
 
     void handleRequest();
 
