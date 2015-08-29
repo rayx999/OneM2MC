@@ -8,6 +8,7 @@
 
 #include <string>
 
+#include "ResourceBase.pb.h"
 #include "ResourceBase.h"
 #include "RequestHandler.h"
 

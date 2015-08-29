@@ -12,6 +12,7 @@
 #include "ResponsePrim.h"
 #include "ResourceBase.h"
 #include "RequestHandler.h"
+#include "RequestCreateHandler.h"
 #include "CSEHandler.h"
 #include "NSEBase.h"
 
@@ -25,26 +26,29 @@ void CSEHandler::handleRequest(RequestPrim& req) {
 		return;
 	}
 
-	string pc_, target_;
-	ResourceBase res_, ret_, parent_;
+	string pc_;
 	ResponseStatusCode rsc_ = RSC_OK;
 
 	switch (req.getOperation()) {
 	case OPERATION_CREATE:
-		rsc_ = setResourceToBeCreated(res_, req, rdb_, ret_, parent_);
+	{
+		RequestCreateHandler<CSEBase> rch_(req, rdb_);
+		rsc_ = rch_.setResourceToBeCreated();
 		if (rsc_ == RSC_OK) {
-			if (!res_.outToResourceStore(rdb_)) {
+			if (!rch_.outToResourceStore()) {
 				rsc_ = RSC_INTERNAL_SERVER_ERROR;
-			} else if (!composeContent(ret_, res_, pc_)) {
+			} else if (!rch_.composeContent(pc_)) {
 				rsc_ = RSC_INTERNAL_SERVER_ERROR;
 			} else {
 				rsc_ = RSC_CREATED;
-				parent_.setLastModifiedTimestamp();
-				parent_.outToResourceStore(rdb_, true);
+				rch_.saveParentLastModifiedTime();
 			}
 		}
 		break;
+	}
 	case OPERATION_RETRIEVE:
+	{
+		string target_;
 		getResourceHAddress(req, target_, *rdb_.cse());
 
 		if (rdb_.isResourceValid(req.getTo())) {
@@ -63,6 +67,7 @@ void CSEHandler::handleRequest(RequestPrim& req) {
 			rsc_ = RSC_INTERNAL_SERVER_ERROR;
 		}
 		break;
+	}
 	case OPERATION_UPDATE:
 		break;
 	case OPERATION_DELETE:

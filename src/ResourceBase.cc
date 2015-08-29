@@ -26,11 +26,23 @@ namespace OneM2M {
 using namespace std;
 using namespace MicroWireless::OneM2M;
 
-//class pb::AE;
-//class pb::CSEBase;
-//class pb::Request;
-
 const int ResourceBase::ResourceBaseOffset = 30000;
+
+map<int, map<Operation, ResourceBase::attrOption>>
+	ResourceBase::allowAttr = {
+   {TAG_TY,   { {OPERATION_CREATE, NOTPRESENT}, {OPERATION_UPDATE, NOTPRESENT} } },
+   {TAG_RI,   { {OPERATION_CREATE, NOTPRESENT}, {OPERATION_UPDATE, NOTPRESENT} } },
+   {TAG_RN,   { {OPERATION_CREATE, NOTPRESENT}, {OPERATION_UPDATE, NOTPRESENT} } },
+   {TAG_PI,   { {OPERATION_CREATE, NOTPRESENT}, {OPERATION_UPDATE, NOTPRESENT} } },
+   {TAG_CT,   { {OPERATION_CREATE, NOTPRESENT}, {OPERATION_UPDATE, NOTPRESENT} } },
+   {TAG_LT,   { {OPERATION_CREATE, NOTPRESENT}, {OPERATION_UPDATE, NOTPRESENT} } },
+   {TAG_ET,   { {OPERATION_CREATE, OPTIONAL  }, {OPERATION_UPDATE, OPTIONAL  } } },
+   {TAG_ACPI, { {OPERATION_CREATE, NOTPRESENT}, {OPERATION_UPDATE, NOTPRESENT} } },
+   {TAG_LBL,  { {OPERATION_CREATE, OPTIONAL  }, {OPERATION_UPDATE, OPTIONAL  } } },
+   {TAG_AA,   { {OPERATION_CREATE, OPTIONAL  }, {OPERATION_UPDATE, OPTIONAL  } } },
+   {TAG_AT,   { {OPERATION_CREATE, OPTIONAL  }, {OPERATION_UPDATE, OPTIONAL  } } },
+   {TAG_ST,   { {OPERATION_CREATE, OPTIONAL  }, {OPERATION_UPDATE, OPTIONAL  } } }
+};
 
 ResourceBase::ResourceBase() : base_() {
 	if (!setCreateTimestamp()) {
@@ -45,19 +57,41 @@ ResourceBase::ResourceBase(const string& json, const string& id_str) : base_() {
 	}
 }
 
-bool ResourceBase::setResourceBase(const string &str, const string& id_str) {
+bool ResourceBase::setResourceBase(const string &json, const string& id_str) {
+	// keep original create time
+	TimeStamp _ct;
+	getCreateTimestamp(_ct);
+
+	try {
+		json2pb(base_, json.c_str(), json.length());
+	} catch (exception &e) {
+		cerr << "try json2pb failed." << e.what() << endl;
+		return false;
+	}
+
+	// need to keep original create time if Json file
+	// doesn't have create time set up
+	if (!base_.has_ct()) {
+		setCreateTimestamp(&_ct);
+	}
+
+	return checkResourceConsistency(id_str);
+}
+
+bool ResourceBase::setResourceBase(const string &pc, const string& id_str, Operation op) {
 	// keep original create time
 	TimeStamp _ct;
 	getCreateTimestamp(_ct);
 
 	// parse to PB buffer, try pb in string first
-	if (!base_.ParseFromString(str)) {
-		try {
-			json2pb(base_, str.c_str(), str.length());
-		} catch (exception &e) {
-			cerr << "try json2pb failed." << e.what() << endl;
-			return false;
-		}
+	if (!base_.ParseFromString(pc)) {
+		cerr << "setResourceBase: ParseFromString failed.\n";
+		return false;
+	}
+
+	if (!checkResourceAttributes(op)) {
+		cerr << "setResourceBase: checkResourceAttributes failed.\n";
+		return false;
 	}
 	// need to keep original create time if Json file
 	// doesn't have create time set up
@@ -66,6 +100,20 @@ bool ResourceBase::setResourceBase(const string &str, const string& id_str) {
 	}
 
 	return checkResourceConsistency(id_str);
+}
+
+bool ResourceBase::setNewResourceBaseAttr(const string& ri, const string& rn,
+		const string& pi, ResourceBase& ret) {
+	if (!setResourceId(ri) || !ret.setResourceId(ri) ) {
+		return false;
+	}
+	if (!setParentId(pi) || !ret.setParentId(pi) ) {
+		return false;
+	}
+	if (rn != getResourceName()) {
+		return setResourceName(rn) && ret.setResourceName(rn);
+	}
+	return true;
 }
 
 pb::CSEBase* ResourceBase::getCSEBase() {
@@ -192,6 +240,14 @@ SupportedResourceType ResourceBase::getResourceCase() {
 	return static_cast<SupportedResourceType>(base_.resource_case() - ResourceBaseOffset);
 }
 
+bool ResourceBase::checkResourceAttributes(Operation op) {
+	if (checkResourceAttributes(op, base_, allowAttr)) {
+		base_.set_ty(static_cast<pb::CommonTypes_SupportedResourceType>(getResourceCase()));
+		return true;
+	}
+	return false;
+}
+
 bool ResourceBase::checkResourceConsistency(const string& id_str) {
 	if (getResourceType() != getResourceCase())	{
 		cerr << "checkResourceConsistency failed. ";
@@ -232,6 +288,8 @@ void ResourceBase::CopyResourceTimeStamps(ResourceBase& src) {
 string ResourceBase::getJson() {
 	return pb2json(base_);
 }
+
+ResourceBase::~ResourceBase() { }
 
 }	// OneM2M
 

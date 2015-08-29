@@ -28,7 +28,7 @@ using namespace MicroWireless::OneM2M;
 class AETest : public NSEBaseMockTest {
 protected:
 	static const std::string create_request;
-	static const std::string ae_content;
+	static const std::string ae_content, ae_exp;
 	static const string exp_to_, exp_fr_;
 
 	static pb::ResourceBase ae_pc_;
@@ -42,7 +42,7 @@ public:
 
     virtual void SetUp()
     {
-    	 json2pb(ae_pc_, ae_content.c_str(), ae_content.length());
+    	 json2pb(ae_pc_, ae_exp.c_str(), ae_exp.length());
     }
 
     void setupRequestPrim(const string& reqp_json, const string& pc_json) {
@@ -73,6 +73,13 @@ const string AETest::create_request("{"
 	"}");
 
 const string AETest::ae_content("{"
+			"\"ae\"     : {"
+				"\"apn\" 	: \"FreshGo\","
+				"\"api\" 	: \"APP-01\" "
+			"}"
+		"}");
+
+const string AETest::ae_exp("{"
 			"\"ty\" 	: 2,"
 		    "\"rn\"     : \"AE-01\","
 	    	"\"pi\"     : \"Z0005\","
@@ -85,7 +92,7 @@ const string AETest::ae_content("{"
 
 const string AETest::exp_to_("//microwireless.com/AE-01");
 const string AETest::exp_fr_("//microwireless.com/IN-CSE-01");
-
+/*
 TEST_F(AETest, CreateAEWithRn) {
   string ret_pc_;
   setupRequestPrim(create_request, ae_content);
@@ -96,6 +103,21 @@ TEST_F(AETest, CreateAEWithRn) {
   ri_ = ret_.ri();
   ASSERT_FALSE(ri_.empty());
   ASSERT_TRUE(ret_.rn().empty()); // ret_ doesn't have rn because Resource name not changed.
+  cout << "Responded ri: " << ri_ << endl;
+}
+*/
+
+TEST_F(AETest, CreateAEFullURI) {
+  string ret_pc_;
+  setupRequestPrim(create_request, ae_content);
+  p_reqp_->setTo("//microwireless.com/in-cse-01/AE-01");
+  retrieveTestBody(RSC_CREATED, "ab3f124a", exp_to_, exp_fr_, ret_pc_);
+  pb::ResourceBase ret_;
+  ASSERT_TRUE(ret_.ParseFromString(ret_pc_));
+  ri_ = ret_.ri();
+  ASSERT_FALSE(ri_.empty());
+  ASSERT_STREQ(ret_.rn().c_str(), "AE-01"); // ret_ rn overwrites origianl in ae_content
+  ASSERT_STREQ(ret_.ae().aei().c_str(), "AE-01"); // AEId set
   cout << "Responded ri: " << ri_ << endl;
 }
 
@@ -132,6 +154,7 @@ TEST_F(AETest, RetrieveAE1) {
 
 TEST_F(AETest, CreateAEConflict) {
   setupRequestPrim(create_request, ae_content);
+  p_reqp_->setTo("//microwireless.com/in-cse-01/AE-01");
   retrieveTestBody(RSC_CONFLICT, "ab3f124a", exp_to_, exp_fr_);
 }
 
@@ -167,27 +190,16 @@ TEST_F(AETest, CreateAEParentInvalid) {
   retrieveTestBody(RSC_NOT_FOUND, "ab3f124a", exp_to_, exp_fr_);
 }
 
-TEST_F(AETest, CreateAEFullURI) {
-  string ret_pc_;
-  setupRequestPrim(create_request, ae_content);
-  p_reqp_->setTo("//microwireless.com/in-cse-01/AE-03");
-  retrieveTestBody(RSC_CREATED, "ab3f124a", exp_to_, exp_fr_, ret_pc_);
-  pb::ResourceBase ret_;
-  ASSERT_TRUE(ret_.ParseFromString(ret_pc_));
-  ri_ = ret_.ri();
-  ASSERT_FALSE(ri_.empty());
-  ASSERT_STREQ(ret_.rn().c_str(), "AE-03"); // ret_ rn overwrites origianl in ae_content
-  cout << "Responded ri: " << ri_ << endl;
+TEST_F(AETest, CreateAEWithNPFields) {
+  setupRequestPrim(create_request, ae_exp);
+   retrieveTestBody(RSC_BAD_REQUEST, "ab3f124a", exp_to_, exp_fr_);
 }
 
 TEST_F(AETest, CreateAENoRn) {
 	  const string ae_json("{"
-					"\"ty\" 	: 2,"
-			    	"\"pi\"     : \"Z0005\","
 					"\"ae\"     : {"
 						"\"apn\" 	: \"FreshGo\","
-						"\"api\" 	: \"APP-01\","
-						"\"aei\" 	: \"AE-02\" "
+						"\"api\" 	: \"APP-01\" "
 					"}"
 				"}");
   string ret_pc_;
@@ -198,5 +210,6 @@ TEST_F(AETest, CreateAENoRn) {
   ri_ = ret_.ri();
   ASSERT_FALSE(ri_.empty());
   ASSERT_STREQ(ret_.rn().c_str(), ri_.c_str()); // Resource name same as ri
+  ASSERT_STREQ(ret_.ae().aei().c_str(), ri_.c_str()); // AE-id set to ri
   cout << "Responded ri: " << ri_ << endl;
 }

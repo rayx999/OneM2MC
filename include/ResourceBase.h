@@ -28,7 +28,8 @@ namespace OneM2M {
 using namespace std;
 using namespace MicroWireless::OneM2M;
 
-class CSEHandler;
+//template <typename StoreType>
+//class RequestCreateHandler<StoreType>;
 
 class ResourceBase {
 public:
@@ -36,6 +37,7 @@ public:
 
 	ResourceBase();
 	ResourceBase(const string& json, const string& id_str);
+	virtual ~ResourceBase();
 
 	template <typename StoreType>
 	ResourceBase(const string& ri, ResourceStore<StoreType>& rdb) : base_() {
@@ -45,8 +47,11 @@ public:
 		}
 	}
 
-	// set either json or PB::ResourceBase in string
-	bool setResourceBase(const string &str, const string& id_str);
+	// set from json
+	bool setResourceBase(const string &json, const string& id_str);
+	// set from PB::ResourceBase in string
+	virtual bool setResourceBase(const string &pc, const string& id_str, Operation op);
+	bool setNewResourceBaseAttr(const string& ri, const string& rn,	const string& pi, ResourceBase& ret);
 
 	template <typename Root>
 	bool setResourceBase(RequestPrim& reqp, Root& root) {
@@ -136,18 +141,61 @@ public:
 	string getJson();
 
 private:
+	bool checkResourceAttributes(Operation op);
 
 protected:
-	friend class CSEHandler;
+	template <typename StoreType>
+	friend class RequestCreateHandler;
+
 	bool setCreateTimestamp(TimeStamp* p_ts = NULL);
 	bool setLastModifiedTimestamp(TimeStamp* p_ts = NULL);
 
 	SupportedResourceType getResourceCase();
 	bool checkResourceConsistency(const string& id_str);
 
+	template <typename Resource, typename Map>
+	bool checkResourceAttributes(Operation op, Resource& res, Map& m) {
+		bool ret_ = true;
+		const google::protobuf::Reflection* reflection = res.GetReflection();
+		vector<const google::protobuf::FieldDescriptor*> fields;
+		reflection->ListFields(res, &fields);
+		for (unsigned int i = 0; i < fields.size(); i++) {
+			if (m[fields[i]->number()][op] == NOTPRESENT) {
+				cerr << "checkResourceAttributes: Tag " << fields[i]->number();
+				cerr << " field shouldn't present.\n";
+				ret_ = false;
+			}
+		}
+		return ret_;
+	}
+
+
 protected:
 	pb::ResourceBase base_;
 	string domain_, csi_, ri_;
+
+	enum attrOption {
+		MANDATORY  = 1,
+		OPTIONAL   = 2,
+		NOTPRESENT = 3
+	};
+
+private:
+	enum commonAttrTag {
+		TAG_TY  = 1,
+		TAG_RI  = 2,
+		TAG_RN  = 3,
+		TAG_PI  = 4,
+		TAG_CT  = 5,
+		TAG_LT  = 6,
+		TAG_ET  = 7,
+		TAG_ACPI = 8,
+		TAG_LBL = 9,
+		TAG_AA  = 10,
+		TAG_AT  = 11,
+		TAG_ST  = 12
+	};
+	static map<int, map<Operation, attrOption>> allowAttr;
 };
 
 }	// OneM2M

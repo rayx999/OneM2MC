@@ -10,12 +10,10 @@
 
 #include <string>
 #include <boost/algorithm/string/predicate.hpp>
-#include <boost/random/mersenne_twister.hpp>
-#include <boost/random/uniform_int_distribution.hpp>
-#include <boost/format.hpp>
 #include <json2pb.h>
 
 #include "CommonTypes.h"
+#include "AE.h"
 #include "Request.h"
 #include "RequestPrim.h"
 #include "ResponsePrim.h"
@@ -31,11 +29,9 @@ using namespace MicroWireless::OneM2M;
 
 class RequestHandler {
 public:
-	RequestHandler(NSEBase& nse) : nse_(nse) {
-		gen_.seed(static_cast<long int>(time(0)));
-	};
+	RequestHandler(NSEBase& nse) : nse_(nse) {}
 
-	virtual ~RequestHandler() {};
+	virtual ~RequestHandler() {}
 
 	bool composeContent(ResourceBase& res_pc, ResourceBase& res, string& pc);
 
@@ -97,6 +93,18 @@ public:
 		return RSC_OK;
 	};
 
+	template <typename Root>
+	bool checkResourceType(const string& pc, SupportedResourceType& ty, Root& root) {
+		pb::ResourceBase res_;
+
+		if (res_.ParseFromString(pc)) {
+			return false;
+		}
+
+		ty = static_cast<SupportedResourceType>(res_.resource_case() - ResourceBase::ResourceBaseOffset);
+		return root.isResourceSupported(ty) && ty != REQUEST;
+	}
+
 	template <typename StoreType>
 	bool composeContent(RequestPrim& req, string& pc, ResourceStore<StoreType>& rdb) {
 		bool ret_ = false;
@@ -119,70 +127,11 @@ public:
 		return ret_;
 	}
 
-	template <typename StoreType>
-	ResponseStatusCode setResourceToBeCreated(ResourceBase& res, RequestPrim& reqp,
-			ResourceStore<StoreType>& rdb, ResourceBase& ret, ResourceBase& parent)
-	{
-		const string sp_id_ = rdb.getRoot()->getDomain() + rdb.getRoot()->getCSEId();
-		const string pc_ = reqp.getContent();
-		string full_path = sp_id_;
-
-		if (pc_.empty()) {
-			return RSC_BAD_REQUEST;
-		} else if (!res.setResourceBase(pc_, sp_id_)) {
-			return RSC_BAD_REQUEST;
-		} else if (!reqp.getIntRn().empty()) {
-			if (rdb.isResourceValid(reqp.getTo())) {
-				return RSC_CONFLICT;
-			} else {
-				full_path += "/" + reqp.getIntRn();
-			}
-		} else if (!reqp.getName().empty()) {
-			if (rdb.isResourceValid(sp_id_ + "/" + reqp.getName())) {
-				return RSC_CONFLICT;
-			} else {
-				full_path += "/" + reqp.getName();
-			}
-		} else if (!res.getResourceName().empty()) {
-			if (rdb.isResourceValid(sp_id_ + "/" + res.getResourceName())) {
-				return RSC_CONFLICT;
-			} else {
-				full_path += "/" + res.getResourceName();
-			}
-		}
-
-		// set parent id, default to CSEBase
-		if (!rdb.getParentResource(full_path, parent)) {
-			return RSC_NOT_FOUND;
-		}
-		string pi_ = parent.getResourceId();
-		res.setParentId(pi_);
-		ret.setParentId(pi_);
-
-		// generate ri and rn
-		string ri_;
-		generateResourceId(res.getResourceType(), ri_, rdb);
-		res.setResourceId(ri_);
-		ret.setResourceId(ri_);
-
-		string domain_, csi_, rn_;
-		parseIds(full_path, CSERegex, domain_, csi_, rn_);
-		// no resource name, set resource id as resource name
-		if (rn_.empty()) {
-			rn_ = ri_;
-		}
-		if (rn_ != res.getResourceName()) {
-			res.setResourceName(rn_);
-			ret.setResourceName(rn_);
-		}
-		return RSC_OK;
-	}
-
 protected:
 	template <typename StoreType>
 	bool createRequest(RequestPrim& reqp, string& pc, StoreType &rdb) {
 		string ri_;
-		generateResourceId(REQUEST, ri_, rdb);
+		rdb.generateResourceId(REQUEST, ri_);
 
 		// set a resource to hold ri as response content
 		ResourceBase res_;
@@ -200,19 +149,8 @@ protected:
 		return true;
 	}
 
-	template <typename StoreType>
-	void generateResourceId(SupportedResourceType ty, string& ri, StoreType& rdb) {
-		boost::random::uniform_int_distribution<> dist(1, 99999);
-		do {
-			ri = boost::str(boost::format("%03d-%05d") % ty % dist(gen_));
-		} while (rdb.isResourceValid(ri));
-
-		ri = (ty == AE ? string("C") + ri : ri);
-	}
-
 protected:
 	NSEBase& nse_;
-	boost::random::mt19937 gen_;
 };
 
 }	// OneM2M

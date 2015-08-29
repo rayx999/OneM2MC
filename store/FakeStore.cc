@@ -11,6 +11,9 @@
 #include <string>
 #include <boost/filesystem.hpp>
 #include <boost/algorithm/string.hpp>
+#include <boost/random/mersenne_twister.hpp>
+#include <boost/random/uniform_int_distribution.hpp>
+#include <boost/format.hpp>
 
 
 #include "CommonUtils.h"
@@ -137,22 +140,34 @@ const string ResourceStore<Root>::getResourcePath(const string& ri) {
 
 // get parent resource, default to CSEBase
 template <typename Root>
-bool ResourceStore<Root>::getParentResource(const string& path, ResourceBase& parent) {
+bool ResourceStore<Root>::getParentResource(const string& path, ResourceBase*& p_parent) {
 	size_t pos = path.find_last_of("/\\");
 	string parent_path_ = path.substr(0, pos);
 	string sp_id_ = p_root_->getDomain() + p_root_->getCSEId();
 	if (boost::iequals(path, sp_id_) || boost::iequals(parent_path_, sp_id_)) {
 		// parent is root
-		parent = *p_root_;
+		p_parent = p_root_;
 		return true;
 	} else if (isResourceValid(parent_path_)) {
 		string parent_str_;
-		if (getResource(parent_path_, parent_str_) &&
-			parent.setResourceBase(parent_str_, sp_id_)) {
-			return true;
+		if (getResource(parent_path_, parent_str_)) {
+			p_parent = new ResourceBase();
+			if (p_parent != NULL) {
+				return p_parent->setResourceBase(parent_str_, sp_id_);
+			}
 		}
 	}
 	return false;
+}
+
+template <typename Root>
+void ResourceStore<Root>::generateResourceId(SupportedResourceType ty, string& ri) {
+	boost::random::uniform_int_distribution<> dist(1, 99999);
+	do {
+		ri = boost::str(boost::format("%03d-%05d") % ty % dist(gen_));
+	} while (isResourceValid(ri));
+
+	ri = (ty == AE ? string("C") + ri : ri);
 }
 
 // ghost func to get around template implementation in cc file problem.
@@ -160,13 +175,14 @@ void TemporaryFunction ()
 {
 	string tmp;
     ResourceStore<CSEBase> TempObj("");
-    ResourceBase res;
+    ResourceBase* p_res;
     TempObj.setupRoot();
     TempObj.isResourceValid("");
     TempObj.getResource("", tmp);
     TempObj.putResource("", "", "");
     TempObj.getResourcePath("");
-    TempObj.getParentResource("", res);
+    TempObj.getParentResource("", p_res);
+    TempObj.generateResourceId(AE, tmp);
 }
 
 }	// OneM2M

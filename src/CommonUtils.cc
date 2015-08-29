@@ -25,7 +25,7 @@ bool isMatching(const string& id, const string& regex) {
 bool parseFullIds(const string& id_str, const string& csi_regex,
 		string& domain, string& csi, string& ri)
 {
-	boost::regex pattern_("^(//([\\w-]*?)\\.?([\\w-]*?)\\.?([\\w-]+\\.[\\w-]+))/([\\w-]+)(/[\\w/-]+)*");
+	static const boost::regex pattern_("^(//([\\w-]*?)\\.?([\\w-]*?)\\.?([\\w-]+\\.[\\w-]+))/([\\w-]+)(/[\\w/-]+)*");
 	boost::smatch sm_;
 
 	boost::regex_match(id_str, sm_, pattern_);
