@@ -245,6 +245,8 @@ bool ResourceBase::checkResourceAttributes(Operation op) {
 		base_.set_ty(static_cast<pb::CommonTypes_SupportedResourceType>(getResourceCase()));
 		return true;
 	}
+	// check mandatory attributes
+
 	return false;
 }
 

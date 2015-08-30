@@ -28,8 +28,8 @@ namespace OneM2M {
 using namespace std;
 using namespace MicroWireless::OneM2M;
 
-//template <typename StoreType>
-//class RequestCreateHandler<StoreType>;
+using google::protobuf::Reflection;
+using google::protobuf::FieldDescriptor;
 
 class ResourceBase {
 public:
@@ -156,13 +156,26 @@ protected:
 	template <typename Resource, typename Map>
 	bool checkResourceAttributes(Operation op, Resource& res, Map& m) {
 		bool ret_ = true;
-		const google::protobuf::Reflection* reflection = res.GetReflection();
-		vector<const google::protobuf::FieldDescriptor*> fields;
+		const Reflection* reflection = res.GetReflection();
+		vector<const FieldDescriptor*> fields;
 		reflection->ListFields(res, &fields);
 		for (unsigned int i = 0; i < fields.size(); i++) {
 			if (m[fields[i]->number()][op] == NOTPRESENT) {
 				cerr << "checkResourceAttributes: Tag " << fields[i]->number();
 				cerr << " field shouldn't present.\n";
+				ret_ = false;
+			}
+		}
+
+		// check mandatory attributes
+		for (auto i = m.begin(); i != m.end(); ++i) {
+			if (i->second[op] != MANDATORY) continue;
+			auto found = find_if(fields.begin(), fields.end(), [&i](const FieldDescriptor* f) {
+				return f->number() == i->first;
+			});
+			if (found == fields.end()){
+				cerr << "checkResourceAttributes: Tag " << i->first;
+				cerr << " field NOT present.\n";
 				ret_ = false;
 			}
 		}

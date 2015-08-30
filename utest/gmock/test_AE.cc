@@ -92,20 +92,6 @@ const string AETest::ae_exp("{"
 
 const string AETest::exp_to_("//microwireless.com/AE-01");
 const string AETest::exp_fr_("//microwireless.com/IN-CSE-01");
-/*
-TEST_F(AETest, CreateAEWithRn) {
-  string ret_pc_;
-  setupRequestPrim(create_request, ae_content);
-  p_reqp_->setTo("//microwireless.com/in-cse-01");
-  retrieveTestBody(RSC_CREATED, "ab3f124a", exp_to_, exp_fr_, ret_pc_);
-  pb::ResourceBase ret_;
-  ASSERT_TRUE(ret_.ParseFromString(ret_pc_));
-  ri_ = ret_.ri();
-  ASSERT_FALSE(ri_.empty());
-  ASSERT_TRUE(ret_.rn().empty()); // ret_ doesn't have rn because Resource name not changed.
-  cout << "Responded ri: " << ri_ << endl;
-}
-*/
 
 TEST_F(AETest, CreateAEFullURI) {
   string ret_pc_;
@@ -192,6 +178,16 @@ TEST_F(AETest, CreateAEParentInvalid) {
 
 TEST_F(AETest, CreateAEWithNPFields) {
   setupRequestPrim(create_request, ae_exp);
+   retrieveTestBody(RSC_BAD_REQUEST, "ab3f124a", exp_to_, exp_fr_);
+}
+
+TEST_F(AETest, CreateAENoMandaoryFields) {
+	  const string ae_json("{"
+					"\"ae\"     : {"
+						"\"apn\" 	: \"FreshGo\""
+					"}"
+				"}");
+   setupRequestPrim(create_request, ae_json);
    retrieveTestBody(RSC_BAD_REQUEST, "ab3f124a", exp_to_, exp_fr_);
 }
 
