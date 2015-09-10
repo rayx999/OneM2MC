@@ -51,9 +51,9 @@ public:
 		SupportedResourceType ty_;
 
 		if (pc_.empty()) {
-			return RSC_BAD_REQUEST;
+			return ResponseStatusCode::BAD_REQUEST;
 		} else if (!checkResourceType(ty_)) {
-			return RSC_BAD_REQUEST;
+			return ResponseStatusCode::BAD_REQUEST;
 		}
 
 		switch (ty_) {
@@ -62,20 +62,20 @@ public:
 			p_ret_ = new AEClass();
 			break;
 		default:
-			return RSC_BAD_REQUEST;
+			return ResponseStatusCode::BAD_REQUEST;
 		}
 		if (p_res_ == NULL || p_ret_ == NULL) {
-			return RSC_BAD_REQUEST;
+			return ResponseStatusCode::BAD_REQUEST;
 		} else if (!p_res_->setResourceBase(pc_, sp_id_, Operation::CREATE)) {
-			return RSC_BAD_REQUEST;
+			return ResponseStatusCode::BAD_REQUEST;
 		}
 
 		string full_path;
 		ResponseStatusCode rsc_ = getFullPathToBeCreated(full_path);
-		if (rsc_ != RSC_OK) {
+		if (rsc_ != ResponseStatusCode::OK) {
 			return rsc_;
 		} else if (!rdb_.getParentResource(full_path, p_par_)) {
-			return RSC_NOT_FOUND;
+			return ResponseStatusCode::NOT_FOUND;
 		}
 		string pi_ = p_par_->getResourceId();
 
@@ -95,12 +95,12 @@ public:
 			result_ = ((AEClass*)p_res_)->setNewResourceAttr(ri_, rn_, pi_, *(AEClass*)p_ret_);
 			break;
 		default:
-			return RSC_INTERNAL_SERVER_ERROR;
+			return ResponseStatusCode::INTERNAL_SERVER_ERROR;
 		}
 		if (!result_) {
-			return RSC_INTERNAL_SERVER_ERROR;
+			return ResponseStatusCode::INTERNAL_SERVER_ERROR;
 		}
-		return RSC_OK;
+		return ResponseStatusCode::OK;
 	}
 
 	bool outToResourceStore() {
@@ -135,18 +135,18 @@ private:
 		full_path = sp_id_;
 		if (!reqp_.getIntRn().empty()) {
 			if (rdb_.isResourceValid(reqp_.getTo())) {
-				return RSC_CONFLICT;
+				return ResponseStatusCode::CONFLICT;
 			} else {
 				full_path += "/" + reqp_.getIntRn();
 			}
 		} else if (!reqp_.getName().empty()) {
 			if (rdb_.isResourceValid(sp_id_ + "/" + reqp_.getName())) {
-				return RSC_CONFLICT;
+				return ResponseStatusCode::CONFLICT;
 			} else {
 				full_path += "/" + reqp_.getName();
 			}
 		}
-		return RSC_OK;
+		return ResponseStatusCode::OK;
 	}
 
 private:

@@ -168,7 +168,7 @@ TEST_F(RequestTest, SetOperationResult) {
 
 		ResponseStatusCode rsc_;
 		ASSERT_TRUE(p_req_->getOperationResult_rsc(rsc_));
-		ASSERT_EQ(rsc_, RSC_OK);
+		ASSERT_EQ(rsc_, ResponseStatusCode::OK);
 
 		string str_;
 		ASSERT_TRUE(p_req_->getOperationResult_to(str_));
@@ -195,9 +195,9 @@ TEST_F(RequestTest, TurnOnOperationResult) {
 
 TEST_F(RequestTest, SetOperationResultRsc) {
 	ResponseStatusCode rsc_;
-	ASSERT_TRUE(p_req_->setOperationResult_rsc(RSC_NOT_FOUND));
+	ASSERT_TRUE(p_req_->setOperationResult_rsc(ResponseStatusCode::NOT_FOUND));
 	ASSERT_TRUE(p_req_->getOperationResult_rsc(rsc_));
-    ASSERT_EQ(rsc_, RSC_NOT_FOUND);
+    ASSERT_EQ(rsc_, ResponseStatusCode::NOT_FOUND);
 }
 
 TEST_F(RequestTest, SetOperationResultTo) {

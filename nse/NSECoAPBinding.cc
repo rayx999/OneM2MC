@@ -204,7 +204,7 @@ void NSE_CoAP::send(ResponsePrim& rsp, const string& addr, uint port) {
 	coap_.set_ver(1);
 	coap_.set_type(pb::CoAPTypes_MessageType_CoAP_ACK);
 
-	ResponseStatusCode rsc_ = rsp.getResponseStatusCode();
+	int rsc_ = static_cast<int>(rsp.getResponseStatusCode());
 	if (rsc2coap_.find(rsc_) == rsc2coap_.end()) {
 		cerr << "Send: RSC:" << rsc_ << " Not found.\n";
 		return;

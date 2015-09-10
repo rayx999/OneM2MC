@@ -97,7 +97,7 @@ TEST_F(AETest, CreateAEFullURI) {
   string ret_pc_;
   setupRequestPrim(create_request, ae_content);
   p_reqp_->setTo("//microwireless.com/in-cse-01/AE-01");
-  retrieveTestBody(RSC_CREATED, "ab3f124a", exp_to_, exp_fr_, ret_pc_);
+  retrieveTestBody(ResponseStatusCode::CREATED, "ab3f124a", exp_to_, exp_fr_, ret_pc_);
   pb::ResourceBase ret_;
   ASSERT_TRUE(ret_.ParseFromString(ret_pc_));
   ri_ = ret_.ri();
@@ -120,7 +120,7 @@ TEST_F(AETest, RetrieveAE) {
   ASSERT_TRUE(p_reqp_->setTo(p_reqp_->getTo() + "/" + ri_));
 
   ae_pc_.set_ri(ri_);
-  retrieveTestBody(RSC_OK, "ab3f124a", exp_to_, exp_fr_, ae_pc_);
+  retrieveTestBody(ResponseStatusCode::OK, "ab3f124a", exp_to_, exp_fr_, ae_pc_);
 }
 
 TEST_F(AETest, RetrieveAE1) {
@@ -135,50 +135,50 @@ TEST_F(AETest, RetrieveAE1) {
   NSEBaseMockTest::setupRequestPrim(json);
 
   ae_pc_.set_ri(ri_);
-  retrieveTestBody(RSC_OK, "ab3f124a", exp_to_, exp_fr_, ae_pc_);
+  retrieveTestBody(ResponseStatusCode::OK, "ab3f124a", exp_to_, exp_fr_, ae_pc_);
 }
 
 TEST_F(AETest, CreateAEConflict) {
   setupRequestPrim(create_request, ae_content);
   p_reqp_->setTo("//microwireless.com/in-cse-01/AE-01");
-  retrieveTestBody(RSC_CONFLICT, "ab3f124a", exp_to_, exp_fr_);
+  retrieveTestBody(ResponseStatusCode::CONFLICT, "ab3f124a", exp_to_, exp_fr_);
 }
 
 TEST_F(AETest, CreateAEConflict1) {
   setupRequestPrim(create_request, ae_content);
   p_reqp_->setName("AE-01");
 
-  retrieveTestBody(RSC_CONFLICT, "ab3f124a", exp_to_, exp_fr_);
+  retrieveTestBody(ResponseStatusCode::CONFLICT, "ab3f124a", exp_to_, exp_fr_);
 }
 
 TEST_F(AETest, CreateAEConflict2) {
   setupRequestPrim(create_request, ae_content);
   p_reqp_->setTo("//microwireless.com/in-cse-01/AE-01");
 
-  retrieveTestBody(RSC_CONFLICT, "ab3f124a", exp_to_, exp_fr_);
+  retrieveTestBody(ResponseStatusCode::CONFLICT, "ab3f124a", exp_to_, exp_fr_);
 }
 
 TEST_F(AETest, CreateAENoContent) {
   NSEBaseMockTest::setupRequestPrim(create_request);
-  retrieveTestBody(RSC_BAD_REQUEST, "ab3f124a", exp_to_, exp_fr_);
+  retrieveTestBody(ResponseStatusCode::BAD_REQUEST, "ab3f124a", exp_to_, exp_fr_);
 }
 
 TEST_F(AETest, CreateAEInvalidContent) {
   setupRequestPrim(create_request, ae_content);
   p_reqp_->setContent("abcdefghijklmnopqrstuvwxyz1234567890");
-  retrieveTestBody(RSC_BAD_REQUEST, "ab3f124a", exp_to_, exp_fr_);
+  retrieveTestBody(ResponseStatusCode::BAD_REQUEST, "ab3f124a", exp_to_, exp_fr_);
 }
 
 TEST_F(AETest, CreateAEParentInvalid) {
   setupRequestPrim(create_request, ae_content);
   p_reqp_->setName("AE-01/Fun/Wrong");
 
-  retrieveTestBody(RSC_NOT_FOUND, "ab3f124a", exp_to_, exp_fr_);
+  retrieveTestBody(ResponseStatusCode::NOT_FOUND, "ab3f124a", exp_to_, exp_fr_);
 }
 
 TEST_F(AETest, CreateAEWithNPFields) {
   setupRequestPrim(create_request, ae_exp);
-   retrieveTestBody(RSC_BAD_REQUEST, "ab3f124a", exp_to_, exp_fr_);
+   retrieveTestBody(ResponseStatusCode::BAD_REQUEST, "ab3f124a", exp_to_, exp_fr_);
 }
 
 TEST_F(AETest, CreateAENoMandaoryFields) {
@@ -188,7 +188,7 @@ TEST_F(AETest, CreateAENoMandaoryFields) {
 					"}"
 				"}");
    setupRequestPrim(create_request, ae_json);
-   retrieveTestBody(RSC_BAD_REQUEST, "ab3f124a", exp_to_, exp_fr_);
+   retrieveTestBody(ResponseStatusCode::BAD_REQUEST, "ab3f124a", exp_to_, exp_fr_);
 }
 
 TEST_F(AETest, CreateAENoRn) {
@@ -200,7 +200,7 @@ TEST_F(AETest, CreateAENoRn) {
 				"}");
   string ret_pc_;
   setupRequestPrim(create_request, ae_json);
-  retrieveTestBody(RSC_CREATED, "ab3f124a", exp_to_, exp_fr_, ret_pc_);
+  retrieveTestBody(ResponseStatusCode::CREATED, "ab3f124a", exp_to_, exp_fr_, ret_pc_);
   pb::ResourceBase ret_;
   ASSERT_TRUE(ret_.ParseFromString(ret_pc_));
   ri_ = ret_.ri();

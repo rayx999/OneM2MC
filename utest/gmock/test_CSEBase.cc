@@ -66,7 +66,7 @@ const string CSEBaseTest::cse_content("{"
 
 TEST_F(CSEBaseTest, RetrieveCSE) {
   setupRequestPrim(retrieve_json);
-  retrieveTestBody(RSC_OK, "ab3f124a", exp_to_, exp_fr_, exp_pc_);
+  retrieveTestBody(ResponseStatusCode::OK, "ab3f124a", exp_to_, exp_fr_, exp_pc_);
 }
 
 TEST_F(CSEBaseTest, RetrieveCSE2) {
@@ -77,7 +77,7 @@ TEST_F(CSEBaseTest, RetrieveCSE2) {
 			"\"fr\": \"//microwireless.com/AE-01\""
 		"}");
   setupRequestPrim(json);
-  retrieveTestBody(RSC_OK, "ab3f124a", exp_to_, exp_fr_, exp_pc_);
+  retrieveTestBody(ResponseStatusCode::OK, "ab3f124a", exp_to_, exp_fr_, exp_pc_);
 }
 
 TEST_F(CSEBaseTest, RetrieveCSE3) {
@@ -88,7 +88,7 @@ TEST_F(CSEBaseTest, RetrieveCSE3) {
 			"\"fr\": \"//microwireless.com/AE-01\""
 		"}");
   setupRequestPrim(json);
-  retrieveTestBody(RSC_OK, "ab3f124a", exp_to_, exp_fr_, exp_pc_);
+  retrieveTestBody(ResponseStatusCode::OK, "ab3f124a", exp_to_, exp_fr_, exp_pc_);
 }
 
 TEST_F(CSEBaseTest, RetrieveCSE4) {
@@ -100,7 +100,7 @@ TEST_F(CSEBaseTest, RetrieveCSE4) {
 		    "\"rt\": 3"
 		  "}");
   setupRequestPrim(json);
-  retrieveTestBody(RSC_OK, "ab3f124a", exp_to_, exp_fr_, exp_pc_);
+  retrieveTestBody(ResponseStatusCode::OK, "ab3f124a", exp_to_, exp_fr_, exp_pc_);
 }
 
 TEST_F(CSEBaseTest, NotExistResource) {
@@ -112,7 +112,7 @@ TEST_F(CSEBaseTest, NotExistResource) {
 		"}");
 
   setupRequestPrim(not_exist_json);
-  retrieveTestBody(RSC_NOT_FOUND, "ab3f124a", exp_to_, exp_fr_);
+  retrieveTestBody(ResponseStatusCode::NOT_FOUND, "ab3f124a", exp_to_, exp_fr_);
 }
 
 TEST_F(CSEBaseTest, RetrieveCSENonBlockSync) {
@@ -127,7 +127,7 @@ TEST_F(CSEBaseTest, RetrieveCSENonBlockSync) {
   pb::ResourceBase pc_;
 
   setupRequestPrim(json);
-  retrieveTestBody(RSC_ACCEPTED, "ab3f124a", exp_to_, exp_fr_, pc_str_);
+  retrieveTestBody(ResponseStatusCode::ACCEPTED, "ab3f124a", exp_to_, exp_fr_, pc_str_);
   ASSERT_TRUE(pc_.ParseFromString(pc_str_));
   req_ri_ = pc_.ri();
   cout << "Accepted Request RI = " << req_ri_ << endl;
@@ -164,7 +164,7 @@ TEST_F(CSEBaseTest, RetrieveNonBlockRequest) {
   json2pb(exp_req_, exp_json.c_str(), exp_json.length());
 
   setupRequestPrim(json);
-  retrieveTestBody(RSC_OK, "ab3f124a", exp_to_, exp_fr_, exp_req_);
+  retrieveTestBody(ResponseStatusCode::OK, "ab3f124a", exp_to_, exp_fr_, exp_req_);
 //  pb::ResourceBase res_;
 //  ASSERT_TRUE(res_.ParseFromString(str_));
 //  cout << pb2json(res_) << endl;

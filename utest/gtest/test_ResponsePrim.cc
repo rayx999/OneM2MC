@@ -27,7 +27,7 @@ class ResponsePrimTest : public ::testing::Test {
 	RequestPrim * p_request_;
 
 	ResponsePrimTest() {
-		rsc_ok_ = RSC_OK;
+		rsc_ok_ = ResponseStatusCode::OK;
 		pc_ = request_json;
 		p_rsp_ = NULL;
 		p_request_ = NULL;

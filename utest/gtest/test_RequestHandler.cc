@@ -72,11 +72,11 @@ const string RequestHandlerTest::req1_json("{"
 TEST_F(RequestHandlerTest, isForMe) {
 	CSEBase cse_(cse_json, cse_path);
 	RequestPrim req_(req_json);
-	ASSERT_EQ(p_hdl_->isForMe<CSEBase>(req_, cse_), RSC_OK);
+	ASSERT_EQ(p_hdl_->isForMe<CSEBase>(req_, cse_), ResponseStatusCode::OK);
 }
 
 TEST_F(RequestHandlerTest, isNOTForMe) {
 	CSEBase cse_(cse_json, cse_path);
 	RequestPrim req_(req1_json);
-	ASSERT_EQ(p_hdl_->isForMe<CSEBase>(req_, cse_), RSC_ACCESS_DENIED);
+	ASSERT_EQ(p_hdl_->isForMe<CSEBase>(req_, cse_), ResponseStatusCode::ACCESS_DENIED);
 }

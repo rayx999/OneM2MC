@@ -12,7 +12,7 @@
 #include <fstream>
 
 #include "CSEBase.h"
-#include "NSEBase.h"
+#include "NSECoAPBinding.h"
 #include "CSEResourceStore.h"
 #include "CSEHandler.h"
 #include "CSEServer.h"
@@ -47,10 +47,10 @@ int main(int argc, char* argv[])
 */
   try
   {
-	NSEBase nse_(argv[1], argv[2]);
+	NSE_CoAP nse_coap_(argv[1], argv[2]);
 	CSEResourceStore rdb_(store_fn);
-	CSEHandler hdl_(nse_, rdb_);
-	CSEServer server_(rdb_, nse_, hdl_);
+	CSEHandler hdl_(nse_coap_, rdb_);
+	CSEServer server_(rdb_, nse_coap_, hdl_);
 
 	server_.run();
   }

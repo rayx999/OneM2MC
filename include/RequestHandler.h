@@ -40,16 +40,16 @@ public:
 		ResponseStatusCode rsc_ = isForMe(req, *rdb.cse());
 		string pc_;
 
-		if (rsc_ == RSC_OK) {
+		if (rsc_ == ResponseStatusCode::OK) {
 			ResponseType rt_ = req.getResponseType();
 			switch (rt_) {
 			case ResponseType::NON_BLOCKING_REQUEST_SYNC:
 			case ResponseType::NON_BLOCKING_REQUEST_ASYNC:
 				if (createRequest(req, pc_, rdb)) {
-					rsc_ = RSC_ACCEPTED;
+					rsc_ = ResponseStatusCode::ACCEPTED;
 				} else {
 					cerr << "handleRequest: createRequest failed.\n";
-					rsc_ = RSC_INTERNAL_SERVER_ERROR;
+					rsc_ = ResponseStatusCode::INTERNAL_SERVER_ERROR;
 				}
 				break;
 			default:
@@ -57,7 +57,7 @@ public:
 			}
 		}
 
-		if (rsc_ != RSC_OK) {
+		if (rsc_ != ResponseStatusCode::OK) {
 			string fr_ = rdb.getRoot()->getDomain() + rdb.getRoot()->getCSEId();
 			ResponsePrim rsp_(&req, rsc_, fr_);
 			if (!pc_.empty()) {
@@ -66,7 +66,7 @@ public:
 			nse_.send(rsp_, "127.0.1", 5555);
 		}
 
-		return (rsc_ == RSC_OK);
+		return (rsc_ == ResponseStatusCode::OK);
 }
 
 	template <typename Root>
@@ -77,20 +77,20 @@ public:
 	template <typename Root>
 	ResponseStatusCode isForMe(RequestPrim& req, Root& root) {
 		if (!req.isValid()) {
-			return RSC_BAD_REQUEST;
+			return ResponseStatusCode::BAD_REQUEST;
 		}
 
 		string domain_, csi_;
 		req.getIdInfo(domain_, csi_);
 		if (!domain_.empty() && !boost::iequals(domain_, root.getDomain())) {
-			return RSC_ACCESS_DENIED;
+			return ResponseStatusCode::ACCESS_DENIED;
 		}
 
 		if (!boost::iequals(csi_, root.getCSEId())) {
-			return RSC_ACCESS_DENIED;
+			return ResponseStatusCode::ACCESS_DENIED;
 		}
 
-		return RSC_OK;
+		return ResponseStatusCode::OK;
 	};
 
 	template <typename Root>

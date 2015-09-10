@@ -42,7 +42,7 @@ ResponsePrim::ResponsePrim(RequestPrim *p_reqp, ResponseStatusCode rsc, const st
 	if (fr.empty()) {
 		throw runtime_error("ResponsePrim::ResponsePrim: From field is empty!");
 	}
-	if (rsc != RSC_BAD_REQUEST) {
+	if (rsc != ResponseStatusCode::BAD_REQUEST) {
 		// keep original request reference
 		if (p_reqp == NULL || !p_reqp->isValid()) {
 			throw runtime_error("ResponsePrim::ResponsePrim: Matching request is invalid!");
@@ -99,7 +99,7 @@ EventCat ResponsePrim::getEventCat(){  }
 
 bool ResponsePrim::isValid(ValidateType vt) {
 
-	if (getResponseStatusCode() == RSC_NONE ||
+	if (getResponseStatusCode() == ResponseStatusCode::NONE ||
 		rspp_.rqi().empty()) {
 		cerr << "RequestPrim miss request id or response status code." << endl;
 		return false;

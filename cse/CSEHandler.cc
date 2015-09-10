@@ -27,20 +27,20 @@ void CSEHandler::handleRequest(RequestPrim& req) {
 	}
 
 	string pc_;
-	ResponseStatusCode rsc_ = RSC_OK;
+	ResponseStatusCode rsc_ = ResponseStatusCode::OK;
 
 	switch (req.getOperation()) {
 	case Operation::CREATE:
 	{
 		RequestCreateHandler<CSEBase> rch_(req, rdb_);
 		rsc_ = rch_.setResourceToBeCreated();
-		if (rsc_ == RSC_OK) {
+		if (rsc_ == ResponseStatusCode::OK) {
 			if (!rch_.outToResourceStore()) {
-				rsc_ = RSC_INTERNAL_SERVER_ERROR;
+				rsc_ = ResponseStatusCode::INTERNAL_SERVER_ERROR;
 			} else if (!rch_.composeContent(pc_)) {
-				rsc_ = RSC_INTERNAL_SERVER_ERROR;
+				rsc_ = ResponseStatusCode::INTERNAL_SERVER_ERROR;
 			} else {
-				rsc_ = RSC_CREATED;
+				rsc_ = ResponseStatusCode::CREATED;
 				rch_.saveParentLastModifiedTime();
 			}
 		}
@@ -58,13 +58,13 @@ void CSEHandler::handleRequest(RequestPrim& req) {
 		} else {
 			cerr << "handleRequest: resource not found. ri:";
 			cerr << req.getIntRn() << " to: " << req.getTo() << endl;
-			rsc_ = RSC_NOT_FOUND;
+			rsc_ = ResponseStatusCode::NOT_FOUND;
 			break;
 		}
 		if (!composeContent(req, pc_, rdb_)) {
 			cerr << "handleRequest: Retrieve resource " << req.getTargetResource();
 			cerr << " failed.\n";
-			rsc_ = RSC_INTERNAL_SERVER_ERROR;
+			rsc_ = ResponseStatusCode::INTERNAL_SERVER_ERROR;
 		}
 		break;
 	}
@@ -75,13 +75,13 @@ void CSEHandler::handleRequest(RequestPrim& req) {
 	case Operation::NOTIFY:
 		break;
 	default:
-		rsc_ = RSC_BAD_REQUEST;
+		rsc_ = ResponseStatusCode::BAD_REQUEST;
 		break;
 	}
 
 	string fr_ = rdb_.getRoot()->getDomain() + rdb_.getRoot()->getCSEId();
 	ResponsePrim rsp_(&req, rsc_, fr_);
-	if ((rsc_ == RSC_OK || rsc_ == RSC_CREATED) && !pc_.empty()) {
+	if ((rsc_ == ResponseStatusCode::OK || rsc_ == ResponseStatusCode::CREATED) && !pc_.empty()) {
 		rsp_.setContent(pc_);
 	}
 	nse_.send(rsp_, "127.0.0.1", 5555);
