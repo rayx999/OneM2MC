@@ -110,22 +110,23 @@ bool ResponsePrim::isValid(ValidateType vt) {
 	}
 
 	switch (p_reqp_->getOperation()) {
-	case OPERATION_CREATE:
+	case Operation::CREATE:
 		break;
-	case OPERATION_RETRIEVE:
+	case Operation::RETRIEVE:
 		if (rspp_.pc().empty()) {
 			cerr << "RequestPrim miss content." << endl;
 			return false;
 		}
 		break;
-	case OPERATION_UPDATE:
+	case Operation::UPDATE:
 		break;
-	case OPERATION_DELETE:
+	case Operation::DDELETE:
 		break;
-	case OPERATION_NOTIFY:
+	case Operation::NOTIFY:
 		break;
 	default:
-		cerr << "Invalid response operation: " << p_reqp_->getOperation() << endl;
+		cerr << "Invalid response operation: " <<
+		static_cast<int>(p_reqp_->getOperation()) << endl;
 		return false;
 	}
 

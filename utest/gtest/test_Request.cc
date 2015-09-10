@@ -87,7 +87,7 @@ const string RequestTest::ri_("REQ24543");
 
 TEST_F(RequestTest, FullCtor) {
 	try {
-		RequestPrim reqp_(OPERATION_RETRIEVE, to_, fr_, rid_);
+		RequestPrim reqp_(Operation::RETRIEVE, to_, fr_, rid_);
 		ASSERT_TRUE(reqp_.isValid());
 
 		Request req_(reqp_, ri_, reqp_.getIntRn());
@@ -102,21 +102,21 @@ TEST_F(RequestTest, TurnOnFixture) {
 }
 
 TEST_F(RequestTest, CheckAttributes) {
-	ASSERT_EQ(p_req_->getResourceType(), REQUEST);
+	ASSERT_EQ(p_req_->getResourceType(), SupportedResourceType::REQUEST);
 	ASSERT_STREQ(p_req_->getResourceId().c_str(), ri_.c_str());
 	ASSERT_STREQ(p_req_->getParentId().c_str(), p_reqp_->getIntRn().c_str());
 
-	ASSERT_EQ(p_req_->getOperation(), OPERATION_RETRIEVE);
+	ASSERT_EQ(p_req_->getOperation(), Operation::RETRIEVE);
 	ASSERT_STREQ(p_req_->getTarget().c_str(), p_reqp_->getTo().c_str());
 	ASSERT_STREQ(p_req_->getOriginator().c_str(), p_reqp_->getFrom().c_str());
 	ASSERT_STREQ(p_req_->getRequestId().c_str(), p_reqp_->getRequestId().c_str());
 	ASSERT_STREQ(p_req_->getContent().c_str(), p_reqp_->getContent().c_str());
-	ASSERT_EQ(p_req_->getRequestStatus(), REQUEST_STATUS_PENDING);
+	ASSERT_EQ(p_req_->getRequestStatus(), RequestStatus::PENDING);
 }
 
 TEST_F(RequestTest, SetRequestStatus) {
-	p_req_->setRequestStatus(REQUEST_STATUS_FORWARDED);
-	ASSERT_EQ(p_req_->getRequestStatus(), REQUEST_STATUS_FORWARDED);
+	p_req_->setRequestStatus(RequestStatus::FORWARDED);
+	ASSERT_EQ(p_req_->getRequestStatus(), RequestStatus::FORWARDED);
 }
 
 TEST_F(RequestTest, NoOperationResult) {

@@ -74,7 +74,7 @@ bool CSEBase::isResourceSupported(SupportedResourceType rt) {
 	const google::protobuf::RepeatedField<int>& _srt =
 			p_cse_->srt();
 	for (_it = _srt.begin(); _it != _srt.end(); _it++) {
-		if (*_it == rt) {
+		if (*_it == static_cast<int>(rt)) {
 			return true;
 		}
 	}

@@ -22,7 +22,7 @@ namespace MicroWireless {
 namespace OneM2M {
 
 void RequestPrim::setDefaults() {
-	reqp_.set_rcn(static_cast<pb::CommonTypes_ResultContent>(RESULT_CONTENT_ATTRIBUTES));
+	reqp_.set_rcn(static_cast<pb::CommonTypes_ResultContent>(ResultContent::ATTRIBUTES));
 }
 
 RequestPrim::RequestPrim(const string & json) {
@@ -221,20 +221,20 @@ bool RequestPrim::isValid(ValidateType vt) {
 	}
 */
 	switch (static_cast<Operation>(reqp_.op())) {
-	case OPERATION_CREATE:
+	case Operation::CREATE:
 		break;
-	case OPERATION_RETRIEVE:
+	case Operation::RETRIEVE:
 		if (reqp_.ty() != pb::CommonTypes_SupportedResourceType_SUPPORTED_RESOURCE_TYPE_NONE ||
 			!reqp_.nm().empty()) {
 			cerr << "Retrieve request has resource type or name fields." << endl;
 			return false;
 		}
 		break;
-	case OPERATION_UPDATE:
+	case Operation::UPDATE:
 		break;
-	case OPERATION_DELETE:
+	case Operation::DDELETE:
 		break;
-	case OPERATION_NOTIFY:
+	case Operation::NOTIFY:
 		break;
 	default:
 		cerr << "Invalid request operation: " << reqp_.op() << endl;

@@ -18,14 +18,14 @@ namespace OneM2M {
 typedef struct timeval	TimeStamp;
 typedef struct timeval	Duration;
 
-enum ResourceType
+enum class ResourceType
 {
   NORMAL = 1,
   VIRTUAL = 2,
   ANNOUNCED = 3,
 };
 
-enum CSEType
+enum class CSEType
 {
   IN_CSE = 1,
   MN_CSE = 2,
@@ -33,7 +33,7 @@ enum CSEType
 };
 
 // also used for MemberType
-enum SupportedResourceType
+enum class SupportedResourceType
 {
   SRT_NONE = 0,
 
@@ -86,100 +86,100 @@ enum SupportedResourceType
   POLLING_CHANNEL_URI = 20004
 };
 
-enum LocationSource
+enum class LocationSource
 {
   NETWORK_BASED = 1,
   DEVICE_BASED = 2,
   SHARING_BASED = 3,
 };
 
-enum EventCat
+enum class EventCat
 {
   // stdEventCats from 1 to 4:
 
-  STD_EVENT_CATS_DEFAULT = 1,
-  STD_EVENT_CATS_IMMEDIATE = 2,
-  STD_EVENT_CATS_BEST_EFFORT = 3,
-  STD_EVENT_CATS_LATEST = 4,
+  DEFAULT = 1,
+  IMMEDIATE = 2,
+  BEST_EFFORT = 3,
+  LATEST = 4,
 
   // user defined events 100-999
 };
 
 // RFC 6838 defined media types
-enum ContentType
+enum class ContentType
 {
   APPLICATION_XML = 1,
   APPLICATION_JSON = 2,
 };
 
-enum FilterUsage
+enum class FilterUsage
 {
   DISCOVERY_CRITERIA = 1,
   EVENT_NOTIFICATION_CRITERIA = 2,
 };
 
-enum DiscoveryResultType
+enum class DiscoveryResultType
 {
-  DISC_RES_TYPE_HIERARCHICAL = 1,
-  DISC_RES_TYPE_NON_HIERARCHICAL = 2,
-  DISC_RES_TYPE_CSEID_RESOURCEID = 3,
+  HIERARCHICAL = 1,
+  NON_HIERARCHICAL = 2,
+  CSEID_RESOURCEID = 3,
 };
 
-enum Operation
+enum class Operation
 {
-  OPERATION_CREATE = 1,
-  OPERATION_RETRIEVE = 2,
-  OPERATION_UPDATE = 3,
-  OPERATION_DELETE = 4,
-  OPERATION_NOTIFY = 5,
+  CREATE = 1,
+  RETRIEVE = 2,
+  UPDATE = 3,
+  DDELETE = 4,	// prefix 'D' to avoid wired conflict using boost
+  NOTIFY = 5,
 };
 
-enum ResponseType
+enum class ResponseType
 {
   NON_BLOCKING_REQUEST_SYNC = 1,
   NON_BLOCKING_REQUEST_ASYNC = 2,
   BLOCKING_REQUEST = 3,
 };
 
-enum ResultContent
+enum class ResultContent
 {
-  RESULT_CONTENT_NOTHING = 0,
-  RESULT_CONTENT_ATTRIBUTES = 1,
-  RESULT_CONTENT_HADDR = 2,	// Hierachical address
-  RESULT_CONTENT_HADDR_ATTR = 3,	// Hierachical address and attributes
-  RESULT_CONTENT_ATTR_CHILD = 4,	// Attributes and child
-  RESULT_CONTENT_ATTR_CHILD_REF = 5,	// Attributes and child reference
-  RESULT_CONTENT_CHILD = 6,	// Child resource references
-  RESULT_CONTENT_ORIGINAL = 7,	// Original resource
+  NOTHING = 0,
+  ATTRIBUTES = 1,
+  HADDR = 2,	// Hierachical address
+  HADDR_ATTR = 3,	// Hierachical address and attributes
+  ATTR_CHILD = 4,	// Attributes and child
+  ATTR_CHILD_REF = 5,	// Attributes and child reference
+  CHILD = 6,	// Child resource references
+  ORIGINAL = 7,	// Original resource
 };
 
-enum RequestStatus
+enum class RequestStatus
 {
-  REQUEST_STATUS_COMPLETED = 1,
-  REQUEST_STATUS_FAILED = 2,
-  REQUEST_STATUS_PENDING = 3,
-  REQUEST_STATUS_FORWARDED = 4,
+  COMPLETED = 1,
+  FAILED = 2,
+  PENDING = 3,
+  FORWARDED = 4,
 };
 
-enum ConsistencyStrategy
+enum class ConsistencyStrategy
 {
   ABONDON_MEMBER = 1,
   ABONDON_GROUP = 2,
   SET_MIXED = 3,
 };
 
-enum CmdType
+enum class CmdType
 {
-  CMD_TYPE_RESET = 1,
-  CMD_TYPE_REBOOT = 2,
-  CMD_TYPE_UPLOAD = 3,
-  CMD_TYPE_DOWNLOAD = 4,
-  CMD_TYPE_SW_INSTALL = 5,
-  CMD_TYPE_SW_UNINSTALL = 6,
-  CMD_TYPE_SW_UPDATE = 7,
+  RESET = 1,
+  REBOOT = 2,
+  UPLOAD = 3,
+  DOWNLOAD = 4,
+  SW_INSTALL = 5,
+  SW_UNINSTALL = 6,
+  SW_UPDATE = 7,
 };
 
-enum ExecModeType
+enum class ExecModeType
 {
   IMMEDIATE_ONCE = 1,
   IMMEDIATE_REPEAT = 2,
@@ -187,23 +187,23 @@ enum ExecModeType
   RANDOM_REPEAT = 4,
 };
 
-enum ExecStatusType
+enum class ExecStatusType
 {
-  EXEC_STATUS_INITIATED = 1,
-  EXEC_STATUS_PENDING = 2,
-  EXEC_STATUS_FINISHED = 3,
-  EXEC_STATUS_CANCELLING = 4,
-  EXEC_STATUS_CANCELLED = 5,
-  EXEC_STATUS_UNCANCELLABLE = 6,
+  INITIATED = 1,
+  PENDING = 2,
+  FINISHED = 3,
+  CANCELLING = 4,
+  CANCELLED = 5,
+  UNCANCELLABLE = 6,
 };
 
-enum ExecResultType
+enum class ExecResultType
 {
   EXEC_RESULT_TYPE_NONE = 0,
 
 };
 
- enum PointOfAccess
+ enum class PointOfAccess
  {
    IPV4 = 1,
    IPV6 = 2,

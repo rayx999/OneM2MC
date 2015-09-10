@@ -30,18 +30,18 @@ const int ResourceBase::ResourceBaseOffset = 30000;
 
 map<int, map<Operation, ResourceBase::attrOption>>
 	ResourceBase::allowAttr = {
-   {TAG_TY,   { {OPERATION_CREATE, NOTPRESENT}, {OPERATION_UPDATE, NOTPRESENT} } },
-   {TAG_RI,   { {OPERATION_CREATE, NOTPRESENT}, {OPERATION_UPDATE, NOTPRESENT} } },
-   {TAG_RN,   { {OPERATION_CREATE, NOTPRESENT}, {OPERATION_UPDATE, NOTPRESENT} } },
-   {TAG_PI,   { {OPERATION_CREATE, NOTPRESENT}, {OPERATION_UPDATE, NOTPRESENT} } },
-   {TAG_CT,   { {OPERATION_CREATE, NOTPRESENT}, {OPERATION_UPDATE, NOTPRESENT} } },
-   {TAG_LT,   { {OPERATION_CREATE, NOTPRESENT}, {OPERATION_UPDATE, NOTPRESENT} } },
-   {TAG_ET,   { {OPERATION_CREATE, OPTIONAL  }, {OPERATION_UPDATE, OPTIONAL  } } },
-   {TAG_ACPI, { {OPERATION_CREATE, NOTPRESENT}, {OPERATION_UPDATE, NOTPRESENT} } },
-   {TAG_LBL,  { {OPERATION_CREATE, OPTIONAL  }, {OPERATION_UPDATE, OPTIONAL  } } },
-   {TAG_AA,   { {OPERATION_CREATE, OPTIONAL  }, {OPERATION_UPDATE, OPTIONAL  } } },
-   {TAG_AT,   { {OPERATION_CREATE, OPTIONAL  }, {OPERATION_UPDATE, OPTIONAL  } } },
-   {TAG_ST,   { {OPERATION_CREATE, OPTIONAL  }, {OPERATION_UPDATE, OPTIONAL  } } }
+   {TAG_TY,   { {Operation::CREATE, NOTPRESENT}, {Operation::UPDATE, NOTPRESENT} } },
+   {TAG_RI,   { {Operation::CREATE, NOTPRESENT}, {Operation::UPDATE, NOTPRESENT} } },
+   {TAG_RN,   { {Operation::CREATE, NOTPRESENT}, {Operation::UPDATE, NOTPRESENT} } },
+   {TAG_PI,   { {Operation::CREATE, NOTPRESENT}, {Operation::UPDATE, NOTPRESENT} } },
+   {TAG_CT,   { {Operation::CREATE, NOTPRESENT}, {Operation::UPDATE, NOTPRESENT} } },
+   {TAG_LT,   { {Operation::CREATE, NOTPRESENT}, {Operation::UPDATE, NOTPRESENT} } },
+   {TAG_ET,   { {Operation::CREATE, OOPTIONAL }, {Operation::UPDATE, OOPTIONAL } } },
+   {TAG_ACPI, { {Operation::CREATE, NOTPRESENT}, {Operation::UPDATE, NOTPRESENT} } },
+   {TAG_LBL,  { {Operation::CREATE, OOPTIONAL }, {Operation::UPDATE, OOPTIONAL } } },
+   {TAG_AA,   { {Operation::CREATE, OOPTIONAL }, {Operation::UPDATE, OOPTIONAL } } },
+   {TAG_AT,   { {Operation::CREATE, OOPTIONAL }, {Operation::UPDATE, OOPTIONAL } } },
+   {TAG_ST,   { {Operation::CREATE, OOPTIONAL }, {Operation::UPDATE, OOPTIONAL } } }
 };
 
 ResourceBase::ResourceBase() : base_() {
@@ -253,8 +253,8 @@ bool ResourceBase::checkResourceAttributes(Operation op) {
 bool ResourceBase::checkResourceConsistency(const string& id_str) {
 	if (getResourceType() != getResourceCase())	{
 		cerr << "checkResourceConsistency failed. ";
-		cerr << " ResourceType: " << getResourceType();
-		cerr << " ResourceCase: " << getResourceCase() << endl;
+		cerr << " ResourceType: " << static_cast<int>(getResourceType())
+		     << " ResourceCase: " << static_cast<int>(getResourceCase()) << endl;
 		return false;
 	}
 	if (!parseIds(id_str, CSERegex, domain_, csi_, ri_)) {

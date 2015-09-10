@@ -131,6 +131,7 @@ TEST_F(CSEBaseTest, RetrieveCSENonBlockSync) {
   ASSERT_TRUE(pc_.ParseFromString(pc_str_));
   req_ri_ = pc_.ri();
   cout << "Accepted Request RI = " << req_ri_ << endl;
+  ASSERT_FALSE(req_ri_.empty());
 }
 
 TEST_F(CSEBaseTest, RetrieveNonBlockRequest) {

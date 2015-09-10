@@ -30,7 +30,7 @@ void CSEHandler::handleRequest(RequestPrim& req) {
 	ResponseStatusCode rsc_ = RSC_OK;
 
 	switch (req.getOperation()) {
-	case OPERATION_CREATE:
+	case Operation::CREATE:
 	{
 		RequestCreateHandler<CSEBase> rch_(req, rdb_);
 		rsc_ = rch_.setResourceToBeCreated();
@@ -46,7 +46,7 @@ void CSEHandler::handleRequest(RequestPrim& req) {
 		}
 		break;
 	}
-	case OPERATION_RETRIEVE:
+	case Operation::RETRIEVE:
 	{
 		string target_;
 		getResourceHAddress(req, target_, *rdb_.cse());
@@ -68,11 +68,11 @@ void CSEHandler::handleRequest(RequestPrim& req) {
 		}
 		break;
 	}
-	case OPERATION_UPDATE:
+	case Operation::UPDATE:
 		break;
-	case OPERATION_DELETE:
+	case Operation::DDELETE:
 		break;
-	case OPERATION_NOTIFY:
+	case Operation::NOTIFY:
 		break;
 	default:
 		rsc_ = RSC_BAD_REQUEST;
@@ -84,7 +84,7 @@ void CSEHandler::handleRequest(RequestPrim& req) {
 	if ((rsc_ == RSC_OK || rsc_ == RSC_CREATED) && !pc_.empty()) {
 		rsp_.setContent(pc_);
 	}
-	nse_.send(rsp_);
+	nse_.send(rsp_, "127.0.0.1", 5555);
 }
 
 }	// OneM2M

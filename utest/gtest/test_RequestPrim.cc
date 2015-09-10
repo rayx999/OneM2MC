@@ -30,7 +30,7 @@ class RequestPrimTest : public ::testing::Test {
 	RequestPrim * p_req_;
 
 	RequestPrimTest() {
-		op_ = OPERATION_RETRIEVE;
+		op_ = Operation::RETRIEVE;
 		p_req_ = NULL;
 	}
 
@@ -189,12 +189,12 @@ TEST_F(RequestPrimTest, TurnOnFixture) {
 }
 
 TEST_F(RequestPrimTest, SetGetResourceType) {
-	ASSERT_TRUE(p_req_->setResourceType(CSE_BASE));
-	ASSERT_EQ(p_req_->getResourceType(), CSE_BASE);
+	ASSERT_TRUE(p_req_->setResourceType(SupportedResourceType::CSE_BASE));
+	ASSERT_EQ(p_req_->getResourceType(), SupportedResourceType::CSE_BASE);
 }
 
 TEST_F(RequestPrimTest, GetAttributes) {
-	ASSERT_EQ(p_req_->getOperation(), OPERATION_RETRIEVE);
+	ASSERT_EQ(p_req_->getOperation(), Operation::RETRIEVE);
 	ASSERT_STREQ(p_req_->getTo().c_str(), to_.c_str());
 	ASSERT_STREQ(p_req_->getFrom().c_str(), fr_.c_str());
 	ASSERT_STREQ(p_req_->getRequestId().c_str(), rqi_.c_str());

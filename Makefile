@@ -6,6 +6,9 @@ LD        := g++
 
 BUILD_DIR := build
 
+# Cygwin flags
+CY_FLG    := -D_WIN32_WINNT=0x0501 -D__USE_W32_SOCKETS -D'__MSABI_LONG(x)=x'
+
 # Protobuf resource compile
 PB_DIR    := resource
 PG_DIR    := src-gen
@@ -14,12 +17,12 @@ PB_SRC    := $(patsubst $(PB_DIR)/%.proto,$(PG_DIR)/%.cc,$(PB_SRC))
 PB_LIB    := -ljson2pb -ljansson -lprotobuf -lpthread # !!has to be exact order like this!!
 
 # main components
-MC_DIR    := src store $(PG_DIR)
+MC_DIR    := src nse store $(PG_DIR)
 MC_SRC    := $(foreach sdir,$(MC_DIR),$(wildcard $(sdir)/*.cc))
 MC_OBJ    := $(patsubst %.cc,build/%.o,$(MC_SRC))
-MC_FLG    := -Wall -D_WIN32_WINNT=0x0501 -D__USE_W32_SOCKETS -std=gnu++11
+MC_FLG    := -Wall -std=gnu++11
 MC_INC    := -Iinclude $(addprefix -I,$(MC_DIR))
-MC_LIB    := -lboost_regex -lboost_filesystem -lboost_system -L/usr/local/lib
+MC_LIB    := -lboost_regex -lboost_filesystem -lboost_system -lboost_thread -L/usr/local/lib
 
 # Elements i.e. CSE, AE, etc.
 EL_DIR    := cse 
@@ -27,7 +30,7 @@ EL_SRC    := $(foreach sdir,$(EL_DIR),$(wildcard $(sdir)/*.cc))
 EL_OBJ    := $(patsubst %.cc,build/%.o,$(EL_SRC))
 EL_FIL    := %CSEMain.o  # objects filter out for gmock
 EL_GMK    := $(filter-out $(EL_FIL),$(EL_OBJ))  # objects for gmock test
-EL_FLG    := -Wall -D_WIN32_WINNT=0x0501 -D__USE_W32_SOCKETS -std=gnu++11
+EL_FLG    := -Wall -std=gnu++11
 EL_INC    := $(addprefix -I,$(EL_DIR))
 EL_LIB    := 
 
@@ -53,7 +56,7 @@ GM_LIB    :=
 
 DIR       := $(MC_DIR) $(EL_DIR) $(GF_DIR) $(GT_DIR) $(GM_DIR)
 OBJ       := $(MC_OBJ) $(EL_OBJ) $(GF_OBJ) $(GT_OBJ) $(GM_OBJ)
-FLG       := $(MC_FLG)
+FLG       := $(MC_FLG) $(CY_FLG)
 INC       := $(MC_INC) $(EL_INC) $(GF_INC) $(GT_INC) $(GM_INC)
 LIB       := $(PB_LIB) $(MC_LIB) $(EL_LIB) $(GT_LIB) $(GM_LIB) -lws2_32
  

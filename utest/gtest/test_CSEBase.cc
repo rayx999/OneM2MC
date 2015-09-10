@@ -160,7 +160,7 @@ TEST_F(CSEBaseTest, SetupRoot) {
 		ASSERT_TRUE(rdb.setupRoot());
 		CSEBase * p_root_ = rdb.getRoot();
 		ASSERT_TRUE(p_root_ != NULL);
-		ASSERT_EQ(p_root_->getResourceType(), CSE_BASE);
+		ASSERT_EQ(p_root_->getResourceType(), SupportedResourceType::CSE_BASE);
 	} catch (exception &e) {
 		cout << "Unexpected exception: " << e.what() << endl;
 		ASSERT_TRUE(false);
@@ -215,22 +215,23 @@ TEST_F(CSEBaseTest, CheckOutResource) {
 
 TEST_F(CSEBaseTest, GetAttributes) {
 	ASSERT_STREQ(cse_base.getCSEId().c_str(), "/IN-CSE-01");
-	ASSERT_EQ(cse_base.getCSEType(), IN_CSE);
+	ASSERT_EQ(cse_base.getCSEType(), CSEType::IN_CSE);
 	ASSERT_STREQ(cse_base.getResourceId().c_str(), "Z0005");
 	ASSERT_STREQ(cse_base.getResourceName().c_str(), "IN-CSE-01");
 	ASSERT_STREQ(cse_base.getDomain().c_str(), "//microwireless.com");
 }
 
 TEST_F(CSEBaseTest, CheckSupportedResourceType) {
-	ASSERT_TRUE(cse_base.isResourceSupported(CSE_BASE));
-	ASSERT_FALSE(cse_base.isResourceSupported(FAN_OUT_POINT));
+	ASSERT_TRUE(cse_base.isResourceSupported(SupportedResourceType::CSE_BASE));
+	ASSERT_FALSE(cse_base.isResourceSupported(SupportedResourceType::FAN_OUT_POINT));
 }
 
 TEST_F(CSEBaseTest, GetSupportedResource) {
 	SupportedResourceType *_rt;
 	int size = cse_base.getSupportedResource(_rt);
 	ASSERT_EQ(size, 3);
-	SupportedResourceType _srt[] = {AE,CSE_BASE,REMOTE_CSE};
+	SupportedResourceType _srt[] = {SupportedResourceType::AE,
+			SupportedResourceType::CSE_BASE, SupportedResourceType::REMOTE_CSE};
 	UTest::ASSERT_ARREQ(_rt, _srt, 3);
 }
 

@@ -4,6 +4,7 @@
  *  Created on: 2015年7月25日
  *      Author: weimi_000
  */
+#include <boost/bind.hpp>
 
 #include "CSEResourceStore.h"
 #include "CommonTypes.h"
@@ -21,7 +22,7 @@ CSEServer::CSEServer(CSEResourceStore& rdb, NSEBase& nse, CSEHandler& hdl) :
 	nse_(nse),
 	hdl_(hdl)
 {
-	nse_.setRequestHandler(hdl_);
+	nse_.setRequestHandler(boost::bind(&CSEHandler::handleRequest, &hdl_, _1));
 }
 
 void CSEServer::run() {

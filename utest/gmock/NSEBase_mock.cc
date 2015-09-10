@@ -146,7 +146,7 @@ void NSEBaseMockTest::retrieveTestBody(ResponseStatusCode rsc, const string& rqi
 				Property(&ResponsePrim::getTo, StrEq(to)),
 				Property(&ResponsePrim::getFrom, StrEq(fr)),
 				Property(&ResponsePrim::getRequestId, StrEq(rqi)),
-				Property(&ResponsePrim::getContent, PbEq(exp)))))
+				Property(&ResponsePrim::getContent, PbEq(exp))), _, _))
 		.Times(1);
 
 	server_->run();
@@ -160,7 +160,7 @@ void NSEBaseMockTest::retrieveTestBody(ResponseStatusCode rsc, const string& rqi
 	 EXPECT_CALL(*nse_, send(AllOf(Property(&ResponsePrim::getResponseStatusCode, Eq(rsc)),
 					Property(&ResponsePrim::getTo, StrEq(to)),
 					Property(&ResponsePrim::getFrom, StrEq(fr)),
-					Property(&ResponsePrim::getRequestId, StrEq(rqi)))))
+					Property(&ResponsePrim::getRequestId, StrEq(rqi))), _, _))
 		  .Times(1);
 
 	 server_->run();
@@ -175,7 +175,7 @@ void NSEBaseMockTest::retrieveTestBody(ResponseStatusCode rsc, const string& rqi
 					Property(&ResponsePrim::getTo, StrEq(to)),
 					Property(&ResponsePrim::getFrom, StrEq(fr)),
 					Property(&ResponsePrim::getRequestId, StrEq(rqi)),
-					Property(&ResponsePrim::getContent, StrGood(&pc)))))
+					Property(&ResponsePrim::getContent, StrGood(&pc))), _, _))
 		  .Times(1);
 
 	 server_->run();

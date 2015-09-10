@@ -1,0 +1,104 @@
+// Resource File for CoAP protocol binding
+// ETSI TS 118 108 V1.0.0 (2015-02)
+
+syntax = "proto3";
+
+package MicroWireless.OneM2M.pb;
+
+message CoAPTypes
+{
+  enum MethodType
+  {
+    CoAP_METHOD_NONE = 0;
+
+    CoAP_GET    = 1;
+    CoAP_POST   = 2;
+    CoAP_PUT    = 3;
+    CoAP_DELETE = 4;
+  }
+
+  enum MessageType
+  {
+    CoAP_CON = 0;  // Confirmable
+    CoAP_NON = 1;  // Non-confirmable
+    CoAP_ACK = 2;  // Acknowledgement
+    CoAP_RST = 3;  // Reset
+  }
+
+  enum ResponseCode
+  {
+    CoAP_Code_None                  = 0;
+
+    CoAP_Created                    = 201;
+    CoAP_Deleted                    = 202;
+    CoAP_Valid                      = 203;
+    CoAP_Changed                    = 204;
+    CoAP_Content                    = 205;
+    CoAP_Bad_Request                = 400;
+    CoAP_Unauthorized               = 401;
+    CoAP_Bad_Option                 = 402;
+    CoAP_Forbidden                  = 403;
+    CoAP_Not_Found                  = 404;
+    CoAP_Method_Not_Allowed         = 405;
+    CoAP_Not_Acceptable             = 406;
+    CoAP_Precondition_Failed        = 412;
+    CoAP_Request_Entity_Too_Large   = 413;
+    CoAP_Unsupported_Content_Format = 415;
+    CoAP_Internal_Server_Error      = 500;
+    CoAP_Not_Implemented            = 501;
+    CoAP_Bad_Gateway                = 502;
+    CoAP_Service_Unavailable        = 503;
+    CoAP_Gateway_Timeout            = 504;
+    CoAP_Proxying_Not_Supported     = 505;
+  }
+
+  enum OptionType
+  {
+    CoAP_Option_None    =  0;
+
+    // CoAP common Options
+    CoAP_If_Match       =  1;
+    CoAP_Uri_Host       =  3;
+    CoAP_ETag           =  4;
+    CoAP_If_None_Match  =  5;
+    CoAP_Uri_Port       =  7;
+    CoAP_Location_Path  =  8;
+    CoAP_Uri_Path       = 11;
+    CoAP_Content_Format = 12;
+    CoAP_Max_Age        = 14;
+    CoAP_Uri_Query      = 15;
+    CoAP_Accept         = 17;
+    CoAP_Location_Query = 20;
+    CoAP_Proxy_Uri      = 35;
+    CoAP_Proxy_Scheme   = 39;
+    CoAP_Size1          = 60;
+
+    // OneM2M New options
+    ONEM2M_FR      = 256;
+    ONEM2M_RQI     = 257;
+    ONEM2M_NM      = 258;
+    ONEM2M_OT      = 259;
+    ONEM2M_RQET    = 260;
+    ONEM2M_RSET    = 261;
+    ONEM2M_OET     = 262;
+    ONEM2M_RTURI   = 263;
+    ONEM2M_EC      = 264;
+    ONEM2M_RSC     = 265;
+    ONEM2M_GID     = 266;
+  }
+}
+
+message CoAPOption
+{
+  CoAPTypes.OptionType num = 1;
+  string value = 2;
+}
+
+message CoAPBinding
+{
+  uint32 ver = 1;                    // Always 1;
+  CoAPTypes.MessageType type = 2;    // CON, NON, ACK or RST;
+  CoAPTypes.ResponseCode code = 3;   // CoAP Response Code;
+  repeated CoAPOption opt = 4;       // CoAP Option list;
+  string payload = 5;                // Opaque Payload
+}

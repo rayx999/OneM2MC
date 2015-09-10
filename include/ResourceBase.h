@@ -189,7 +189,7 @@ protected:
 
 	enum attrOption {
 		MANDATORY  = 1,
-		OPTIONAL   = 2,
+		OOPTIONAL  = 2,		// prefix 'O' to avoid wired conflict using boost
 		NOTPRESENT = 3
 	};
 

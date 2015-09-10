@@ -164,10 +164,10 @@ template <typename Root>
 void ResourceStore<Root>::generateResourceId(SupportedResourceType ty, string& ri) {
 	boost::random::uniform_int_distribution<> dist(1, 99999);
 	do {
-		ri = boost::str(boost::format("%03d-%05d") % ty % dist(gen_));
+		ri = boost::str(boost::format("%03d-%05d") % static_cast<int>(ty) % dist(gen_));
 	} while (isResourceValid(ri));
 
-	ri = (ty == AE ? string("C") + ri : ri);
+	ri = (ty == SupportedResourceType::AE ? string("C") + ri : ri);
 }
 
 // ghost func to get around template implementation in cc file problem.
@@ -182,7 +182,7 @@ void TemporaryFunction ()
     TempObj.putResource("", "", "");
     TempObj.getResourcePath("");
     TempObj.getParentResource("", p_res);
-    TempObj.generateResourceId(AE, tmp);
+    TempObj.generateResourceId(SupportedResourceType::AE, tmp);
 }
 
 }	// OneM2M

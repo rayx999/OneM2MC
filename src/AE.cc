@@ -24,12 +24,12 @@ using namespace std;
 using namespace MicroWireless::OneM2M;
 
 map<int, map<Operation, AEClass::attrOption>> AEClass::allowAttr = {
-   {TAG_APN,   { {OPERATION_CREATE, OPTIONAL  }, {OPERATION_UPDATE, OPTIONAL  } } },
-   {TAG_API,   { {OPERATION_CREATE, MANDATORY }, {OPERATION_UPDATE, MANDATORY } } },
-   {TAG_AEI,   { {OPERATION_CREATE, NOTPRESENT}, {OPERATION_UPDATE, NOTPRESENT} } },
-   {TAG_POA,   { {OPERATION_CREATE, OPTIONAL  }, {OPERATION_UPDATE, OPTIONAL  } } },
-   {TAG_OR ,   { {OPERATION_CREATE, OPTIONAL  }, {OPERATION_UPDATE, OPTIONAL  } } },
-   {TAG_NL ,   { {OPERATION_CREATE, NOTPRESENT}, {OPERATION_UPDATE, NOTPRESENT} } }
+   {TAG_APN,   { {Operation::CREATE, OOPTIONAL }, {Operation::UPDATE, OOPTIONAL } } },
+   {TAG_API,   { {Operation::CREATE, MANDATORY }, {Operation::UPDATE, MANDATORY } } },
+   {TAG_AEI,   { {Operation::CREATE, NOTPRESENT}, {Operation::UPDATE, NOTPRESENT} } },
+   {TAG_POA,   { {Operation::CREATE, OOPTIONAL }, {Operation::UPDATE, OOPTIONAL } } },
+   {TAG_OR ,   { {Operation::CREATE, OOPTIONAL }, {Operation::UPDATE, OOPTIONAL } } },
+   {TAG_NL ,   { {Operation::CREATE, NOTPRESENT}, {Operation::UPDATE, NOTPRESENT} } }
 };
 
 AEClass::AEClass() : p_ae_(getAE()) { }

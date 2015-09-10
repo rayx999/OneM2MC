@@ -57,7 +57,7 @@ public:
 		}
 
 		switch (ty_) {
-		case AE:
+		case SupportedResourceType::AE:
 			p_res_ = new AEClass();
 			p_ret_ = new AEClass();
 			break;
@@ -66,7 +66,7 @@ public:
 		}
 		if (p_res_ == NULL || p_ret_ == NULL) {
 			return RSC_BAD_REQUEST;
-		} else if (!p_res_->setResourceBase(pc_, sp_id_, OPERATION_CREATE)) {
+		} else if (!p_res_->setResourceBase(pc_, sp_id_, Operation::CREATE)) {
 			return RSC_BAD_REQUEST;
 		}
 
@@ -91,7 +91,7 @@ public:
 
 		bool result_ = false;
 		switch (ty_) {
-		case AE:
+		case SupportedResourceType::AE:
 			result_ = ((AEClass*)p_res_)->setNewResourceAttr(ri_, rn_, pi_, *(AEClass*)p_ret_);
 			break;
 		default:

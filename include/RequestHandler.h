@@ -43,8 +43,8 @@ public:
 		if (rsc_ == RSC_OK) {
 			ResponseType rt_ = req.getResponseType();
 			switch (rt_) {
-			case NON_BLOCKING_REQUEST_SYNC:
-			case NON_BLOCKING_REQUEST_ASYNC:
+			case ResponseType::NON_BLOCKING_REQUEST_SYNC:
+			case ResponseType::NON_BLOCKING_REQUEST_ASYNC:
 				if (createRequest(req, pc_, rdb)) {
 					rsc_ = RSC_ACCEPTED;
 				} else {
@@ -63,7 +63,7 @@ public:
 			if (!pc_.empty()) {
 				rsp_.setContent(pc_);
 			}
-			nse_.send(rsp_);
+			nse_.send(rsp_, "127.0.1", 5555);
 		}
 
 		return (rsc_ == RSC_OK);
@@ -102,7 +102,7 @@ public:
 		}
 
 		ty = static_cast<SupportedResourceType>(res_.resource_case() - ResourceBase::ResourceBaseOffset);
-		return root.isResourceSupported(ty) && ty != REQUEST;
+		return root.isResourceSupported(ty) && ty != SupportedResourceType::REQUEST;
 	}
 
 	template <typename StoreType>
@@ -115,12 +115,13 @@ public:
 		}
 
 		switch (req.getResultContent()) {
-		case RESULT_CONTENT_ATTRIBUTES:
+		case ResultContent::ATTRIBUTES:
 			//pc = pb2json(res);
 			// return true;
 			return base_.SerializeToString(&pc);
 		default:
-			cerr << "serializeContent: Unknown ResultContent:" << req.getResultContent() << endl;
+			cerr << "serializeContent: Unknown ResultContent:"
+			<< static_cast<int>(req.getResultContent()) << endl;
 			break;
 		}
 
@@ -131,7 +132,7 @@ protected:
 	template <typename StoreType>
 	bool createRequest(RequestPrim& reqp, string& pc, StoreType &rdb) {
 		string ri_;
-		rdb.generateResourceId(REQUEST, ri_);
+		rdb.generateResourceId(SupportedResourceType::REQUEST, ri_);
 
 		// set a resource to hold ri as response content
 		ResourceBase res_;

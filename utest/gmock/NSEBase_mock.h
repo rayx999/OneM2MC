@@ -27,7 +27,7 @@ class NSEBaseMock : public NSEBase {
 public:
   NSEBaseMock(const char* ip, const char* port) : NSEBase(ip, port) {};
   MOCK_METHOD0(run, void());
-  MOCK_METHOD1(send, void(ResponsePrim& rsp));
+  MOCK_METHOD3(send, void(ResponsePrim&, const std::string&, uint));
 };
 
 class NSEBaseMockTest : public ::testing::Test {
