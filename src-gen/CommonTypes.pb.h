@@ -480,29 +480,6 @@ inline bool CommonTypes_ExecResultType_Parse(
   return ::google::protobuf::internal::ParseNamedEnum<CommonTypes_ExecResultType>(
     CommonTypes_ExecResultType_descriptor(), name, value);
 }
-enum CommonTypes_PointOfAccess {
-  CommonTypes_PointOfAccess_POINT_OF_ACCESS_NONE = 0,
-  CommonTypes_PointOfAccess_IPV4 = 1,
-  CommonTypes_PointOfAccess_IPV6 = 2,
-  CommonTypes_PointOfAccess_FQDN = 3,
-  CommonTypes_PointOfAccess_CommonTypes_PointOfAccess_INT_MIN_SENTINEL_DO_NOT_USE_ = ::google::protobuf::kint32min,
-  CommonTypes_PointOfAccess_CommonTypes_PointOfAccess_INT_MAX_SENTINEL_DO_NOT_USE_ = ::google::protobuf::kint32max
-};
-bool CommonTypes_PointOfAccess_IsValid(int value);
-const CommonTypes_PointOfAccess CommonTypes_PointOfAccess_PointOfAccess_MIN = CommonTypes_PointOfAccess_POINT_OF_ACCESS_NONE;
-const CommonTypes_PointOfAccess CommonTypes_PointOfAccess_PointOfAccess_MAX = CommonTypes_PointOfAccess_FQDN;
-const int CommonTypes_PointOfAccess_PointOfAccess_ARRAYSIZE = CommonTypes_PointOfAccess_PointOfAccess_MAX + 1;
-
-const ::google::protobuf::EnumDescriptor* CommonTypes_PointOfAccess_descriptor();
-inline const ::std::string& CommonTypes_PointOfAccess_Name(CommonTypes_PointOfAccess value) {
-  return ::google::protobuf::internal::NameOfEnum(
-    CommonTypes_PointOfAccess_descriptor(), value);
-}
-inline bool CommonTypes_PointOfAccess_Parse(
-    const ::std::string& name, CommonTypes_PointOfAccess* value) {
-  return ::google::protobuf::internal::ParseNamedEnum<CommonTypes_PointOfAccess>(
-    CommonTypes_PointOfAccess_descriptor(), name, value);
-}
 enum CommonTypes_ResponseStatusCode {
   CommonTypes_ResponseStatusCode_RSC_NONE = 0,
   CommonTypes_ResponseStatusCode_RSC_ACCEPTED = 1000,
@@ -1103,32 +1080,6 @@ class CommonTypes : public ::google::protobuf::Message {
     return CommonTypes_ExecResultType_Parse(name, value);
   }
 
-  typedef CommonTypes_PointOfAccess PointOfAccess;
-  static const PointOfAccess POINT_OF_ACCESS_NONE = CommonTypes_PointOfAccess_POINT_OF_ACCESS_NONE;
-  static const PointOfAccess IPV4 = CommonTypes_PointOfAccess_IPV4;
-  static const PointOfAccess IPV6 = CommonTypes_PointOfAccess_IPV6;
-  static const PointOfAccess FQDN = CommonTypes_PointOfAccess_FQDN;
-  static inline bool PointOfAccess_IsValid(int value) {
-    return CommonTypes_PointOfAccess_IsValid(value);
-  }
-  static const PointOfAccess PointOfAccess_MIN =
-    CommonTypes_PointOfAccess_PointOfAccess_MIN;
-  static const PointOfAccess PointOfAccess_MAX =
-    CommonTypes_PointOfAccess_PointOfAccess_MAX;
-  static const int PointOfAccess_ARRAYSIZE =
-    CommonTypes_PointOfAccess_PointOfAccess_ARRAYSIZE;
-  static inline const ::google::protobuf::EnumDescriptor*
-  PointOfAccess_descriptor() {
-    return CommonTypes_PointOfAccess_descriptor();
-  }
-  static inline const ::std::string& PointOfAccess_Name(PointOfAccess value) {
-    return CommonTypes_PointOfAccess_Name(value);
-  }
-  static inline bool PointOfAccess_Parse(const ::std::string& name,
-      PointOfAccess* value) {
-    return CommonTypes_PointOfAccess_Parse(name, value);
-  }
-
   typedef CommonTypes_ResponseStatusCode ResponseStatusCode;
   static const ResponseStatusCode RSC_NONE = CommonTypes_ResponseStatusCode_RSC_NONE;
   static const ResponseStatusCode RSC_ACCEPTED = CommonTypes_ResponseStatusCode_RSC_ACCEPTED;
@@ -1452,11 +1403,6 @@ template <> struct is_proto_enum< ::MicroWireless::OneM2M::pb::CommonTypes_ExecR
 template <>
 inline const EnumDescriptor* GetEnumDescriptor< ::MicroWireless::OneM2M::pb::CommonTypes_ExecResultType>() {
   return ::MicroWireless::OneM2M::pb::CommonTypes_ExecResultType_descriptor();
-}
-template <> struct is_proto_enum< ::MicroWireless::OneM2M::pb::CommonTypes_PointOfAccess> : ::google::protobuf::internal::true_type {};
-template <>
-inline const EnumDescriptor* GetEnumDescriptor< ::MicroWireless::OneM2M::pb::CommonTypes_PointOfAccess>() {
-  return ::MicroWireless::OneM2M::pb::CommonTypes_PointOfAccess_descriptor();
 }
 template <> struct is_proto_enum< ::MicroWireless::OneM2M::pb::CommonTypes_ResponseStatusCode> : ::google::protobuf::internal::true_type {};
 template <>

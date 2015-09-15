@@ -42,7 +42,6 @@ const ::google::protobuf::EnumDescriptor* CommonTypes_CmdType_descriptor_ = NULL
 const ::google::protobuf::EnumDescriptor* CommonTypes_ExecModeType_descriptor_ = NULL;
 const ::google::protobuf::EnumDescriptor* CommonTypes_ExecStatusType_descriptor_ = NULL;
 const ::google::protobuf::EnumDescriptor* CommonTypes_ExecResultType_descriptor_ = NULL;
-const ::google::protobuf::EnumDescriptor* CommonTypes_PointOfAccess_descriptor_ = NULL;
 const ::google::protobuf::EnumDescriptor* CommonTypes_ResponseStatusCode_descriptor_ = NULL;
 const ::google::protobuf::Descriptor* Attribute_descriptor_ = NULL;
 const ::google::protobuf::internal::GeneratedMessageReflection*
@@ -88,8 +87,7 @@ void protobuf_AssignDesc_CommonTypes_2eproto() {
   CommonTypes_ExecModeType_descriptor_ = CommonTypes_descriptor_->enum_type(14);
   CommonTypes_ExecStatusType_descriptor_ = CommonTypes_descriptor_->enum_type(15);
   CommonTypes_ExecResultType_descriptor_ = CommonTypes_descriptor_->enum_type(16);
-  CommonTypes_PointOfAccess_descriptor_ = CommonTypes_descriptor_->enum_type(17);
-  CommonTypes_ResponseStatusCode_descriptor_ = CommonTypes_descriptor_->enum_type(18);
+  CommonTypes_ResponseStatusCode_descriptor_ = CommonTypes_descriptor_->enum_type(17);
   Attribute_descriptor_ = file->message_type(1);
   static const int Attribute_offsets_[2] = {
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Attribute, atr_),
@@ -142,7 +140,7 @@ void protobuf_AddDesc_CommonTypes_2eproto() {
   ::google::protobuf::protobuf_AddDesc_google_2fprotobuf_2fany_2eproto();
   ::google::protobuf::DescriptorPool::InternalAddGeneratedFile(
     "\n\021CommonTypes.proto\022\027MicroWireless.OneM2"
-    "M.pb\032\031google/protobuf/any.proto\"\270\037\n\013Comm"
+    "M.pb\032\031google/protobuf/any.proto\"\357\036\n\013Comm"
     "onTypes\"N\n\014ResourceType\022\026\n\022RESOURCE_TYPE"
     "_NONE\020\000\022\n\n\006NORMAL\020\001\022\013\n\007VIRTUAL\020\002\022\r\n\tANNO"
     "UNCED\020\003\"A\n\007CSEType\022\021\n\rCSE_TYPE_NONE\020\000\022\n\n"
@@ -214,38 +212,36 @@ void protobuf_AddDesc_CommonTypes_2eproto() {
     "_FINISHED\020\003\022\032\n\026EXEC_STATUS_CANCELLING\020\004\022"
     "\031\n\025EXEC_STATUS_CANCELLED\020\005\022\035\n\031EXEC_STATU"
     "S_UNCANCELLABLE\020\006\"+\n\016ExecResultType\022\031\n\025E"
-    "XEC_RESULT_TYPE_NONE\020\000\"G\n\rPointOfAccess\022"
-    "\030\n\024POINT_OF_ACCESS_NONE\020\000\022\010\n\004IPV4\020\001\022\010\n\004I"
-    "PV6\020\002\022\010\n\004FQDN\020\003\"\270\010\n\022ResponseStatusCode\022\014"
-    "\n\010RSC_NONE\020\000\022\021\n\014RSC_ACCEPTED\020\350\007\022\013\n\006RSC_O"
-    "K\020\320\017\022\020\n\013RSC_CREATED\020\321\017\022\020\n\013RSC_DELETED\020\322\017"
-    "\022\020\n\013RSC_CHANGED\020\323\017\022\024\n\017RSC_BAD_REQUEST\020\240\037"
-    "\022\022\n\rRSC_NOT_FOUND\020\244\037\022\036\n\031RSC_OPERATION_NO"
-    "T_ALLOWED\020\245\037\022\030\n\023RSC_REQUEST_TIMEOUT\020\250\037\022%"
-    "\n RSC_SUB_CREATOR_HAS_NO_PRIVILEGE\020\205 \022\034\n"
-    "\027RSC_CONTENTS_UNACCEPTED\020\206 \022\026\n\021RSC_ACCES"
-    "S_DENIED\020\207 \022 \n\033RSC_GROUP_REQUEST_ID_EXIS"
-    "TS\020\210 \022\021\n\014RSC_CONFLICT\020\211 \022\036\n\031RSC_INTERNAL"
-    "_SERVER_ERROR\020\210\'\022\030\n\023RSC_NOT_IMPLEMENTED\020"
-    "\211\'\022\035\n\030RSC_TARGET_NOT_REACHABLE\020\357\'\022\025\n\020RSC"
-    "_NO_PREVILEGE\020\361\'\022\027\n\022RSC_ALREADY_EXISTS\020\362"
-    "\'\022\036\n\031RSC_TAGET_NOT_SUBSCIBABLE\020\323(\022%\n RSC"
-    "_SUB_VERIFICATION_INIT_FAILED\020\324(\022\"\n\035RSC_"
-    "SUB_HOST_HAS_NO_PRIVILEGE\020\325(\022+\n&RSC_NON_"
-    "BLOCKING_REQUEST_NOT_SUPPORTED\020\326(\022\036\n\031RSC"
-    "_EXT_OBJ_NOT_REACHABLE\020\363.\022\032\n\025RSC_EXT_OBJ"
-    "_NOT_FOUND\020\365.\022\034\n\027RSC_MAX_MEMBER_EXCEEDED"
-    "\020\372.\022!\n\034RSC_MEMBER_TYPE_INCONSISTENT\020\373.\022&"
-    "\n!RSC_MGMT_SESSION_CANNOT_ESTABLISH\020\204/\022+"
-    "\n&RSC_MGMT_SESSION_ESTABLISHMENT_TIMEOUT"
-    "\020\205/\022\030\n\023RSC_INVALID_CMDTYPE\020\206/\022\032\n\025RSC_INV"
-    "ALID_ARGUMENTS\020\207/\022\037\n\032RSC_INSUFFICIENT_AR"
-    "GUMENTS\020\210/\022\036\n\031RSC_MGMT_CONVERSION_ERROR\020"
-    "\211/\022!\n\034RSC_MGMT_CANCELATION_FAILURE\020\212/\022\031\n"
-    "\024RSC_ALREADY_COMPLETE\020\214/\022 \n\033RSC_COMMAND_"
-    "NOT_CANCALLABLE\020\215/\":\n\tAttribute\022\013\n\003atr\030\001"
-    " \001(\r\022 \n\002vl\030\002 \001(\0132\024.google.protobuf.Anyb\006"
-    "proto3", 4166);
+    "XEC_RESULT_TYPE_NONE\020\000\"\270\010\n\022ResponseStatu"
+    "sCode\022\014\n\010RSC_NONE\020\000\022\021\n\014RSC_ACCEPTED\020\350\007\022\013"
+    "\n\006RSC_OK\020\320\017\022\020\n\013RSC_CREATED\020\321\017\022\020\n\013RSC_DEL"
+    "ETED\020\322\017\022\020\n\013RSC_CHANGED\020\323\017\022\024\n\017RSC_BAD_REQ"
+    "UEST\020\240\037\022\022\n\rRSC_NOT_FOUND\020\244\037\022\036\n\031RSC_OPERA"
+    "TION_NOT_ALLOWED\020\245\037\022\030\n\023RSC_REQUEST_TIMEO"
+    "UT\020\250\037\022%\n RSC_SUB_CREATOR_HAS_NO_PRIVILEG"
+    "E\020\205 \022\034\n\027RSC_CONTENTS_UNACCEPTED\020\206 \022\026\n\021RS"
+    "C_ACCESS_DENIED\020\207 \022 \n\033RSC_GROUP_REQUEST_"
+    "ID_EXISTS\020\210 \022\021\n\014RSC_CONFLICT\020\211 \022\036\n\031RSC_I"
+    "NTERNAL_SERVER_ERROR\020\210\'\022\030\n\023RSC_NOT_IMPLE"
+    "MENTED\020\211\'\022\035\n\030RSC_TARGET_NOT_REACHABLE\020\357\'"
+    "\022\025\n\020RSC_NO_PREVILEGE\020\361\'\022\027\n\022RSC_ALREADY_E"
+    "XISTS\020\362\'\022\036\n\031RSC_TAGET_NOT_SUBSCIBABLE\020\323("
+    "\022%\n RSC_SUB_VERIFICATION_INIT_FAILED\020\324(\022"
+    "\"\n\035RSC_SUB_HOST_HAS_NO_PRIVILEGE\020\325(\022+\n&R"
+    "SC_NON_BLOCKING_REQUEST_NOT_SUPPORTED\020\326("
+    "\022\036\n\031RSC_EXT_OBJ_NOT_REACHABLE\020\363.\022\032\n\025RSC_"
+    "EXT_OBJ_NOT_FOUND\020\365.\022\034\n\027RSC_MAX_MEMBER_E"
+    "XCEEDED\020\372.\022!\n\034RSC_MEMBER_TYPE_INCONSISTE"
+    "NT\020\373.\022&\n!RSC_MGMT_SESSION_CANNOT_ESTABLI"
+    "SH\020\204/\022+\n&RSC_MGMT_SESSION_ESTABLISHMENT_"
+    "TIMEOUT\020\205/\022\030\n\023RSC_INVALID_CMDTYPE\020\206/\022\032\n\025"
+    "RSC_INVALID_ARGUMENTS\020\207/\022\037\n\032RSC_INSUFFIC"
+    "IENT_ARGUMENTS\020\210/\022\036\n\031RSC_MGMT_CONVERSION"
+    "_ERROR\020\211/\022!\n\034RSC_MGMT_CANCELATION_FAILUR"
+    "E\020\212/\022\031\n\024RSC_ALREADY_COMPLETE\020\214/\022 \n\033RSC_C"
+    "OMMAND_NOT_CANCALLABLE\020\215/\":\n\tAttribute\022\013"
+    "\n\003atr\030\001 \001(\r\022 \n\002vl\030\002 \001(\0132\024.google.protobu"
+    "f.Anyb\006proto3", 4093);
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedFile(
     "CommonTypes.proto", &protobuf_RegisterTypes);
   CommonTypes::default_instance_ = new CommonTypes();
@@ -790,31 +786,6 @@ const CommonTypes_ExecResultType CommonTypes::EXEC_RESULT_TYPE_NONE;
 const CommonTypes_ExecResultType CommonTypes::ExecResultType_MIN;
 const CommonTypes_ExecResultType CommonTypes::ExecResultType_MAX;
 const int CommonTypes::ExecResultType_ARRAYSIZE;
-#endif  // _MSC_VER
-const ::google::protobuf::EnumDescriptor* CommonTypes_PointOfAccess_descriptor() {
-  protobuf_AssignDescriptorsOnce();
-  return CommonTypes_PointOfAccess_descriptor_;
-}
-bool CommonTypes_PointOfAccess_IsValid(int value) {
-  switch(value) {
-    case 0:
-    case 1:
-    case 2:
-    case 3:
-      return true;
-    default:
-      return false;
-  }
-}
-
-#ifndef _MSC_VER
-const CommonTypes_PointOfAccess CommonTypes::POINT_OF_ACCESS_NONE;
-const CommonTypes_PointOfAccess CommonTypes::IPV4;
-const CommonTypes_PointOfAccess CommonTypes::IPV6;
-const CommonTypes_PointOfAccess CommonTypes::FQDN;
-const CommonTypes_PointOfAccess CommonTypes::PointOfAccess_MIN;
-const CommonTypes_PointOfAccess CommonTypes::PointOfAccess_MAX;
-const int CommonTypes::PointOfAccess_ARRAYSIZE;
 #endif  // _MSC_VER
 const ::google::protobuf::EnumDescriptor* CommonTypes_ResponseStatusCode_descriptor() {
   protobuf_AssignDescriptorsOnce();

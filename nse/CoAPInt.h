@@ -1,5 +1,5 @@
 /*
- * CoAPInt.h
+ * CoAPInt.h - CoAP Interface
  *
  *  Created on: 2015年9月3日
  *      Author: weimi_000
@@ -15,11 +15,14 @@ using namespace MicroWireless::OneM2M;
 class CoAPInt {
 
 public:
-
-	virtual void coap_send(pb::CoAPBinding&) { }
-
+	CoAPInt(const std::string& ip, const std::string& port) :
+		ip_(ip), port_(port) { }
+	virtual void send(pb::CoAPBinding&) { }
 	virtual void run() { }
+	virtual ~CoAPInt() { }
 
+private:
+	const std::string ip_, port_;
 };
 
 

@@ -11,7 +11,7 @@ message CSEBase
   CommonTypes.CSEType cst = 100;					// CSE_type = 100;
   string csi = 101;									// CSE_id = 101;
   repeated CommonTypes.SupportedResourceType srt = 102;	// supported_resource_type = 102;
-  repeated CommonTypes.PointOfAccess poa = 103;		// point_of_access = 103;
+  repeated string poa = 103;		    // point_of_access = 103;
   string nl = 104;									// node_link = 104;
   string ncp = 105;									// notification_congestion_policy = 105;
 }

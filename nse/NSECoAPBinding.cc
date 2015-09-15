@@ -7,12 +7,13 @@
 
 #include <iostream>
 #include <string>
-#include <bitset>
+#include <boost/lexical_cast.hpp>
 
 #include "CoAPBinding.pb.h"
 #include "NSECoAPBinding.h"
 #include "RequestPrim.h"
 #include "ResponsePrim.h"
+#include "CoAPInt.h"
 
 namespace MicroWireless {
 namespace OneM2M {
@@ -70,25 +71,6 @@ void NSE_CoAP::addOpt(pb::CoAPBinding& coap, pb::CoAPTypes_OptionType type, cons
 	p_opt_->set_value(value);
 }
 
-void NSE_CoAP::addOpt(pb::CoAPBinding& coap, pb::CoAPTypes_OptionType type, uint value, int base) {
-	coap.add_opt();
-	pb::CoAPOption* p_opt_ = coap.mutable_opt(coap.opt_size() - 1);
-	p_opt_->set_num(type);
-	switch (base) {
-	case 16:
-		p_opt_->set_value(bitset<16>(value).to_string());
-		break;
-	case 32:
-		p_opt_->set_value(bitset<32>(value).to_string());
-		break;
-	case 64:
-		p_opt_->set_value(bitset<64>(value).to_string());
-		break;
-	default:
-		cerr << "addOpt: Unknown base:" << base << endl;
-	}
-}
-
 bool NSE_CoAP::getOpt(const pb::CoAPBinding& coap, pb::CoAPTypes_OptionType type,
 		const pb::CoAPOption*& p_opt) {
 	const RepeatedPtrField<pb::CoAPOption>& opts_ = coap.opt();
@@ -115,7 +97,7 @@ bool NSE_CoAP::convertCoAPRequest(const pb::CoAPBinding& coap, RequestPrim*& p_r
 	Operation op_;
 	string to_, fr_, rqi_;
 
-	switch (static_cast<pb::CoAPTypes_MethodType>(coap.code())) {
+	switch (coap.method()) {
 	case pb::CoAPTypes_MethodType_CoAP_POST:
 		op_ = Operation::CREATE;  // Operation::NOTIFY ??
 		break;
@@ -200,6 +182,9 @@ bool NSE_CoAP::convertCoAPRequest(const pb::CoAPBinding& coap, RequestPrim*& p_r
 }
 
 void NSE_CoAP::send(ResponsePrim& rsp, const string& addr, uint port) {
+
+	//cout << "NSE_CoAP::send： Response rsc:" << (int)rsp.getResponseStatusCode() << endl;
+
 	pb::CoAPBinding coap_;
 	coap_.set_ver(1);
 	coap_.set_type(pb::CoAPTypes_MessageType_CoAP_ACK);
@@ -214,7 +199,7 @@ void NSE_CoAP::send(ResponsePrim& rsp, const string& addr, uint port) {
 	// Add CoAP Option CoAP_Uri_Host
 	addOpt(coap_, pb::CoAPTypes_OptionType_CoAP_Uri_Host, addr);
 	// Add CoAP Option CoAP_Uri_Port 16 bit
-	addOpt(coap_, pb::CoAPTypes_OptionType_CoAP_Uri_Port, port, 16);
+	addOpt(coap_, pb::CoAPTypes_OptionType_CoAP_Uri_Port, boost::lexical_cast<string>(port));
 	// Add CoAP Option CoAP_Uri_Path
 	addOpt(coap_, pb::CoAPTypes_OptionType_CoAP_Uri_Path, rsp.getTo());
 	// Add CoAP Option CoAP_Location_Path
@@ -227,11 +212,17 @@ void NSE_CoAP::send(ResponsePrim& rsp, const string& addr, uint port) {
 	// Add CoAP Option ONEM2M_RQI
 	addOpt(coap_, pb::CoAPTypes_OptionType_ONEM2M_RQI, rsp.getRequestId());
 
-	//coap_send(coap_);
+	// set content if any
+	if (!rsp.getContent().empty()) {
+		coap_.set_payload(rsp.getContent());
+	}
+
+	coap_int_.send(coap_);
 }
 
 void NSE_CoAP::run() {
 	NSEBase::run();
+	coap_int_.run();
 }
 
 }	// OneM2M

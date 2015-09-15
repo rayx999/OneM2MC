@@ -22,7 +22,7 @@ CSEServer::CSEServer(CSEResourceStore& rdb, NSEBase& nse, CSEHandler& hdl) :
 	nse_(nse),
 	hdl_(hdl)
 {
-	nse_.setRequestHandler(boost::bind(&CSEHandler::handleRequest, &hdl_, _1));
+	//nse_.setRequestHandler(boost::bind(&CSEHandler::handleRequest, &hdl_, _1));
 }
 
 void CSEServer::run() {

@@ -98,7 +98,10 @@ message CoAPBinding
 {
   uint32 ver = 1;                    // Always 1;
   CoAPTypes.MessageType type = 2;    // CON, NON, ACK or RST;
-  CoAPTypes.ResponseCode code = 3;   // CoAP Response Code;
-  repeated CoAPOption opt = 4;       // CoAP Option list;
-  string payload = 5;                // Opaque Payload
+  oneof MethodOrCode  {
+    CoAPTypes.MethodType method = 3; // CoAP Request Method
+    CoAPTypes.ResponseCode code = 4; // CoAP Response Code;
+  }
+  repeated CoAPOption opt = 5;       // CoAP Option list;
+  string payload = 6;                // Opaque Payload
 }

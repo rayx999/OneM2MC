@@ -203,13 +203,6 @@ enum class ExecResultType
 
 };
 
- enum class PointOfAccess
- {
-   IPV4 = 1,
-   IPV6 = 2,
-   FQDN = 3,
- };
-
  enum class ResponseStatusCode
  {
    NONE = 0,

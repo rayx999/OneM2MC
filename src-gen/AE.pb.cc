@@ -84,13 +84,11 @@ void protobuf_AddDesc_AE_2eproto() {
   already_here = true;
   GOOGLE_PROTOBUF_VERIFY_VERSION;
 
-  ::MicroWireless::OneM2M::pb::protobuf_AddDesc_CommonTypes_2eproto();
   ::google::protobuf::DescriptorPool::InternalAddGeneratedFile(
-    "\n\010AE.proto\022\027MicroWireless.OneM2M.pb\032\021Com"
-    "monTypes.proto\"\204\001\n\002AE\022\013\n\003apn\030d \001(\t\022\013\n\003ap"
-    "i\030e \001(\t\022\013\n\003aei\030f \001(\t\022\?\n\003poa\030g \003(\01622.Micr"
-    "oWireless.OneM2M.pb.CommonTypes.PointOfA"
-    "ccess\022\n\n\002or\030h \001(\t\022\n\n\002nl\030i \001(\tb\006proto3", 197);
+    "\n\010AE.proto\022\027MicroWireless.OneM2M.pb\"P\n\002A"
+    "E\022\013\n\003apn\030d \001(\t\022\013\n\003api\030e \001(\t\022\013\n\003aei\030f \001(\t"
+    "\022\013\n\003poa\030g \003(\t\022\n\n\002or\030h \001(\t\022\n\n\002nl\030i \001(\tb\006p"
+    "roto3", 125);
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedFile(
     "AE.proto", &protobuf_RegisterTypes);
   AE::default_instance_ = new AE();
@@ -260,35 +258,25 @@ bool AE::MergePartialFromCodedStream(
         } else {
           goto handle_unusual;
         }
-        if (input->ExpectTag(824)) goto parse_poa;
+        if (input->ExpectTag(826)) goto parse_poa;
         break;
       }
 
-      // repeated .MicroWireless.OneM2M.pb.CommonTypes.PointOfAccess poa = 103;
+      // repeated string poa = 103;
       case 103: {
-        if (tag == 824) {
+        if (tag == 826) {
          parse_poa:
-          int value;
-          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
-                   int, ::google::protobuf::internal::WireFormatLite::TYPE_ENUM>(
-                 input, &value)));
-          add_poa(static_cast< ::MicroWireless::OneM2M::pb::CommonTypes_PointOfAccess >(value));
-        } else if (tag == 826) {
-          ::google::protobuf::uint32 length;
-          DO_(input->ReadVarint32(&length));
-          ::google::protobuf::io::CodedInputStream::Limit limit = input->PushLimit(length);
-          while (input->BytesUntilLimit() > 0) {
-            int value;
-            DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
-                   int, ::google::protobuf::internal::WireFormatLite::TYPE_ENUM>(
-                 input, &value)));
-            add_poa(static_cast< ::MicroWireless::OneM2M::pb::CommonTypes_PointOfAccess >(value));
-          }
-          input->PopLimit(limit);
+          DO_(::google::protobuf::internal::WireFormatLite::ReadString(
+                input, this->add_poa()));
+          ::google::protobuf::internal::WireFormat::VerifyUTF8StringNamedField(
+            this->poa(this->poa_size() - 1).data(),
+            this->poa(this->poa_size() - 1).length(),
+            ::google::protobuf::internal::WireFormat::PARSE,
+            "MicroWireless.OneM2M.pb.AE.poa");
         } else {
           goto handle_unusual;
         }
-        if (input->ExpectTag(824)) goto parse_poa;
+        if (input->ExpectTag(826)) goto parse_poa;
         if (input->ExpectTag(834)) goto parse_or;
         break;
       }
@@ -381,17 +369,14 @@ void AE::SerializeWithCachedSizes(
       102, this->aei(), output);
   }
 
-  // repeated .MicroWireless.OneM2M.pb.CommonTypes.PointOfAccess poa = 103;
-  if (this->poa_size() > 0) {
-    ::google::protobuf::internal::WireFormatLite::WriteTag(
-      103,
-      ::google::protobuf::internal::WireFormatLite::WIRETYPE_LENGTH_DELIMITED,
-      output);
-    output->WriteVarint32(_poa_cached_byte_size_);
-  }
+  // repeated string poa = 103;
   for (int i = 0; i < this->poa_size(); i++) {
-    ::google::protobuf::internal::WireFormatLite::WriteEnumNoTag(
-      this->poa(i), output);
+  ::google::protobuf::internal::WireFormat::VerifyUTF8StringNamedField(
+    this->poa(i).data(), this->poa(i).length(),
+    ::google::protobuf::internal::WireFormat::SERIALIZE,
+    "MicroWireless.OneM2M.pb.AE.poa");
+    ::google::protobuf::internal::WireFormatLite::WriteString(
+      103, this->poa(i), output);
   }
 
   // optional string or = 104;
@@ -453,17 +438,14 @@ void AE::SerializeWithCachedSizes(
         102, this->aei(), target);
   }
 
-  // repeated .MicroWireless.OneM2M.pb.CommonTypes.PointOfAccess poa = 103;
-  if (this->poa_size() > 0) {
-    target = ::google::protobuf::internal::WireFormatLite::WriteTagToArray(
-      103,
-      ::google::protobuf::internal::WireFormatLite::WIRETYPE_LENGTH_DELIMITED,
-      target);
-    target = ::google::protobuf::io::CodedOutputStream::WriteVarint32ToArray(    _poa_cached_byte_size_, target);
-  }
+  // repeated string poa = 103;
   for (int i = 0; i < this->poa_size(); i++) {
-    target = ::google::protobuf::internal::WireFormatLite::WriteEnumNoTagToArray(
-      this->poa(i), target);
+    ::google::protobuf::internal::WireFormat::VerifyUTF8StringNamedField(
+      this->poa(i).data(), this->poa(i).length(),
+      ::google::protobuf::internal::WireFormat::SERIALIZE,
+      "MicroWireless.OneM2M.pb.AE.poa");
+    target = ::google::protobuf::internal::WireFormatLite::
+      WriteStringToArray(103, this->poa(i), target);
   }
 
   // optional string or = 104;
@@ -530,21 +512,11 @@ int AE::ByteSize() const {
         this->nl());
   }
 
-  // repeated .MicroWireless.OneM2M.pb.CommonTypes.PointOfAccess poa = 103;
-  {
-    int data_size = 0;
-    for (int i = 0; i < this->poa_size(); i++) {
-      data_size += ::google::protobuf::internal::WireFormatLite::EnumSize(
-        this->poa(i));
-    }
-    if (data_size > 0) {
-      total_size += 2 +
-        ::google::protobuf::internal::WireFormatLite::Int32Size(data_size);
-    }
-    GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
-    _poa_cached_byte_size_ = data_size;
-    GOOGLE_SAFE_CONCURRENT_WRITES_END();
-    total_size += data_size;
+  // repeated string poa = 103;
+  total_size += 2 * this->poa_size();
+  for (int i = 0; i < this->poa_size(); i++) {
+    total_size += ::google::protobuf::internal::WireFormatLite::StringSize(
+      this->poa(i));
   }
 
   GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
@@ -762,31 +734,55 @@ void AE::clear_aei() {
   // @@protoc_insertion_point(field_set_allocated:MicroWireless.OneM2M.pb.AE.aei)
 }
 
-// repeated .MicroWireless.OneM2M.pb.CommonTypes.PointOfAccess poa = 103;
+// repeated string poa = 103;
 int AE::poa_size() const {
   return poa_.size();
 }
 void AE::clear_poa() {
   poa_.Clear();
 }
- ::MicroWireless::OneM2M::pb::CommonTypes_PointOfAccess AE::poa(int index) const {
+ const ::std::string& AE::poa(int index) const {
   // @@protoc_insertion_point(field_get:MicroWireless.OneM2M.pb.AE.poa)
-  return static_cast< ::MicroWireless::OneM2M::pb::CommonTypes_PointOfAccess >(poa_.Get(index));
+  return poa_.Get(index);
 }
- void AE::set_poa(int index, ::MicroWireless::OneM2M::pb::CommonTypes_PointOfAccess value) {
-  poa_.Set(index, value);
+ ::std::string* AE::mutable_poa(int index) {
+  // @@protoc_insertion_point(field_mutable:MicroWireless.OneM2M.pb.AE.poa)
+  return poa_.Mutable(index);
+}
+ void AE::set_poa(int index, const ::std::string& value) {
   // @@protoc_insertion_point(field_set:MicroWireless.OneM2M.pb.AE.poa)
+  poa_.Mutable(index)->assign(value);
 }
- void AE::add_poa(::MicroWireless::OneM2M::pb::CommonTypes_PointOfAccess value) {
-  poa_.Add(value);
+ void AE::set_poa(int index, const char* value) {
+  poa_.Mutable(index)->assign(value);
+  // @@protoc_insertion_point(field_set_char:MicroWireless.OneM2M.pb.AE.poa)
+}
+ void AE::set_poa(int index, const char* value, size_t size) {
+  poa_.Mutable(index)->assign(
+    reinterpret_cast<const char*>(value), size);
+  // @@protoc_insertion_point(field_set_pointer:MicroWireless.OneM2M.pb.AE.poa)
+}
+ ::std::string* AE::add_poa() {
+  return poa_.Add();
+}
+ void AE::add_poa(const ::std::string& value) {
+  poa_.Add()->assign(value);
   // @@protoc_insertion_point(field_add:MicroWireless.OneM2M.pb.AE.poa)
 }
- const ::google::protobuf::RepeatedField<int>&
+ void AE::add_poa(const char* value) {
+  poa_.Add()->assign(value);
+  // @@protoc_insertion_point(field_add_char:MicroWireless.OneM2M.pb.AE.poa)
+}
+ void AE::add_poa(const char* value, size_t size) {
+  poa_.Add()->assign(reinterpret_cast<const char*>(value), size);
+  // @@protoc_insertion_point(field_add_pointer:MicroWireless.OneM2M.pb.AE.poa)
+}
+ const ::google::protobuf::RepeatedPtrField< ::std::string>&
 AE::poa() const {
   // @@protoc_insertion_point(field_list:MicroWireless.OneM2M.pb.AE.poa)
   return poa_;
 }
- ::google::protobuf::RepeatedField<int>*
+ ::google::protobuf::RepeatedPtrField< ::std::string>*
 AE::mutable_poa() {
   // @@protoc_insertion_point(field_mutable_list:MicroWireless.OneM2M.pb.AE.poa)
   return &poa_;

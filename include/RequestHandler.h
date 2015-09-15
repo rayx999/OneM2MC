@@ -63,7 +63,7 @@ public:
 			if (!pc_.empty()) {
 				rsp_.setContent(pc_);
 			}
-			nse_.send(rsp_, "127.0.1", 5555);
+			nse_.send(rsp_, "localhost", 5555);
 		}
 
 		return (rsc_ == ResponseStatusCode::OK);

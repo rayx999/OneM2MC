@@ -501,6 +501,12 @@ class CoAPBinding : public ::google::protobuf::Message {
   static const ::google::protobuf::Descriptor* descriptor();
   static const CoAPBinding& default_instance();
 
+  enum MethodOrCodeCase {
+    kMethod = 3,
+    kCode = 4,
+    METHODORCODE_NOT_SET = 0,
+  };
+
   void Swap(CoAPBinding* other);
 
   // implements Message ----------------------------------------------
@@ -554,16 +560,28 @@ class CoAPBinding : public ::google::protobuf::Message {
   ::MicroWireless::OneM2M::pb::CoAPTypes_MessageType type() const;
   void set_type(::MicroWireless::OneM2M::pb::CoAPTypes_MessageType value);
 
-  // optional .MicroWireless.OneM2M.pb.CoAPTypes.ResponseCode code = 3;
+  // optional .MicroWireless.OneM2M.pb.CoAPTypes.MethodType method = 3;
+  private:
+  bool has_method() const;
+  public:
+  void clear_method();
+  static const int kMethodFieldNumber = 3;
+  ::MicroWireless::OneM2M::pb::CoAPTypes_MethodType method() const;
+  void set_method(::MicroWireless::OneM2M::pb::CoAPTypes_MethodType value);
+
+  // optional .MicroWireless.OneM2M.pb.CoAPTypes.ResponseCode code = 4;
+  private:
+  bool has_code() const;
+  public:
   void clear_code();
-  static const int kCodeFieldNumber = 3;
+  static const int kCodeFieldNumber = 4;
   ::MicroWireless::OneM2M::pb::CoAPTypes_ResponseCode code() const;
   void set_code(::MicroWireless::OneM2M::pb::CoAPTypes_ResponseCode value);
 
-  // repeated .MicroWireless.OneM2M.pb.CoAPOption opt = 4;
+  // repeated .MicroWireless.OneM2M.pb.CoAPOption opt = 5;
   int opt_size() const;
   void clear_opt();
-  static const int kOptFieldNumber = 4;
+  static const int kOptFieldNumber = 5;
   const ::MicroWireless::OneM2M::pb::CoAPOption& opt(int index) const;
   ::MicroWireless::OneM2M::pb::CoAPOption* mutable_opt(int index);
   ::MicroWireless::OneM2M::pb::CoAPOption* add_opt();
@@ -572,9 +590,9 @@ class CoAPBinding : public ::google::protobuf::Message {
   ::google::protobuf::RepeatedPtrField< ::MicroWireless::OneM2M::pb::CoAPOption >*
       mutable_opt();
 
-  // optional string payload = 5;
+  // optional string payload = 6;
   void clear_payload();
-  static const int kPayloadFieldNumber = 5;
+  static const int kPayloadFieldNumber = 6;
   const ::std::string& payload() const;
   void set_payload(const ::std::string& value);
   void set_payload(const char* value);
@@ -583,8 +601,15 @@ class CoAPBinding : public ::google::protobuf::Message {
   ::std::string* release_payload();
   void set_allocated_payload(::std::string* payload);
 
+  MethodOrCodeCase MethodOrCode_case() const;
   // @@protoc_insertion_point(class_scope:MicroWireless.OneM2M.pb.CoAPBinding)
  private:
+  inline void set_has_method();
+  inline void set_has_code();
+
+  inline bool has_MethodOrCode() const;
+  void clear_MethodOrCode();
+  inline void clear_has_MethodOrCode();
 
   ::google::protobuf::internal::InternalMetadataWithArena _internal_metadata_;
   bool _is_default_instance_;
@@ -592,8 +617,14 @@ class CoAPBinding : public ::google::protobuf::Message {
   int type_;
   ::google::protobuf::RepeatedPtrField< ::MicroWireless::OneM2M::pb::CoAPOption > opt_;
   ::google::protobuf::internal::ArenaStringPtr payload_;
-  int code_;
+  union MethodOrCodeUnion {
+    MethodOrCodeUnion() {}
+    int method_;
+    int code_;
+  } MethodOrCode_;
   mutable int _cached_size_;
+  ::google::protobuf::uint32 _oneof_case_[1];
+
   friend void  protobuf_AddDesc_CoAPBinding_2eproto();
   friend void protobuf_AssignDesc_CoAPBinding_2eproto();
   friend void protobuf_ShutdownFile_CoAPBinding_2eproto();
@@ -702,21 +733,65 @@ inline void CoAPBinding::set_type(::MicroWireless::OneM2M::pb::CoAPTypes_Message
   // @@protoc_insertion_point(field_set:MicroWireless.OneM2M.pb.CoAPBinding.type)
 }
 
-// optional .MicroWireless.OneM2M.pb.CoAPTypes.ResponseCode code = 3;
+// optional .MicroWireless.OneM2M.pb.CoAPTypes.MethodType method = 3;
+inline bool CoAPBinding::has_method() const {
+  return MethodOrCode_case() == kMethod;
+}
+inline void CoAPBinding::set_has_method() {
+  _oneof_case_[0] = kMethod;
+}
+inline void CoAPBinding::clear_method() {
+  if (has_method()) {
+    MethodOrCode_.method_ = 0;
+    clear_has_MethodOrCode();
+  }
+}
+inline ::MicroWireless::OneM2M::pb::CoAPTypes_MethodType CoAPBinding::method() const {
+  // @@protoc_insertion_point(field_get:MicroWireless.OneM2M.pb.CoAPBinding.method)
+  if (has_method()) {
+    return static_cast< ::MicroWireless::OneM2M::pb::CoAPTypes_MethodType >(MethodOrCode_.method_);
+  }
+  return static_cast< ::MicroWireless::OneM2M::pb::CoAPTypes_MethodType >(0);
+}
+inline void CoAPBinding::set_method(::MicroWireless::OneM2M::pb::CoAPTypes_MethodType value) {
+  if (!has_method()) {
+    clear_MethodOrCode();
+    set_has_method();
+  }
+  MethodOrCode_.method_ = value;
+  // @@protoc_insertion_point(field_set:MicroWireless.OneM2M.pb.CoAPBinding.method)
+}
+
+// optional .MicroWireless.OneM2M.pb.CoAPTypes.ResponseCode code = 4;
+inline bool CoAPBinding::has_code() const {
+  return MethodOrCode_case() == kCode;
+}
+inline void CoAPBinding::set_has_code() {
+  _oneof_case_[0] = kCode;
+}
 inline void CoAPBinding::clear_code() {
-  code_ = 0;
+  if (has_code()) {
+    MethodOrCode_.code_ = 0;
+    clear_has_MethodOrCode();
+  }
 }
 inline ::MicroWireless::OneM2M::pb::CoAPTypes_ResponseCode CoAPBinding::code() const {
   // @@protoc_insertion_point(field_get:MicroWireless.OneM2M.pb.CoAPBinding.code)
-  return static_cast< ::MicroWireless::OneM2M::pb::CoAPTypes_ResponseCode >(code_);
+  if (has_code()) {
+    return static_cast< ::MicroWireless::OneM2M::pb::CoAPTypes_ResponseCode >(MethodOrCode_.code_);
+  }
+  return static_cast< ::MicroWireless::OneM2M::pb::CoAPTypes_ResponseCode >(0);
 }
 inline void CoAPBinding::set_code(::MicroWireless::OneM2M::pb::CoAPTypes_ResponseCode value) {
-  
-  code_ = value;
+  if (!has_code()) {
+    clear_MethodOrCode();
+    set_has_code();
+  }
+  MethodOrCode_.code_ = value;
   // @@protoc_insertion_point(field_set:MicroWireless.OneM2M.pb.CoAPBinding.code)
 }
 
-// repeated .MicroWireless.OneM2M.pb.CoAPOption opt = 4;
+// repeated .MicroWireless.OneM2M.pb.CoAPOption opt = 5;
 inline int CoAPBinding::opt_size() const {
   return opt_.size();
 }
@@ -746,7 +821,7 @@ CoAPBinding::mutable_opt() {
   return &opt_;
 }
 
-// optional string payload = 5;
+// optional string payload = 6;
 inline void CoAPBinding::clear_payload() {
   payload_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
@@ -789,6 +864,15 @@ inline void CoAPBinding::set_allocated_payload(::std::string* payload) {
   // @@protoc_insertion_point(field_set_allocated:MicroWireless.OneM2M.pb.CoAPBinding.payload)
 }
 
+inline bool CoAPBinding::has_MethodOrCode() const {
+  return MethodOrCode_case() != METHODORCODE_NOT_SET;
+}
+inline void CoAPBinding::clear_has_MethodOrCode() {
+  _oneof_case_[0] = METHODORCODE_NOT_SET;
+}
+inline CoAPBinding::MethodOrCodeCase CoAPBinding::MethodOrCode_case() const {
+  return CoAPBinding::MethodOrCodeCase(_oneof_case_[0]);
+}
 #endif  // !PROTOBUF_INLINE_NOT_IN_HEADERS
 // -------------------------------------------------------------------
 

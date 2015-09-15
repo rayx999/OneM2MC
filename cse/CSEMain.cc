@@ -16,6 +16,7 @@
 #include "CSEResourceStore.h"
 #include "CSEHandler.h"
 #include "CSEServer.h"
+#include "CoAPInt.h"
 
 using namespace MicroWireless::OneM2M;
 
@@ -47,7 +48,8 @@ int main(int argc, char* argv[])
 */
   try
   {
-	NSE_CoAP nse_coap_(argv[1], argv[2]);
+	CoAPInt coap_int_(argv[1], argv[2]);
+	NSE_CoAP nse_coap_(argv[1], argv[2], coap_int_);
 	CSEResourceStore rdb_(store_fn);
 	CSEHandler hdl_(nse_coap_, rdb_);
 	CSEServer server_(rdb_, nse_coap_, hdl_);
@@ -58,6 +60,7 @@ int main(int argc, char* argv[])
   {
     std::cerr << "Exception: " << e.what() << "\n";
   }
+
 
   return 0;
 }

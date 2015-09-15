@@ -206,14 +206,6 @@ message CommonTypes
  
 	}
 
-  enum PointOfAccess
-  {
-    POINT_OF_ACCESS_NONE = 0;
-    IPV4 = 1;
-    IPV6 = 2;
-    FQDN = 3;
-  }
-
   enum ResponseStatusCode
   {
     RSC_NONE = 0;

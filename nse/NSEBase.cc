@@ -13,6 +13,8 @@
 //#include <boost/thread/mutex.hpp>
 #include <boost/bind.hpp>
 
+#include "CSEHandler.h"
+#include "RequestHandler.h"
 #include "RequestPrim.h"
 #include "ResponsePrim.h"
 #include "NSEBase.h"
@@ -26,12 +28,9 @@ using namespace MicroWireless::OneM2M;
 NSEBase::NSEBase(const std::string& ip, const std::string& port)
 	: ip_(ip), port_(port)
 	, io_svc_(new boost::asio::io_service())
+	, work_(new boost::asio::io_service::work(*io_svc_))
 	//,strand_ = new boost::asio::io_service::strand(*io_svc_)
 { }
-
-void NSEBase::setRequestHandler(boost::function<void(RequestPrim&)> req_hdl) {
-	req_h_ = req_hdl;
-}
 
 void NSEBase::work_thread(boost::shared_ptr<boost::asio::io_service> io_service) {
 	while (true) {
@@ -50,16 +49,11 @@ void NSEBase::work_thread(boost::shared_ptr<boost::asio::io_service> io_service)
 	}
 }
 
-void NSEBase::post(RequestPrim& req) {
-	io_svc_->post(boost::bind(req_h_, req));
+void NSEBase::send(ResponsePrim& rsp, const std::string& addr, uint port) {
+	//cout << "NSEBase::send: rsc:" << (int) rsp.getResponseStatusCode() << endl;
 }
 
-void NSEBase::send(ResponsePrim& rsp, const std::string& addr, uint port) { }
-
 void NSEBase::run() {
-	boost::shared_ptr<boost::asio::io_service::work> work(
-		new boost::asio::io_service::work(*io_svc_));
-
 	for (int x = 0; x < num_threads_; ++x)	{
 		thread_grp_.create_thread(boost::bind(&NSEBase::work_thread, this, io_svc_));
 	}

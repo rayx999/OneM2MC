@@ -12,6 +12,7 @@
 
 #include "CoAPBinding.pb.h"
 #include "NSEBase.h"
+#include "CoAPInt.h"
 
 namespace MicroWireless {
 namespace OneM2M {
@@ -22,7 +23,8 @@ class ResponsePrim;
 
 class NSE_CoAP : public NSEBase {
 public:
-	NSE_CoAP(const std::string& ip, const std::string& port) : NSEBase(ip, port) { }
+	NSE_CoAP(const std::string& ip, const std::string& port, CoAPInt& coap_int) :
+		NSEBase(ip, port), coap_int_(coap_int) { }
 	virtual ~NSE_CoAP() { }
 
 	virtual void send(ResponsePrim& rsp, const std::string& addr, uint port);
@@ -32,8 +34,9 @@ public:
 
 private:
 	void addOpt(pb::CoAPBinding&, pb::CoAPTypes_OptionType, const std::string&);
-	void addOpt(pb::CoAPBinding&, pb::CoAPTypes_OptionType, uint, int);
 	bool getOpt(const pb::CoAPBinding&, pb::CoAPTypes_OptionType, const pb::CoAPOption*&);
+
+	CoAPInt& coap_int_;
 	static std::map<int, int> rsc2coap_;
 };
 

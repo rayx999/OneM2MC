@@ -22,6 +22,8 @@ namespace OneM2M {
 using namespace MicroWireless::OneM2M;
 
 void CSEHandler::handleRequest(RequestPrim& req) {
+	//cout << "CSEHandler::handleRequest: start...\n";
+
 	if (!checkRequest(req, rdb_)) {
 		return;
 	}
@@ -61,6 +63,9 @@ void CSEHandler::handleRequest(RequestPrim& req) {
 			rsc_ = ResponseStatusCode::NOT_FOUND;
 			break;
 		}
+
+		//cout << "CSEHandler::handleRequest: Prepare content..." << endl;
+
 		if (!composeContent(req, pc_, rdb_)) {
 			cerr << "handleRequest: Retrieve resource " << req.getTargetResource();
 			cerr << " failed.\n";
@@ -80,11 +85,12 @@ void CSEHandler::handleRequest(RequestPrim& req) {
 	}
 
 	string fr_ = rdb_.getRoot()->getDomain() + rdb_.getRoot()->getCSEId();
+	//cout << "CSEHandler::handleRequest: compose fr:" << fr_ << endl;
 	ResponsePrim rsp_(&req, rsc_, fr_);
 	if ((rsc_ == ResponseStatusCode::OK || rsc_ == ResponseStatusCode::CREATED) && !pc_.empty()) {
 		rsp_.setContent(pc_);
 	}
-	nse_.send(rsp_, "127.0.0.1", 5555);
+	nse_.send(rsp_, "localhost", 5555);
 }
 
 }	// OneM2M

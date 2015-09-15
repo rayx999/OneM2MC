@@ -27,7 +27,6 @@
 #include <google/protobuf/repeated_field.h>
 #include <google/protobuf/extension_set.h>
 #include <google/protobuf/unknown_field_set.h>
-#include "CommonTypes.pb.h"
 // @@protoc_insertion_point(includes)
 
 namespace MicroWireless {
@@ -132,15 +131,21 @@ class AE : public ::google::protobuf::Message {
   ::std::string* release_aei();
   void set_allocated_aei(::std::string* aei);
 
-  // repeated .MicroWireless.OneM2M.pb.CommonTypes.PointOfAccess poa = 103;
+  // repeated string poa = 103;
   int poa_size() const;
   void clear_poa();
   static const int kPoaFieldNumber = 103;
-  ::MicroWireless::OneM2M::pb::CommonTypes_PointOfAccess poa(int index) const;
-  void set_poa(int index, ::MicroWireless::OneM2M::pb::CommonTypes_PointOfAccess value);
-  void add_poa(::MicroWireless::OneM2M::pb::CommonTypes_PointOfAccess value);
-  const ::google::protobuf::RepeatedField<int>& poa() const;
-  ::google::protobuf::RepeatedField<int>* mutable_poa();
+  const ::std::string& poa(int index) const;
+  ::std::string* mutable_poa(int index);
+  void set_poa(int index, const ::std::string& value);
+  void set_poa(int index, const char* value);
+  void set_poa(int index, const char* value, size_t size);
+  ::std::string* add_poa();
+  void add_poa(const ::std::string& value);
+  void add_poa(const char* value);
+  void add_poa(const char* value, size_t size);
+  const ::google::protobuf::RepeatedPtrField< ::std::string>& poa() const;
+  ::google::protobuf::RepeatedPtrField< ::std::string>* mutable_poa();
 
   // optional string or = 104;
   void clear_or_();
@@ -172,8 +177,7 @@ class AE : public ::google::protobuf::Message {
   ::google::protobuf::internal::ArenaStringPtr apn_;
   ::google::protobuf::internal::ArenaStringPtr api_;
   ::google::protobuf::internal::ArenaStringPtr aei_;
-  ::google::protobuf::RepeatedField<int> poa_;
-  mutable int _poa_cached_byte_size_;
+  ::google::protobuf::RepeatedPtrField< ::std::string> poa_;
   ::google::protobuf::internal::ArenaStringPtr or__;
   ::google::protobuf::internal::ArenaStringPtr nl_;
   mutable int _cached_size_;
@@ -321,31 +325,55 @@ inline void AE::set_allocated_aei(::std::string* aei) {
   // @@protoc_insertion_point(field_set_allocated:MicroWireless.OneM2M.pb.AE.aei)
 }
 
-// repeated .MicroWireless.OneM2M.pb.CommonTypes.PointOfAccess poa = 103;
+// repeated string poa = 103;
 inline int AE::poa_size() const {
   return poa_.size();
 }
 inline void AE::clear_poa() {
   poa_.Clear();
 }
-inline ::MicroWireless::OneM2M::pb::CommonTypes_PointOfAccess AE::poa(int index) const {
+inline const ::std::string& AE::poa(int index) const {
   // @@protoc_insertion_point(field_get:MicroWireless.OneM2M.pb.AE.poa)
-  return static_cast< ::MicroWireless::OneM2M::pb::CommonTypes_PointOfAccess >(poa_.Get(index));
+  return poa_.Get(index);
 }
-inline void AE::set_poa(int index, ::MicroWireless::OneM2M::pb::CommonTypes_PointOfAccess value) {
-  poa_.Set(index, value);
+inline ::std::string* AE::mutable_poa(int index) {
+  // @@protoc_insertion_point(field_mutable:MicroWireless.OneM2M.pb.AE.poa)
+  return poa_.Mutable(index);
+}
+inline void AE::set_poa(int index, const ::std::string& value) {
   // @@protoc_insertion_point(field_set:MicroWireless.OneM2M.pb.AE.poa)
+  poa_.Mutable(index)->assign(value);
 }
-inline void AE::add_poa(::MicroWireless::OneM2M::pb::CommonTypes_PointOfAccess value) {
-  poa_.Add(value);
+inline void AE::set_poa(int index, const char* value) {
+  poa_.Mutable(index)->assign(value);
+  // @@protoc_insertion_point(field_set_char:MicroWireless.OneM2M.pb.AE.poa)
+}
+inline void AE::set_poa(int index, const char* value, size_t size) {
+  poa_.Mutable(index)->assign(
+    reinterpret_cast<const char*>(value), size);
+  // @@protoc_insertion_point(field_set_pointer:MicroWireless.OneM2M.pb.AE.poa)
+}
+inline ::std::string* AE::add_poa() {
+  return poa_.Add();
+}
+inline void AE::add_poa(const ::std::string& value) {
+  poa_.Add()->assign(value);
   // @@protoc_insertion_point(field_add:MicroWireless.OneM2M.pb.AE.poa)
 }
-inline const ::google::protobuf::RepeatedField<int>&
+inline void AE::add_poa(const char* value) {
+  poa_.Add()->assign(value);
+  // @@protoc_insertion_point(field_add_char:MicroWireless.OneM2M.pb.AE.poa)
+}
+inline void AE::add_poa(const char* value, size_t size) {
+  poa_.Add()->assign(reinterpret_cast<const char*>(value), size);
+  // @@protoc_insertion_point(field_add_pointer:MicroWireless.OneM2M.pb.AE.poa)
+}
+inline const ::google::protobuf::RepeatedPtrField< ::std::string>&
 AE::poa() const {
   // @@protoc_insertion_point(field_list:MicroWireless.OneM2M.pb.AE.poa)
   return poa_;
 }
-inline ::google::protobuf::RepeatedField<int>*
+inline ::google::protobuf::RepeatedPtrField< ::std::string>*
 AE::mutable_poa() {
   // @@protoc_insertion_point(field_mutable_list:MicroWireless.OneM2M.pb.AE.poa)
   return &poa_;
