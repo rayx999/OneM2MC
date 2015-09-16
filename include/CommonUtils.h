@@ -9,6 +9,7 @@
 #define INCLUDE_COMMONUTILS_H_
 
 #include <iostream>
+#include <string>
 #include <stdlib.h>
 #include "google/protobuf/timestamp.pb.h"
 
@@ -61,6 +62,8 @@ bool isMatching(const std::string& id, const std::string& regex);
 bool parseIds(const std::string& id_str, const std::string& csi_regex,
 		std::string& domain, std::string& csi, std::string& ri);
 
+void getPairs(std::map<std::string, std::string>&,
+		const std::string&, const std::string&, const std::string&);
 
 }	// OneM2M
 }	// MicroWireless

@@ -35,6 +35,7 @@ public:
 private:
 	void addOpt(pb::CoAPBinding&, pb::CoAPTypes_OptionType, const std::string&);
 	bool getOpt(const pb::CoAPBinding&, pb::CoAPTypes_OptionType, const pb::CoAPOption*&);
+	void convertUriQuery(const std::string&, RequestPrim&);
 
 	CoAPInt& coap_int_;
 	static std::map<int, int> rsc2coap_;

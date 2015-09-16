@@ -35,6 +35,7 @@ using ::testing::Invoke;
 using ::testing::Matcher;
 using ::testing::Property;
 using ::testing::Eq;
+using ::testing::IsNull;
 using ::testing::_;
 
 CSEResourceStore * CoAPIntMockTest::rdb_;
@@ -110,7 +111,7 @@ MATCHER_P(OptEq, exp_opt, "") {
 	return true;
 }
 
-ACTION_P3(SendInvoked, p_m, p_cv, p_done) {
+ACTION_P3(sendInvokedNotify, p_m, p_cv, p_done) {
     boost::mutex::scoped_lock lock(*p_m);
     *p_done = true;
     p_cv->notify_one();
@@ -132,6 +133,12 @@ void CoAPIntMockTest::TearDownTestCase()
     delete nse_;
     delete hdl_;
     delete server_;
+}
+
+void CoAPIntMockTest::SetUp() {
+	p_coap_ = NULL;
+	p_reqp_ = NULL;
+	done_ = false;
 }
 
 void CoAPIntMockTest::TearDown() {
@@ -167,13 +174,14 @@ void CoAPIntMockTest::handleRequest() {
 	}
 }
 
+void CoAPIntMockTest::waitForSend() {
+    boost::mutex::scoped_lock lock(mutex_);
+    cond_var_.timed_wait(lock, boost::posix_time::seconds(1));
+}
+
 void CoAPIntMockTest::retrieveTestBody(pb::CoAPTypes_MessageType type, pb::CoAPTypes_ResponseCode code,
 		const map<unsigned int, string>& opt, const pb::ResourceBase& exp)
 {
-	boost::mutex mutex;
-	boost::condition_variable cond_var;
-	bool done(false);
-
 	EXPECT_CALL(*coap_int_, run())
 		.WillOnce(Invoke(this, &CoAPIntMockTest::handleRequest));
 
@@ -183,44 +191,52 @@ void CoAPIntMockTest::retrieveTestBody(pb::CoAPTypes_MessageType type, pb::CoAPT
 				Property(&pb::CoAPBinding::opt_size, Eq((int)opt.size())),
 				Property(&pb::CoAPBinding::opt, OptEq(opt)),
 				Property(&pb::CoAPBinding::payload, PbEq(exp)))))
-        .WillOnce(SendInvoked(&mutex, &cond_var, &done));
+        .WillOnce(sendInvokedNotify(&mutex_, &cond_var_, &done_));
 
 	server_->run();
 
-    {
-      boost::mutex::scoped_lock lock(mutex);
-      EXPECT_TRUE(cond_var.timed_wait(lock, boost::posix_time::seconds(1), [&done] { return done; }));
-    }
-}
-/*
-void CoAPIntMockTest::retrieveTestBody(ResponseStatusCode rsc, const string& rqi,
-		const string& to, const string& fr) {
-	 EXPECT_CALL(*nse_, run())
-		  .WillOnce(Invoke(this, &CoAPIntMockTest::handleRequest));
-
-	 EXPECT_CALL(*nse_, send(AllOf(Property(&pb::CoAPBinding::getResponseStatusCode, Eq(rsc)),
-					Property(&pb::CoAPBinding::getTo, StrEq(to)),
-					Property(&pb::CoAPBinding::getFrom, StrEq(fr)),
-					Property(&pb::CoAPBinding::getRequestId, StrEq(rqi))), _, _))
-		  .Times(1);
-
-	 server_->run();
+	waitForSend();
+    EXPECT_TRUE(done_);
 }
 
-void CoAPIntMockTest::retrieveTestBody(ResponseStatusCode rsc, const string& rqi,
-		const string& to, const string& fr, string& pc) {
-	 EXPECT_CALL(*nse_, run())
-		  .WillOnce(Invoke(this, &CoAPIntMockTest::handleRequest));
+void CoAPIntMockTest::retrieveTestBody(pb::CoAPTypes_MessageType type, pb::CoAPTypes_ResponseCode code,
+		const map<unsigned int, string>& opt) {
 
-	 EXPECT_CALL(*nse_, send(AllOf(Property(&pb::CoAPBinding::getResponseStatusCode, Eq(rsc)),
-					Property(&pb::CoAPBinding::getTo, StrEq(to)),
-					Property(&pb::CoAPBinding::getFrom, StrEq(fr)),
-					Property(&pb::CoAPBinding::getRequestId, StrEq(rqi)),
-					Property(&pb::CoAPBinding::getContent, StrGood(&pc))), _, _))
-		  .Times(1);
+	EXPECT_CALL(*coap_int_, run())
+		.WillOnce(Invoke(this, &CoAPIntMockTest::handleRequest));
 
-	 server_->run();
+	EXPECT_CALL(*coap_int_, send(AllOf(Property(&pb::CoAPBinding::ver, Eq((unsigned int)1)),
+				Property(&pb::CoAPBinding::type, Eq(type)),
+				Property(&pb::CoAPBinding::code, Eq(code)),
+				Property(&pb::CoAPBinding::opt_size, Eq((int)opt.size())),
+				Property(&pb::CoAPBinding::opt, OptEq(opt)))))
+        .WillOnce(sendInvokedNotify(&mutex_, &cond_var_, &done_));
+
+	server_->run();
+
+	waitForSend();
+    EXPECT_TRUE(done_);
 }
-*/
+
+void CoAPIntMockTest::retrieveTestBody(pb::CoAPTypes_MessageType type, pb::CoAPTypes_ResponseCode code,
+		const map<unsigned int, string>& opt, string& pc) {
+
+	EXPECT_CALL(*coap_int_, run())
+		 .WillOnce(Invoke(this, &CoAPIntMockTest::handleRequest));
+
+	EXPECT_CALL(*coap_int_, send(AllOf(Property(&pb::CoAPBinding::ver, Eq((unsigned int)1)),
+				Property(&pb::CoAPBinding::type, Eq(type)),
+				Property(&pb::CoAPBinding::code, Eq(code)),
+				Property(&pb::CoAPBinding::opt_size, Eq((int)opt.size())),
+				Property(&pb::CoAPBinding::opt, OptEq(opt)),
+				Property(&pb::CoAPBinding::payload, StrGood(&pc)))))
+	    .WillOnce(sendInvokedNotify(&mutex_, &cond_var_, &done_));
+
+	server_->run();
+
+	waitForSend();
+	EXPECT_TRUE(done_);
+}
+
 
 

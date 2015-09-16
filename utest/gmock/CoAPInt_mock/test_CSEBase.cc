@@ -79,66 +79,96 @@ TEST_F(CSEBaseTest, RetrieveCSE) {
 		  pb::CoAPTypes_ResponseCode_CoAP_Content,
 		  exp_opt_, exp_pc_);
 }
-/*
+
 TEST_F(CSEBaseTest, RetrieveCSE2) {
   static const string json("{"
-			"\"op\": 2,"
-			"\"to\": \"//microwireless.com/IN-CSE-01/IN-CSE-01\","
-			"\"rqi\": \"ab3f124a\","
-			"\"fr\": \"//microwireless.com/AE-01\""
+			"\"ver\": 1,"
+			"\"type\": 0,"			// Confirmable
+			"\"method\": 1,"		// Get
+			"\"opt\": [ "
+				"{ \"num\":  11, \"value\": \"//microwireless.com/IN-CSE-01/IN-CSE-01\" },"	// Uri_Path
+				"{ \"num\": 256, \"value\": \"//microwireless.com/AE-01\" },"			// FR
+				"{ \"num\": 257, \"value\": \"ab3f124a\" } "							// RQI
+			"]"
 		"}");
-  setupRequestPrim(json);
-  retrieveTestBody(ResponseStatusCode::OK, "ab3f124a", exp_to_, exp_fr_, exp_pc_);
+  setupCoAPBinding(json);
+  retrieveTestBody(pb::CoAPTypes_MessageType_CoAP_ACK,
+		  pb::CoAPTypes_ResponseCode_CoAP_Content,
+		  exp_opt_, exp_pc_);
 }
 
 TEST_F(CSEBaseTest, RetrieveCSE3) {
   static const string json("{"
-			"\"op\": 2,"
-			"\"to\": \"/IN-CSE-01/Z0005\","
-			"\"rqi\": \"ab3f124a\","
-			"\"fr\": \"//microwireless.com/AE-01\""
+			"\"ver\": 1,"
+			"\"type\": 0,"			// Confirmable
+			"\"method\": 1,"		// Get
+			"\"opt\": [ "
+				"{ \"num\":  11, \"value\": \"/IN-CSE-01/Z0005\" },"					// Uri_Path
+				"{ \"num\": 256, \"value\": \"//microwireless.com/AE-01\" },"			// FR
+				"{ \"num\": 257, \"value\": \"ab3f124a\" } "							// RQI
+			"]"
 		"}");
-  setupRequestPrim(json);
-  retrieveTestBody(ResponseStatusCode::OK, "ab3f124a", exp_to_, exp_fr_, exp_pc_);
+  setupCoAPBinding(json);
+  retrieveTestBody(pb::CoAPTypes_MessageType_CoAP_ACK,
+		  pb::CoAPTypes_ResponseCode_CoAP_Content,
+		  exp_opt_, exp_pc_);
 }
 
 TEST_F(CSEBaseTest, RetrieveCSE4) {
   static const string json("{"
-			"\"op\": 2,"
-			"\"to\": \"//microwireless.com/IN-CSE-01/Z0005\","
-			"\"rqi\": \"ab3f124a\","
-			"\"fr\": \"//microwireless.com/AE-01\", "
-		    "\"rt\": 3"
-		  "}");
-  setupRequestPrim(json);
-  retrieveTestBody(ResponseStatusCode::OK, "ab3f124a", exp_to_, exp_fr_, exp_pc_);
+			"\"ver\": 1,"
+			"\"type\": 0,"			// Confirmable
+			"\"method\": 1,"		// Get
+			"\"opt\": [ "
+		  	  	"{ \"num\":  11, \"value\": \"/IN-CSE-01/Z0005\" },"					// Uri_Path
+				"{ \"num\":  15, \"value\": \"rt=3\" },"								// Uri_Query
+				"{ \"num\": 256, \"value\": \"//microwireless.com/AE-01\" },"			// FR
+				"{ \"num\": 257, \"value\": \"ab3f124a\" } "							// RQI
+			"]"
+		"}");
+  setupCoAPBinding(json);
+  retrieveTestBody(pb::CoAPTypes_MessageType_CoAP_ACK,
+		  pb::CoAPTypes_ResponseCode_CoAP_Content,
+		  exp_opt_, exp_pc_);
 }
 
 TEST_F(CSEBaseTest, NotExistResource) {
     static const string not_exist_json("{"
-			"\"op\": 2,"
-			"\"to\": \"//microwireless.com/IN-CSE-01/blah\","
-			"\"rqi\": \"ab3f124a\","
-			"\"fr\": \"//microwireless.com/AE-01\""
-		"}");
+			"\"ver\": 1,"
+			"\"type\": 0,"			// Confirmable
+			"\"method\": 1,"		// Get
+			"\"opt\": [ "
+				"{ \"num\":  11, \"value\": \"/IN-CSE-01/blah\" },"					// Uri_Path
+				"{ \"num\": 256, \"value\": \"//microwireless.com/AE-01\" },"			// FR
+				"{ \"num\": 257, \"value\": \"ab3f124a\" } "							// RQI
+			"]"
+ 		"}");
 
-  setupRequestPrim(not_exist_json);
-  retrieveTestBody(ResponseStatusCode::NOT_FOUND, "ab3f124a", exp_to_, exp_fr_);
+  setupCoAPBinding(not_exist_json);
+  retrieveTestBody(pb::CoAPTypes_MessageType_CoAP_ACK,
+		  pb::CoAPTypes_ResponseCode_CoAP_Not_Found,
+		  exp_opt_);
 }
 
 TEST_F(CSEBaseTest, RetrieveCSENonBlockSync) {
   static const string json("{"
-			"\"op\": 2,"
-			"\"to\": \"/IN-CSE-01/Z0005\","
-			"\"rqi\": \"ab3f124a\","
-			"\"fr\": \"//microwireless.com/AE-01\", "
-		    "\"rt\": 1"
+			"\"ver\": 1,"
+			"\"type\": 0,"			// Confirmable
+			"\"method\": 1,"		// Get
+			"\"opt\": [ "
+		  	  	"{ \"num\":  11, \"value\": \"/IN-CSE-01/Z0005\" },"					// Uri_Path
+				"{ \"num\":  15, \"value\": \"rt=1\" },"								// Uri_Query NonBlockingSync
+				"{ \"num\": 256, \"value\": \"//microwireless.com/AE-01\" },"			// FR
+				"{ \"num\": 257, \"value\": \"ab3f124a\" } "							// RQI
+			"]"
 		"}");
   string pc_str_;
   pb::ResourceBase pc_;
 
-  setupRequestPrim(json);
-  retrieveTestBody(ResponseStatusCode::ACCEPTED, "ab3f124a", exp_to_, exp_fr_, pc_str_);
+  setupCoAPBinding(json);
+  retrieveTestBody(pb::CoAPTypes_MessageType_CoAP_ACK,
+		  pb::CoAPTypes_ResponseCode_CoAP_Code_None,
+		  exp_opt_, pc_str_);
   ASSERT_TRUE(pc_.ParseFromString(pc_str_));
   req_ri_ = pc_.ri();
   cout << "Accepted Request RI = " << req_ri_ << endl;
@@ -150,11 +180,14 @@ TEST_F(CSEBaseTest, RetrieveNonBlockRequest) {
   ASSERT_FALSE(last_test_bad_);
 
   static const string json = string("{"
-			"\"op\": 2,"
-			"\"to\": \"/IN-CSE-01/") + req_ri_ +
-   string("\","
-			"\"rqi\": \"ab3f124a\","
-			"\"fr\": \"//microwireless.com/AE-01\" "
+			"\"ver\": 1,"
+			"\"type\": 0,"			// Confirmable
+			"\"method\": 1,"		// Get
+			"\"opt\": [ "
+		  	  	"{ \"num\":  11, \"value\": \"/IN-CSE-01/" + req_ri_ + "\" },"			// Uri_Path
+				"{ \"num\": 256, \"value\": \"//microwireless.com/AE-01\" },"			// FR
+				"{ \"num\": 257, \"value\": \"ab3f124a\" } "							// RQI
+			"]"
 		"}");
 
   static const string exp_json("{"
@@ -174,10 +207,9 @@ TEST_F(CSEBaseTest, RetrieveNonBlockRequest) {
   pb::ResourceBase exp_req_;
   json2pb(exp_req_, exp_json.c_str(), exp_json.length());
 
-  setupRequestPrim(json);
-  retrieveTestBody(ResponseStatusCode::OK, "ab3f124a", exp_to_, exp_fr_, exp_req_);
-//  pb::ResourceBase res_;
-//  ASSERT_TRUE(res_.ParseFromString(str_));
-//  cout << pb2json(res_) << endl;
+  setupCoAPBinding(json);
+  retrieveTestBody(pb::CoAPTypes_MessageType_CoAP_ACK,
+		  pb::CoAPTypes_ResponseCode_CoAP_Content,
+		  exp_opt_, exp_req_);
 }
-*/
+

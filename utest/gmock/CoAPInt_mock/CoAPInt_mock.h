@@ -44,13 +44,19 @@ protected:
 	pb::CoAPBinding* p_coap_;
 	RequestPrim* p_reqp_;
 
+	boost::mutex mutex_;
+	boost::condition_variable cond_var_;
+	bool done_;
+
+	void waitForSend();
+
 public:
 	CoAPIntMockTest() : p_coap_(), p_reqp_() {}
 
     static void SetUpTestCase();
     static void TearDownTestCase();
 
-    virtual void SetUp() {}
+    virtual void SetUp();
     virtual void TearDown();
 
     void setupCoAPBinding(const string& json);
@@ -59,11 +65,10 @@ public:
 
     void retrieveTestBody(pb::CoAPTypes_MessageType type, pb::CoAPTypes_ResponseCode code,
     		const map<unsigned int, string>& opt, const pb::ResourceBase& exp);
-/*    void retrieveTestBody(ResponseStatusCode rsc, const string& rqi,
-    		const string& to, const string& fr);
-    void retrieveTestBody(ResponseStatusCode rsc, const string& rqi,
-    		const string& to, const string& fr, string& pc);
-*/
+    void retrieveTestBody(pb::CoAPTypes_MessageType type, pb::CoAPTypes_ResponseCode code,
+    		const map<unsigned int, string>& opt);
+    void retrieveTestBody(pb::CoAPTypes_MessageType type, pb::CoAPTypes_ResponseCode code,
+    		const map<unsigned int, string>& opt, string& pc);
 };
 
 #endif /* UTEST_GMOCK_COAPINT_MOCK_H_ */

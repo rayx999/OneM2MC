@@ -11,6 +11,7 @@
 
 #include "CoAPBinding.pb.h"
 #include "NSECoAPBinding.h"
+#include "CommonUtils.h"
 #include "RequestPrim.h"
 #include "ResponsePrim.h"
 #include "CoAPInt.h"
@@ -83,6 +84,21 @@ bool NSE_CoAP::getOpt(const pb::CoAPBinding& coap, pb::CoAPTypes_OptionType type
 	return false;
 }
 
+void NSE_CoAP::convertUriQuery(const string& query, RequestPrim& reqp) {
+	map<string, string> queries_;
+	getPairs(queries_, query, "&", "=");
+
+	for (auto q : queries_) {
+		if (q.first == "rt") {
+			unsigned int rt_ = boost::lexical_cast<unsigned int>(q.second);
+			reqp.setResponseType(static_cast<ResponseType>(rt_));
+		} else {
+			cerr << "NSE_CoAP::convertUriQuery: unknown query "
+					<< q.first << "=" << q.second << endl;
+		}
+	}
+}
+
 bool NSE_CoAP::convertCoAPRequest(const pb::CoAPBinding& coap, RequestPrim*& p_reqp) {
 
 	switch (coap.type()) {
@@ -95,8 +111,6 @@ bool NSE_CoAP::convertCoAPRequest(const pb::CoAPBinding& coap, RequestPrim*& p_r
 	}
 
 	Operation op_;
-	string to_, fr_, rqi_;
-
 	switch (coap.method()) {
 	case pb::CoAPTypes_MethodType_CoAP_POST:
 		op_ = Operation::CREATE;  // Operation::NOTIFY ??
@@ -117,6 +131,7 @@ bool NSE_CoAP::convertCoAPRequest(const pb::CoAPBinding& coap, RequestPrim*& p_r
 
 	// parse all options
 	const RepeatedPtrField<pb::CoAPOption>& opts_ = coap.opt();
+	string to_, fr_, rqi_, uri_query_;
 	for (auto i = opts_.begin(); i != opts_.end(); i++) {
 		switch (i->num()) {
 		case pb::CoAPTypes_OptionType_CoAP_If_Match:
@@ -132,6 +147,8 @@ bool NSE_CoAP::convertCoAPRequest(const pb::CoAPBinding& coap, RequestPrim*& p_r
 		case pb::CoAPTypes_OptionType_CoAP_Content_Format:
 		case pb::CoAPTypes_OptionType_CoAP_Max_Age:
 		case pb::CoAPTypes_OptionType_CoAP_Uri_Query:
+			uri_query_ = i->value();
+			break;
 		case pb::CoAPTypes_OptionType_CoAP_Accept:
 		case pb::CoAPTypes_OptionType_CoAP_Location_Query:
 		case pb::CoAPTypes_OptionType_CoAP_Proxy_Uri:
@@ -175,6 +192,9 @@ bool NSE_CoAP::convertCoAPRequest(const pb::CoAPBinding& coap, RequestPrim*& p_r
 		return false;
 	}
 
+	if (!uri_query_.empty()) {
+		convertUriQuery(uri_query_, *p_reqp);
+	}
 	if (!coap.payload().empty()) {
 		p_reqp->setContent(coap.payload());
 	}
@@ -194,8 +214,10 @@ void NSE_CoAP::send(ResponsePrim& rsp, const string& addr, uint port) {
 		cerr << "Send: RSC:" << rsc_ << " Not found.\n";
 		return;
 	}
-	coap_.set_code(static_cast<pb::CoAPTypes_ResponseCode>(rsc2coap_[rsc_]));
-
+	// ACCEPTED match an empty ACK COAP response
+	if (rsc_ != (int)ResponseStatusCode::ACCEPTED) {
+		coap_.set_code(static_cast<pb::CoAPTypes_ResponseCode>(rsc2coap_[rsc_]));
+	}
 	// Add CoAP Option CoAP_Uri_Host
 	addOpt(coap_, pb::CoAPTypes_OptionType_CoAP_Uri_Host, addr);
 	// Add CoAP Option CoAP_Uri_Port 16 bit

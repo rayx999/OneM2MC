@@ -8,6 +8,7 @@
 #include <iostream>
 #include <string>
 #include <boost/regex.hpp>
+#include <boost/algorithm/string.hpp>
 #include "CommonUtils.h"
 
 namespace MicroWireless {
@@ -163,7 +164,19 @@ bool parseIds(const string& id_str, const string& csi_regex,
 	}
 }
 
+void getPairs(map<string, string>& pairs, const string& str, const string& sep1, const string& sep2) {
+	vector<string> strs;
+	boost::split(strs, str, boost::is_any_of(sep1));
+
+	for (auto s : strs) {
+	  vector<string> kv;
+	  boost::split(kv, s, boost::is_any_of(sep2));
+	  pairs[kv[0]] = kv[1];
+	}
+}
+
 } 	// OneM2M
+
 }	// MicroWireless
 
 // Protobuf 3 Timestamp operator overloading
