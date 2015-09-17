@@ -153,7 +153,7 @@ TEST_F(AETest, CreateAEConflict1) {
 
 TEST_F(AETest, CreateAEConflict2) {
   setupRequestPrim(create_request, ae_content);
-  p_reqp_->setTo("//microwireless.com/in-cse-01/AE-01");
+  p_reqp_->setTo("//in-cse-01.microwireless.com/AE-01");
 
   retrieveTestBody(ResponseStatusCode::CONFLICT, "ab3f124a", exp_to_, exp_fr_);
 }

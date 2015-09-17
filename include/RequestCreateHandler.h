@@ -134,16 +134,18 @@ private:
 	ResponseStatusCode getFullPathToBeCreated(string& full_path) {
 		full_path = sp_id_;
 		if (!reqp_.getIntRn().empty()) {
-			if (rdb_.isResourceValid(reqp_.getTo())) {
+			full_path += "/" + reqp_.getIntRn();
+			if (rdb_.isResourceValid(full_path)) {
+				cerr << "getFullPathToBeCreated: conflict: getIntRn = " <<
+						full_path << endl;
 				return ResponseStatusCode::CONFLICT;
-			} else {
-				full_path += "/" + reqp_.getIntRn();
 			}
 		} else if (!reqp_.getName().empty()) {
+			full_path += "/" + reqp_.getName();
 			if (rdb_.isResourceValid(sp_id_ + "/" + reqp_.getName())) {
+				cerr << "getFullPathToBeCreated: conflict: getName = " <<
+						full_path << endl;
 				return ResponseStatusCode::CONFLICT;
-			} else {
-				full_path += "/" + reqp_.getName();
 			}
 		}
 		return ResponseStatusCode::OK;

@@ -26,43 +26,44 @@ using google::protobuf::Reflection;
 using google::protobuf::FieldDescriptor;
 using google::protobuf::RepeatedPtrField;
 
+// CoAP response code > 1000, need to add ONEM2M_RSC option
 map<int, int> NSE_CoAP::rsc2coap_ = {
-		{ 1000,   0 },    // ACCEPTED
-		{ 2000, 205 },    // OK
-		{ 2001, 201 },    // CREATED                                      Created
-		{ 2002, 202 },    // DELETED                                      Deleted
-		{ 2004, 204 },    // CHANGED                                      Changed
-		{ 4000, 400 },    // BAD_REQUEST                                  Bad Request
-		{ 4004, 404 },    // NOT_FOUND                                    Not Found
-		{ 4005, 405 },    // Operation::NOT_ALLOWED                        Method Not Allowed
-		{ 4008, 404 },    // REQUEST_TIMEOUT                              Not Found
-		{ 4101, 403 },    // SUBSCRIPTION_CREATOR_HAS_NO_PRIVILEGE–       Forbidden
-		{ 4102, 400 },    // CONTENTS_UNACCEPTABLE                        Bad Request
-		{ 4103, 403 },    // ACCESS_DENIED                                Forbidden
-		{ 4104, 400 },    // GROUP_REQUEST_IDENTIFIER_EXISTS              Bad Request
-		{ 4105, 403 },    // CONFLICT                                     Forbidden
-		{ 5000, 500 },    // INTERNAL_SERVER_ERROR                        Internal Server Error
-		{ 5001, 501 },    // NOT_IMPLEMENTED                              Not Implemented
-		{ 5103, 404 },    // TARGET_NOT_REACHABLE                         Not Found
-		{ 5105, 403 },    // NO_PRIVILEGE                                 Forbidden
-		{ 5106, 400 },    // ALREADY_EXISTS                               Bad Request
-		{ 5203, 403 },    // TARGET_NOT_SUBSCRIBABLE                      Forbidden
-		{ 5204, 500 },    // SUBSCRIPTION_VERIFICATION_INITIATION_FAILED  Internal Server Error
-		{ 5205, 403 },    // SUBSCRIPTION_HOST_HAS_NO_PRIVILEGE           Forbidden
-		{ 5206, 500 },    // NON_BLOCKING_REQUEST_NOT_SUPPORTED           Internal Server Error
-		{ 6003, 404 },    // EXTENAL_OBJECT_NOT_REACHABLE                 Not Found
-		{ 6005, 404 },    // EXTENAL_OBJECT_NOT_FOUND                     Not Found
-		{ 6010, 400 },    // MAX_NUMBERF_OF_MEMBER_EXCEEDED               Bad Request
-		{ 6011, 400 },    // MEMBER_TYPE_INCONSISTENT                     Bad Request
-		{ 6020, 500 },    // MGMT_SESSION_CANNOT_BE_ESTABLISHED           Internal Server Error
-		{ 6021, 500 },    // MGMT_SESSION_ESTABLISHMENT _TIMEOUT          Internal Server Error
-		{ 6022, 400 },    // INVALID _CMDTYPE                             Bad Request
-		{ 6023, 400 },    // INVALID_ARGUMENTS                            Bad Request
-		{ 6024, 400 },    // INSUFFICIENT_ARGUMENTS                       Bad Request
-		{ 6025, 500 },    // MGMT_CONVERSION_ERROR                        Internal Server Error
-		{ 6026, 500 },    // MGMT_CANCELATION_FAILURE                     Internal Server Error
-		{ 6028, 400 },    // ALREADY_COMPLETE                             Bad Request
-		{ 6029, 400 }     // COMMAND_NOT_CANCELLABLE                      Bad Request
+		{ 1000,    0 },    // ACCEPTED
+		{ 2000,  205 },    // OK
+		{ 2001,  201 },    // CREATED                                      Created
+		{ 2002,  202 },    // DELETED                                      Deleted
+		{ 2004,  204 },    // CHANGED                                      Changed
+		{ 4000, 1400 },    // BAD_REQUEST                                  Bad Request
+		{ 4004, 1404 },    // NOT_FOUND                                    Not Found
+		{ 4005,  405 },    // Operation::NOT_ALLOWED                        Method Not Allowed
+		{ 4008, 1404 },    // REQUEST_TIMEOUT                              Not Found
+		{ 4101, 1403 },    // SUBSCRIPTION_CREATOR_HAS_NO_PRIVILEGE–       Forbidden
+		{ 4102, 1400 },    // CONTENTS_UNACCEPTABLE                        Bad Request
+		{ 4103, 1403 },    // ACCESS_DENIED                                Forbidden
+		{ 4104, 1400 },    // GROUP_REQUEST_IDENTIFIER_EXISTS              Bad Request
+		{ 4105, 1403 },    // CONFLICT                                     Forbidden
+		{ 5000, 1500 },    // INTERNAL_SERVER_ERROR                        Internal Server Error
+		{ 5001,  501 },    // NOT_IMPLEMENTED                              Not Implemented
+		{ 5103, 1404 },    // TARGET_NOT_REACHABLE                         Not Found
+		{ 5105, 1403 },    // NO_PRIVILEGE                                 Forbidden
+		{ 5106, 1400 },    // ALREADY_EXISTS                               Bad Request
+		{ 5203, 1403 },    // TARGET_NOT_SUBSCRIBABLE                      Forbidden
+		{ 5204, 1500 },    // SUBSCRIPTION_VERIFICATION_INITIATION_FAILED  Internal Server Error
+		{ 5205, 1403 },    // SUBSCRIPTION_HOST_HAS_NO_PRIVILEGE           Forbidden
+		{ 5206, 1500 },    // NON_BLOCKING_REQUEST_NOT_SUPPORTED           Internal Server Error
+		{ 6003, 1404 },    // EXTENAL_OBJECT_NOT_REACHABLE                 Not Found
+		{ 6005, 1404 },    // EXTENAL_OBJECT_NOT_FOUND                     Not Found
+		{ 6010, 1400 },    // MAX_NUMBERF_OF_MEMBER_EXCEEDED               Bad Request
+		{ 6011, 1400 },    // MEMBER_TYPE_INCONSISTENT                     Bad Request
+		{ 6020, 1500 },    // MGMT_SESSION_CANNOT_BE_ESTABLISHED           Internal Server Error
+		{ 6021, 1500 },    // MGMT_SESSION_ESTABLISHMENT _TIMEOUT          Internal Server Error
+		{ 6022, 1400 },    // INVALID _CMDTYPE                             Bad Request
+		{ 6023, 1400 },    // INVALID_ARGUMENTS                            Bad Request
+		{ 6024, 1400 },    // INSUFFICIENT_ARGUMENTS                       Bad Request
+		{ 6025, 1500 },    // MGMT_CONVERSION_ERROR                        Internal Server Error
+		{ 6026, 1500 },    // MGMT_CANCELATION_FAILURE                     Internal Server Error
+		{ 6028, 1400 },    // ALREADY_COMPLETE                             Bad Request
+		{ 6029, 1400 }     // COMMAND_NOT_CANCELLABLE                      Bad Request
 };
 
 void NSE_CoAP::addOpt(pb::CoAPBinding& coap, pb::CoAPTypes_OptionType type, const string& value) {
@@ -131,7 +132,7 @@ bool NSE_CoAP::convertCoAPRequest(const pb::CoAPBinding& coap, RequestPrim*& p_r
 
 	// parse all options
 	const RepeatedPtrField<pb::CoAPOption>& opts_ = coap.opt();
-	string to_, fr_, rqi_, uri_query_;
+	string to_, fr_, rqi_, nm_, uri_query_;
 	for (auto i = opts_.begin(); i != opts_.end(); i++) {
 		switch (i->num()) {
 		case pb::CoAPTypes_OptionType_CoAP_If_Match:
@@ -162,6 +163,8 @@ bool NSE_CoAP::convertCoAPRequest(const pb::CoAPBinding& coap, RequestPrim*& p_r
 			rqi_ = i->value();
 			break;
 		case pb::CoAPTypes_OptionType_ONEM2M_NM:
+			nm_ = i->value();
+			break;
 		case pb::CoAPTypes_OptionType_ONEM2M_OT:
 		case pb::CoAPTypes_OptionType_ONEM2M_RQET:
 		case pb::CoAPTypes_OptionType_ONEM2M_RSET:
@@ -195,6 +198,9 @@ bool NSE_CoAP::convertCoAPRequest(const pb::CoAPBinding& coap, RequestPrim*& p_r
 	if (!uri_query_.empty()) {
 		convertUriQuery(uri_query_, *p_reqp);
 	}
+	if (!nm_.empty()) {
+		p_reqp->setName(nm_);
+	}
 	if (!coap.payload().empty()) {
 		p_reqp->setContent(coap.payload());
 	}
@@ -216,7 +222,14 @@ void NSE_CoAP::send(ResponsePrim& rsp, const string& addr, uint port) {
 	}
 	// ACCEPTED match an empty ACK COAP response
 	if (rsc_ != (int)ResponseStatusCode::ACCEPTED) {
-		coap_.set_code(static_cast<pb::CoAPTypes_ResponseCode>(rsc2coap_[rsc_]));
+		int code_ = rsc2coap_[rsc_];
+		if (code_ > 1000) {
+			code_ -= 1000;
+			// add ONEM2M_RSC option
+			addOpt(coap_, pb::CoAPTypes_OptionType_ONEM2M_RSC,
+					boost::lexical_cast<string>(rsc_));
+		}
+		coap_.set_code(static_cast<pb::CoAPTypes_ResponseCode>(code_));
 	}
 	// Add CoAP Option CoAP_Uri_Host
 	addOpt(coap_, pb::CoAPTypes_OptionType_CoAP_Uri_Host, addr);

@@ -180,7 +180,7 @@ void CoAPIntMockTest::waitForSend() {
 }
 
 void CoAPIntMockTest::retrieveTestBody(pb::CoAPTypes_MessageType type, pb::CoAPTypes_ResponseCode code,
-		const map<unsigned int, string>& opt, const pb::ResourceBase& exp)
+		const ExpOption& opt, const pb::ResourceBase& exp)
 {
 	EXPECT_CALL(*coap_int_, run())
 		.WillOnce(Invoke(this, &CoAPIntMockTest::handleRequest));
@@ -200,7 +200,7 @@ void CoAPIntMockTest::retrieveTestBody(pb::CoAPTypes_MessageType type, pb::CoAPT
 }
 
 void CoAPIntMockTest::retrieveTestBody(pb::CoAPTypes_MessageType type, pb::CoAPTypes_ResponseCode code,
-		const map<unsigned int, string>& opt) {
+		const ExpOption& opt) {
 
 	EXPECT_CALL(*coap_int_, run())
 		.WillOnce(Invoke(this, &CoAPIntMockTest::handleRequest));
@@ -219,7 +219,7 @@ void CoAPIntMockTest::retrieveTestBody(pb::CoAPTypes_MessageType type, pb::CoAPT
 }
 
 void CoAPIntMockTest::retrieveTestBody(pb::CoAPTypes_MessageType type, pb::CoAPTypes_ResponseCode code,
-		const map<unsigned int, string>& opt, string& pc) {
+		const ExpOption& opt, string& pc) {
 
 	EXPECT_CALL(*coap_int_, run())
 		 .WillOnce(Invoke(this, &CoAPIntMockTest::handleRequest));

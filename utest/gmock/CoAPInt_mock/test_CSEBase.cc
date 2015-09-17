@@ -25,8 +25,8 @@ class CSEBaseTest : public CoAPIntMockTest {
 protected:
 	static const std::string retrieve_json;
 	static const std::string cse_content;
-	static const std::map<unsigned int, std::string> exp_opt_;
 
+	static ExpOption exp_opt_;
 	static pb::ResourceBase exp_pc_;
 	static string req_ri_;
 
@@ -36,9 +36,18 @@ public:
     virtual void SetUp()
     {
          json2pb(exp_pc_, cse_content.c_str(), cse_content.length());
+
+         exp_opt_ = {
+          	{ pb::CoAPTypes_OptionType_CoAP_Uri_Host, "localhost" },
+          	{ pb::CoAPTypes_OptionType_CoAP_Uri_Port, "5555" },
+          	{ pb::CoAPTypes_OptionType_CoAP_Uri_Path, "//microwireless.com/AE-01" },
+          	{ pb::CoAPTypes_OptionType_ONEM2M_FR,     "//microwireless.com/IN-CSE-01" },
+          	{ pb::CoAPTypes_OptionType_ONEM2M_RQI,    "ab3f124a" }
+         };
     }
 };
 
+ExpOption CSEBaseTest::exp_opt_;
 pb::ResourceBase CSEBaseTest::exp_pc_;
 string CSEBaseTest::req_ri_;
 
@@ -52,14 +61,6 @@ const string CSEBaseTest::retrieve_json("{"
 			"{ \"num\": 257, \"value\": \"ab3f124a\" } "							// RQI
 		"]"
 	"}");
-
-const map<unsigned int, string> CSEBaseTest::exp_opt_ = {
-		{   3, "localhost" },						// Uri_Host
-		{   7, "5555" },                            // Uri_Port
-		{  11, "//microwireless.com/AE-01" },		// Uri_path
-		{ 256, "//microwireless.com/IN-CSE-01" },	// FR
-		{ 257, "ab3f124a" }							// RQI
-};
 
 const string CSEBaseTest::cse_content("{"
 			"\"ty\" 	: 5,"
@@ -145,6 +146,8 @@ TEST_F(CSEBaseTest, NotExistResource) {
  		"}");
 
   setupCoAPBinding(not_exist_json);
+  // add expected option ONEM2M_RSC NOT_FOUND
+  exp_opt_[pb::CoAPTypes_OptionType_ONEM2M_RSC] = "4004";
   retrieveTestBody(pb::CoAPTypes_MessageType_CoAP_ACK,
 		  pb::CoAPTypes_ResponseCode_CoAP_Not_Found,
 		  exp_opt_);

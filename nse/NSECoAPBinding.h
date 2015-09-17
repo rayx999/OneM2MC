@@ -32,9 +32,10 @@ public:
 
 	bool convertCoAPRequest(const pb::CoAPBinding&, RequestPrim*& p_reqp);
 
-private:
 	void addOpt(pb::CoAPBinding&, pb::CoAPTypes_OptionType, const std::string&);
 	bool getOpt(const pb::CoAPBinding&, pb::CoAPTypes_OptionType, const pb::CoAPOption*&);
+
+private:
 	void convertUriQuery(const std::string&, RequestPrim&);
 
 	CoAPInt& coap_int_;

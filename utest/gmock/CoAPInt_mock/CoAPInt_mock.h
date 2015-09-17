@@ -25,6 +25,8 @@
 using namespace std;
 using namespace MicroWireless::OneM2M;
 
+typedef map<pb::CoAPTypes_OptionType, string> ExpOption;
+
 class CoAPIntMock : public CoAPInt {
 public:
   CoAPIntMock(const char* ip, const char* port) : CoAPInt(ip, port) {};
@@ -51,7 +53,7 @@ protected:
 	void waitForSend();
 
 public:
-	CoAPIntMockTest() : p_coap_(), p_reqp_() {}
+	CoAPIntMockTest() : p_coap_(), p_reqp_(), done_(false) {}
 
     static void SetUpTestCase();
     static void TearDownTestCase();
@@ -64,11 +66,11 @@ public:
     void handleRequest();
 
     void retrieveTestBody(pb::CoAPTypes_MessageType type, pb::CoAPTypes_ResponseCode code,
-    		const map<unsigned int, string>& opt, const pb::ResourceBase& exp);
+    		const ExpOption& opt, const pb::ResourceBase& exp);
     void retrieveTestBody(pb::CoAPTypes_MessageType type, pb::CoAPTypes_ResponseCode code,
-    		const map<unsigned int, string>& opt);
+    		const ExpOption& opt);
     void retrieveTestBody(pb::CoAPTypes_MessageType type, pb::CoAPTypes_ResponseCode code,
-    		const map<unsigned int, string>& opt, string& pc);
+    		const ExpOption& opt, string& pc);
 };
 
 #endif /* UTEST_GMOCK_COAPINT_MOCK_H_ */
