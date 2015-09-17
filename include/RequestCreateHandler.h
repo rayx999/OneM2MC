@@ -15,7 +15,6 @@
 #include "RequestPrim.h"
 #include "ResourceStore.h"
 #include "ResourceBase.h"
-//#include "ResourcePtr.h"
 
 namespace MicroWireless {
 namespace OneM2M {

@@ -492,7 +492,7 @@ enum CommonTypes_ResponseStatusCode {
   CommonTypes_ResponseStatusCode_RSC_OPERATION_NOT_ALLOWED = 4005,
   CommonTypes_ResponseStatusCode_RSC_REQUEST_TIMEOUT = 4008,
   CommonTypes_ResponseStatusCode_RSC_SUB_CREATOR_HAS_NO_PRIVILEGE = 4101,
-  CommonTypes_ResponseStatusCode_RSC_CONTENTS_UNACCEPTED = 4102,
+  CommonTypes_ResponseStatusCode_RSC_CONTENTS_UNACCEPTABLE = 4102,
   CommonTypes_ResponseStatusCode_RSC_ACCESS_DENIED = 4103,
   CommonTypes_ResponseStatusCode_RSC_GROUP_REQUEST_ID_EXISTS = 4104,
   CommonTypes_ResponseStatusCode_RSC_CONFLICT = 4105,
@@ -1092,7 +1092,7 @@ class CommonTypes : public ::google::protobuf::Message {
   static const ResponseStatusCode RSC_OPERATION_NOT_ALLOWED = CommonTypes_ResponseStatusCode_RSC_OPERATION_NOT_ALLOWED;
   static const ResponseStatusCode RSC_REQUEST_TIMEOUT = CommonTypes_ResponseStatusCode_RSC_REQUEST_TIMEOUT;
   static const ResponseStatusCode RSC_SUB_CREATOR_HAS_NO_PRIVILEGE = CommonTypes_ResponseStatusCode_RSC_SUB_CREATOR_HAS_NO_PRIVILEGE;
-  static const ResponseStatusCode RSC_CONTENTS_UNACCEPTED = CommonTypes_ResponseStatusCode_RSC_CONTENTS_UNACCEPTED;
+  static const ResponseStatusCode RSC_CONTENTS_UNACCEPTABLE = CommonTypes_ResponseStatusCode_RSC_CONTENTS_UNACCEPTABLE;
   static const ResponseStatusCode RSC_ACCESS_DENIED = CommonTypes_ResponseStatusCode_RSC_ACCESS_DENIED;
   static const ResponseStatusCode RSC_GROUP_REQUEST_ID_EXISTS = CommonTypes_ResponseStatusCode_RSC_GROUP_REQUEST_ID_EXISTS;
   static const ResponseStatusCode RSC_CONFLICT = CommonTypes_ResponseStatusCode_RSC_CONFLICT;
