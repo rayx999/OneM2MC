@@ -54,8 +54,8 @@ bool CopyMessage::copySubMessage(const FieldDescriptor* sfd, const FieldDescript
 	const Message& s_subm_ = sr_->GetMessage(sm_, sfd);
 	Message* d_subm_ = s_subm_.New();
 	if (d_subm_ == NULL) {
-		std::cerr << "CopyMessage::copySubMessage: message type [" <<
-				s_subm_.GetDescriptor()->name() << "] unknown.\n";
+		//std::cerr << "CopyMessage::copySubMessage: message type [" <<
+		//		s_subm_.GetDescriptor()->name() << "] unknown.\n";
 		return false;
 	}
 	CopyMessage copy_sub_(s_subm_, *d_subm_);
@@ -69,8 +69,8 @@ bool CopyMessage::copyRepeatedSubMessage(const int i,
 	const Message& s_subm_ = sr_->GetRepeatedMessage(sm_, sfd, i);
 	Message* d_subm_ = dr_->AddMessage(&dm_, dfd);
 	if (d_subm_ == NULL) {
-		std::cerr << "CopyMessage::copyRepeatedSubMessage: message type [" <<
-				s_subm_.GetDescriptor()->name() << "] unknown.\n";
+		//std::cerr << "CopyMessage::copyRepeatedSubMessage: message type [" <<
+		//		s_subm_.GetDescriptor()->name() << "] unknown.\n";
 		return false;
 	}
 	CopyMessage copy_sub_(s_subm_, *d_subm_);
@@ -89,12 +89,16 @@ bool CopyMessage::copyField(const std::string& fn, const FieldDescriptor* sfd,
 		const FieldDescriptor* dfd) {
 
 	if (sfd == NULL || dfd == NULL) {
-		std::cerr << "CopyMessage::copyField: field [" << fn << "] missing.\n";
+		//std::cerr << "CopyMessage::copyField: field [" << fn << "] missing.\n";
 		return false;
 	}
 
 	if (sfd->label() == FieldDescriptor::LABEL_REPEATED) {
 		int size_ = sr_->FieldSize(sm_, sfd);
+		if (size_ == 0) {
+			// Repeated field size should > 0;
+			return false;
+		}
 
 		switch (sfd->cpp_type()) {
 		case FieldDescriptor::CPPTYPE_INT32:
@@ -192,7 +196,7 @@ bool CopyMessage::copyField(const std::string& fn, const FieldDescriptor* sfd,
 		}
 		return true;
 	}
-	std::cout << "CopyMessage::copyField: [" << fn << "] not present\n";
+	//std::cout << "CopyMessage::copyField: [" << fn << "] not present\n";
 	return false;
 }
 

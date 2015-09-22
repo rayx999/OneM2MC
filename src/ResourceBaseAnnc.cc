@@ -7,6 +7,7 @@
 
 #include <iostream>
 #include <string>
+#include <json2pb.h>
 
 #include "CopyMessage.pb.h"
 #include "ResourceBase.pb.h"
@@ -37,6 +38,14 @@ void ResourceBaseAnnc::copyAnncFields(const ResourceBase& src, AnncAttr& ma, Ann
 
 bool ResourceBaseAnnc::serializeToString(string* pc) {
 	return base_.SerializeToString(pc);
+}
+
+bool ResourceBaseAnnc::compare(pb::ResourceBase& tgt) {
+	return compareMessage(base_, tgt);
+}
+
+string ResourceBaseAnnc::getJson() {
+	return pb2json(base_);
 }
 
 ResourceBaseAnnc::~ResourceBaseAnnc() { }

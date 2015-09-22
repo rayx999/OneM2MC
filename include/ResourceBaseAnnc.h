@@ -30,6 +30,8 @@ public:
 	pb::AE* getAEAnnc();
 	void copyAnncFields(const ResourceBase&, AnncAttr&, AnncAttr&);
 	bool serializeToString(std::string* pc);
+	bool compare(pb::ResourceBase& tgt);
+	std::string getJson();
 
 protected:
 	pb::ResourceBase base_;

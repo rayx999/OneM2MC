@@ -42,9 +42,9 @@ bool AEAnnc::copyAnncFields(AnncAttr ma, AnncAttr oa) {
 	CopyMessage cf_(ae_pb_, *p_aea_);
 	cf_.copyFields(ma);
 	cf_.copyFields(oa);
-
 	if (ma.size() > 0) {
-		cerr << "AEAnnc::copyAnncFields: MA fields missing in source.\n";
+		cerr << "AEAnnc::copyAnncFields: MA fields missing in source:\n";
+		std::copy(ma_.begin(), ma_.end(), ostream_iterator<string>(cout));
 		return false;
 	}
 	return true;
