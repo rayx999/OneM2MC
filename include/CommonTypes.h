@@ -10,6 +10,9 @@
 
 
 #include <sys/time.h>
+#include <iostream>
+#include <string>
+#include <set>
 
 namespace MicroWireless {
 
@@ -255,7 +258,14 @@ enum class ExecResultType
    ALREADY_COMPLETE = 6028,
    COMMAND_NOT_CANCALLABLE = 6029,
 
- };
+};
+
+enum class AnncType {
+	MA = 0,
+	OA = 1
+};
+
+typedef std::set<std::string> AnncAttr;
 
 }	// OneM2M
 }	// MicroWireless

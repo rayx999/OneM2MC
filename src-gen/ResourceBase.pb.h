@@ -64,6 +64,7 @@ class ResourceBase : public ::google::protobuf::Message {
 
   enum ResourceCase {
     kAe = 30002,
+    kAeA = 40002,
     kCsb = 30005,
     kReq = 30017,
     RESOURCE_NOT_SET = 0,
@@ -245,6 +246,15 @@ class ResourceBase : public ::google::protobuf::Message {
   ::MicroWireless::OneM2M::pb::AE* release_ae();
   void set_allocated_ae(::MicroWireless::OneM2M::pb::AE* ae);
 
+  // optional .MicroWireless.OneM2M.pb.AE aeA = 40002;
+  bool has_aea() const;
+  void clear_aea();
+  static const int kAeAFieldNumber = 40002;
+  const ::MicroWireless::OneM2M::pb::AE& aea() const;
+  ::MicroWireless::OneM2M::pb::AE* mutable_aea();
+  ::MicroWireless::OneM2M::pb::AE* release_aea();
+  void set_allocated_aea(::MicroWireless::OneM2M::pb::AE* aea);
+
   // optional .MicroWireless.OneM2M.pb.CSEBase csb = 30005;
   bool has_csb() const;
   void clear_csb();
@@ -267,6 +277,7 @@ class ResourceBase : public ::google::protobuf::Message {
   // @@protoc_insertion_point(class_scope:MicroWireless.OneM2M.pb.ResourceBase)
  private:
   inline void set_has_ae();
+  inline void set_has_aea();
   inline void set_has_csb();
   inline void set_has_req();
 
@@ -291,6 +302,7 @@ class ResourceBase : public ::google::protobuf::Message {
   union ResourceUnion {
     ResourceUnion() {}
     ::MicroWireless::OneM2M::pb::AE* ae_;
+    ::MicroWireless::OneM2M::pb::AE* aea_;
     ::MicroWireless::OneM2M::pb::CSEBase* csb_;
     ::MicroWireless::OneM2M::pb::Request* req_;
   } resource_;
@@ -818,6 +830,52 @@ inline void ResourceBase::set_allocated_ae(::MicroWireless::OneM2M::pb::AE* ae) 
     resource_.ae_ = ae;
   }
   // @@protoc_insertion_point(field_set_allocated:MicroWireless.OneM2M.pb.ResourceBase.ae)
+}
+
+// optional .MicroWireless.OneM2M.pb.AE aeA = 40002;
+inline bool ResourceBase::has_aea() const {
+  return resource_case() == kAeA;
+}
+inline void ResourceBase::set_has_aea() {
+  _oneof_case_[0] = kAeA;
+}
+inline void ResourceBase::clear_aea() {
+  if (has_aea()) {
+    delete resource_.aea_;
+    clear_has_resource();
+  }
+}
+inline const ::MicroWireless::OneM2M::pb::AE& ResourceBase::aea() const {
+  // @@protoc_insertion_point(field_get:MicroWireless.OneM2M.pb.ResourceBase.aeA)
+  return has_aea() ? *resource_.aea_
+                      : ::MicroWireless::OneM2M::pb::AE::default_instance();
+}
+inline ::MicroWireless::OneM2M::pb::AE* ResourceBase::mutable_aea() {
+  if (!has_aea()) {
+    clear_resource();
+    set_has_aea();
+    resource_.aea_ = new ::MicroWireless::OneM2M::pb::AE;
+  }
+  // @@protoc_insertion_point(field_mutable:MicroWireless.OneM2M.pb.ResourceBase.aeA)
+  return resource_.aea_;
+}
+inline ::MicroWireless::OneM2M::pb::AE* ResourceBase::release_aea() {
+  if (has_aea()) {
+    clear_has_resource();
+    ::MicroWireless::OneM2M::pb::AE* temp = resource_.aea_;
+    resource_.aea_ = NULL;
+    return temp;
+  } else {
+    return NULL;
+  }
+}
+inline void ResourceBase::set_allocated_aea(::MicroWireless::OneM2M::pb::AE* aea) {
+  clear_resource();
+  if (aea) {
+    set_has_aea();
+    resource_.aea_ = aea;
+  }
+  // @@protoc_insertion_point(field_set_allocated:MicroWireless.OneM2M.pb.ResourceBase.aeA)
 }
 
 // optional .MicroWireless.OneM2M.pb.CSEBase csb = 30005;

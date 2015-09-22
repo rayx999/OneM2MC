@@ -116,6 +116,15 @@ bool ResourceBase::setNewResourceBaseAttr(const string& ri, const string& rn,
 	return true;
 }
 
+const pb::ResourceBase& ResourceBase::getResourceBase() const {
+	return base_;
+}
+
+template <>
+const pb::AE& ResourceBase::getElement<pb::AE>() const {
+	return base_.ae();
+}
+
 pb::CSEBase* ResourceBase::getCSEBase() {
 	return base_.mutable_csb();
 }

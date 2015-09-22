@@ -28,6 +28,7 @@ message ResourceBase
   oneof resource
   {
     AE      ae  = 30002;  // Must be 30000 + CommonTypes.SupportedResourceType::AE
+    AE      aeA = 40002;  // Must be 30000 + CommonTypes.SupportedResourceType::AEAnnc
     CSEBase csb = 30005;  // Must be 30000 + CommonTypes.SupportedResourceType::CSE_BASE
     Request req = 30017;  // Must be 30000 + CommonTypes.SupportedResourceType::REQUEST
   }

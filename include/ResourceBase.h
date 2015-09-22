@@ -88,6 +88,11 @@ public:
 		return false;
 	}
 
+	const pb::ResourceBase& getResourceBase() const;
+
+	template <typename PbElementType>
+	const PbElementType& getElement() const;
+
 	pb::CSEBase* getCSEBase();
 	pb::AE* getAE();
 	pb::Request* getRequest();

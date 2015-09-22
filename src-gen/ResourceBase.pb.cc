@@ -27,6 +27,7 @@ const ::google::protobuf::internal::GeneratedMessageReflection*
   ResourceBase_reflection_ = NULL;
 struct ResourceBaseOneofInstance {
   const ::MicroWireless::OneM2M::pb::AE* ae_;
+  const ::MicroWireless::OneM2M::pb::AE* aea_;
   const ::MicroWireless::OneM2M::pb::CSEBase* csb_;
   const ::MicroWireless::OneM2M::pb::Request* req_;
 }* ResourceBase_default_oneof_instance_ = NULL;
@@ -41,7 +42,7 @@ void protobuf_AssignDesc_ResourceBase_2eproto() {
       "ResourceBase.proto");
   GOOGLE_CHECK(file != NULL);
   ResourceBase_descriptor_ = file->message_type(0);
-  static const int ResourceBase_offsets_[16] = {
+  static const int ResourceBase_offsets_[17] = {
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(ResourceBase, ty_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(ResourceBase, ri_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(ResourceBase, rn_),
@@ -55,6 +56,7 @@ void protobuf_AssignDesc_ResourceBase_2eproto() {
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(ResourceBase, at_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(ResourceBase, st_),
     PROTO2_GENERATED_DEFAULT_ONEOF_FIELD_OFFSET(ResourceBase_default_oneof_instance_, ae_),
+    PROTO2_GENERATED_DEFAULT_ONEOF_FIELD_OFFSET(ResourceBase_default_oneof_instance_, aea_),
     PROTO2_GENERATED_DEFAULT_ONEOF_FIELD_OFFSET(ResourceBase_default_oneof_instance_, csb_),
     PROTO2_GENERATED_DEFAULT_ONEOF_FIELD_OFFSET(ResourceBase_default_oneof_instance_, req_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(ResourceBase, resource_),
@@ -111,7 +113,7 @@ void protobuf_AddDesc_ResourceBase_2eproto() {
     "\n\022ResourceBase.proto\022\027MicroWireless.OneM"
     "2M.pb\032\037google/protobuf/timestamp.proto\032\021"
     "CommonTypes.proto\032\rCSEBase.proto\032\010AE.pro"
-    "to\032\rRequest.proto\"\320\003\n\014ResourceBase\022F\n\002ty"
+    "to\032\rRequest.proto\"\376\003\n\014ResourceBase\022F\n\002ty"
     "\030\001 \001(\0162:.MicroWireless.OneM2M.pb.CommonT"
     "ypes.SupportedResourceType\022\n\n\002ri\030\002 \001(\t\022\n"
     "\n\002rn\030\003 \001(\t\022\n\n\002pi\030\004 \001(\t\022&\n\002ct\030\005 \001(\0132\032.goo"
@@ -120,10 +122,11 @@ void protobuf_AddDesc_ResourceBase_2eproto() {
     "gle.protobuf.Timestamp\022\014\n\004acpi\030\010 \003(\t\022\013\n\003"
     "lbl\030\t \003(\t\022\n\n\002aa\030\n \001(\t\022\n\n\002at\030\013 \001(\t\022\n\n\002st\030"
     "\014 \001(\005\022+\n\002ae\030\262\352\001 \001(\0132\033.MicroWireless.OneM"
-    "2M.pb.AEH\000\0221\n\003csb\030\265\352\001 \001(\0132 .MicroWireles"
-    "s.OneM2M.pb.CSEBaseH\000\0221\n\003req\030\301\352\001 \001(\0132 .M"
-    "icroWireless.OneM2M.pb.RequestH\000B\n\n\010reso"
-    "urceb\006proto3", 612);
+    "2M.pb.AEH\000\022,\n\003aeA\030\302\270\002 \001(\0132\033.MicroWireles"
+    "s.OneM2M.pb.AEH\000\0221\n\003csb\030\265\352\001 \001(\0132 .MicroW"
+    "ireless.OneM2M.pb.CSEBaseH\000\0221\n\003req\030\301\352\001 \001"
+    "(\0132 .MicroWireless.OneM2M.pb.RequestH\000B\n"
+    "\n\010resourceb\006proto3", 658);
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedFile(
     "ResourceBase.proto", &protobuf_RegisterTypes);
   ResourceBase::default_instance_ = new ResourceBase();
@@ -165,6 +168,7 @@ const int ResourceBase::kAaFieldNumber;
 const int ResourceBase::kAtFieldNumber;
 const int ResourceBase::kStFieldNumber;
 const int ResourceBase::kAeFieldNumber;
+const int ResourceBase::kAeAFieldNumber;
 const int ResourceBase::kCsbFieldNumber;
 const int ResourceBase::kReqFieldNumber;
 #endif  // !_MSC_VER
@@ -181,6 +185,7 @@ void ResourceBase::InitAsDefaultInstance() {
   lt_ = const_cast< ::google::protobuf::Timestamp*>(&::google::protobuf::Timestamp::default_instance());
   et_ = const_cast< ::google::protobuf::Timestamp*>(&::google::protobuf::Timestamp::default_instance());
   ResourceBase_default_oneof_instance_->ae_ = const_cast< ::MicroWireless::OneM2M::pb::AE*>(&::MicroWireless::OneM2M::pb::AE::default_instance());
+  ResourceBase_default_oneof_instance_->aea_ = const_cast< ::MicroWireless::OneM2M::pb::AE*>(&::MicroWireless::OneM2M::pb::AE::default_instance());
   ResourceBase_default_oneof_instance_->csb_ = const_cast< ::MicroWireless::OneM2M::pb::CSEBase*>(&::MicroWireless::OneM2M::pb::CSEBase::default_instance());
   ResourceBase_default_oneof_instance_->req_ = const_cast< ::MicroWireless::OneM2M::pb::Request*>(&::MicroWireless::OneM2M::pb::Request::default_instance());
 }
@@ -262,6 +267,10 @@ void ResourceBase::clear_resource() {
       delete resource_.ae_;
       break;
     }
+    case kAeA: {
+      delete resource_.aea_;
+      break;
+    }
     case kCsb: {
       delete resource_.csb_;
       break;
@@ -303,7 +312,7 @@ bool ResourceBase::MergePartialFromCodedStream(
   ::google::protobuf::uint32 tag;
   // @@protoc_insertion_point(parse_start:MicroWireless.OneM2M.pb.ResourceBase)
   for (;;) {
-    ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoff(240138);
+    ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoff(320018);
     tag = p.first;
     if (!p.second) goto handle_unusual;
     switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
@@ -534,6 +543,19 @@ bool ResourceBase::MergePartialFromCodedStream(
         } else {
           goto handle_unusual;
         }
+        if (input->ExpectTag(320018)) goto parse_aeA;
+        break;
+      }
+
+      // optional .MicroWireless.OneM2M.pb.AE aeA = 40002;
+      case 40002: {
+        if (tag == 320018) {
+         parse_aeA:
+          DO_(::google::protobuf::internal::WireFormatLite::ReadMessageNoVirtual(
+               input, mutable_aea()));
+        } else {
+          goto handle_unusual;
+        }
         if (input->ExpectAtEnd()) goto success;
         break;
       }
@@ -679,6 +701,12 @@ void ResourceBase::SerializeWithCachedSizes(
       30017, *resource_.req_, output);
   }
 
+  // optional .MicroWireless.OneM2M.pb.AE aeA = 40002;
+  if (has_aea()) {
+    ::google::protobuf::internal::WireFormatLite::WriteMessageMaybeToArray(
+      40002, *resource_.aea_, output);
+  }
+
   // @@protoc_insertion_point(serialize_end:MicroWireless.OneM2M.pb.ResourceBase)
 }
 
@@ -813,6 +841,13 @@ void ResourceBase::SerializeWithCachedSizes(
         30017, *resource_.req_, target);
   }
 
+  // optional .MicroWireless.OneM2M.pb.AE aeA = 40002;
+  if (has_aea()) {
+    target = ::google::protobuf::internal::WireFormatLite::
+      WriteMessageNoVirtualToArray(
+        40002, *resource_.aea_, target);
+  }
+
   // @@protoc_insertion_point(serialize_to_array_end:MicroWireless.OneM2M.pb.ResourceBase)
   return target;
 }
@@ -911,6 +946,13 @@ int ResourceBase::ByteSize() const {
           *resource_.ae_);
       break;
     }
+    // optional .MicroWireless.OneM2M.pb.AE aeA = 40002;
+    case kAeA: {
+      total_size += 3 +
+        ::google::protobuf::internal::WireFormatLite::MessageSizeNoVirtual(
+          *resource_.aea_);
+      break;
+    }
     // optional .MicroWireless.OneM2M.pb.CSEBase csb = 30005;
     case kCsb: {
       total_size += 3 +
@@ -954,6 +996,10 @@ void ResourceBase::MergeFrom(const ResourceBase& from) {
   switch (from.resource_case()) {
     case kAe: {
       mutable_ae()->::MicroWireless::OneM2M::pb::AE::MergeFrom(from.ae());
+      break;
+    }
+    case kAeA: {
+      mutable_aea()->::MicroWireless::OneM2M::pb::AE::MergeFrom(from.aea());
       break;
     }
     case kCsb: {
@@ -1562,6 +1608,52 @@ void ResourceBase::clear_ae() {
     resource_.ae_ = ae;
   }
   // @@protoc_insertion_point(field_set_allocated:MicroWireless.OneM2M.pb.ResourceBase.ae)
+}
+
+// optional .MicroWireless.OneM2M.pb.AE aeA = 40002;
+bool ResourceBase::has_aea() const {
+  return resource_case() == kAeA;
+}
+void ResourceBase::set_has_aea() {
+  _oneof_case_[0] = kAeA;
+}
+void ResourceBase::clear_aea() {
+  if (has_aea()) {
+    delete resource_.aea_;
+    clear_has_resource();
+  }
+}
+ const ::MicroWireless::OneM2M::pb::AE& ResourceBase::aea() const {
+  // @@protoc_insertion_point(field_get:MicroWireless.OneM2M.pb.ResourceBase.aeA)
+  return has_aea() ? *resource_.aea_
+                      : ::MicroWireless::OneM2M::pb::AE::default_instance();
+}
+ ::MicroWireless::OneM2M::pb::AE* ResourceBase::mutable_aea() {
+  if (!has_aea()) {
+    clear_resource();
+    set_has_aea();
+    resource_.aea_ = new ::MicroWireless::OneM2M::pb::AE;
+  }
+  // @@protoc_insertion_point(field_mutable:MicroWireless.OneM2M.pb.ResourceBase.aeA)
+  return resource_.aea_;
+}
+ ::MicroWireless::OneM2M::pb::AE* ResourceBase::release_aea() {
+  if (has_aea()) {
+    clear_has_resource();
+    ::MicroWireless::OneM2M::pb::AE* temp = resource_.aea_;
+    resource_.aea_ = NULL;
+    return temp;
+  } else {
+    return NULL;
+  }
+}
+ void ResourceBase::set_allocated_aea(::MicroWireless::OneM2M::pb::AE* aea) {
+  clear_resource();
+  if (aea) {
+    set_has_aea();
+    resource_.aea_ = aea;
+  }
+  // @@protoc_insertion_point(field_set_allocated:MicroWireless.OneM2M.pb.ResourceBase.aeA)
 }
 
 // optional .MicroWireless.OneM2M.pb.CSEBase csb = 30005;
