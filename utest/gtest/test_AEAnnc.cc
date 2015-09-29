@@ -70,6 +70,7 @@ TEST_F(AEAnncTest, CheckAll) {
 		AEAnnc annc_(src_);
 		pb::ResourceBase tgt_;
 
+		ASSERT_TRUE(annc_.copyAnncFields());
 		json2pb(tgt_, tgt_json.c_str(), tgt_json.length());
 		ASSERT_TRUE(annc_.compare(tgt_));
 	} catch (exception &e) {
@@ -95,12 +96,11 @@ TEST_F(AEAnncTest, CheckMAMissingMA) {
 	try {
 		AEClass src_(json_no_acpi, valid_path);
 		AEAnnc annc_(src_);
+		ASSERT_FALSE(annc_.copyAnncFields());
 	} catch (exception &e) {
-		cout << "Expected exception: " << e.what() << endl;
-		return;
+		cerr << "UnExpected exception: " << e.what() << endl;
+		ASSERT_TRUE(false);;
 	}
-	cerr << "Expected exception didn't happen.\n";
-	ASSERT_TRUE(false);
 }
 
 TEST_F(AEAnncTest, CheckMAMissingMA1) {
@@ -120,12 +120,11 @@ TEST_F(AEAnncTest, CheckMAMissingMA1) {
 	try {
 		AEClass src_(json_no_rn, "//microwireless.com/IN-CSE-01/Z0002");
 		AEAnnc annc_(src_);
+		ASSERT_FALSE(annc_.copyAnncFields());
 	} catch (exception &e) {
-		cout << "Expected exception: " << e.what() << endl;
-		return;
+		cerr << "UnExpected exception: " << e.what() << endl;
+		ASSERT_TRUE(false);;
 	}
-	cerr << "Expected exception didn't happen.\n";
-	ASSERT_TRUE(false);
 }
 
 TEST_F(AEAnncTest, CheckMAMissingOA) {
@@ -159,6 +158,7 @@ TEST_F(AEAnncTest, CheckMAMissingOA) {
 		pb::ResourceBase tgt_;
 		json2pb(tgt_, tgt_json.c_str(), tgt_json.length());
 		AEAnnc annc_(src_);
+		ASSERT_TRUE(annc_.copyAnncFields());
 		ASSERT_TRUE(annc_.compare(tgt_));
 	} catch (exception &e) {
 		cerr << "Unexpected exception: " << e.what() << endl;

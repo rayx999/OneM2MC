@@ -118,6 +118,10 @@ public:
 			p_par_->outToResourceStore(rdb_, true);
 	}
 
+	const ResourceBase& getNewResource() {
+		return *p_res_;
+	}
+
 private:
 
 	bool checkResourceType(SupportedResourceType& ty) {

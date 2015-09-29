@@ -97,26 +97,31 @@ public:
 	pb::AE* getAE();
 	pb::Request* getRequest();
 
-	const string& getDomain();
+	const string& getDomain() const;
 	// get CSE id parsed from ResourceId
-	const string& getIntCsi();
+	const string& getIntCsi() const;
 	// get resource id parsed internally
-	const string& getIntRi();
+	const string& getIntRi() const;
 
-	SupportedResourceType getResourceType();
+	SupportedResourceType getResourceType() const;
 	bool setResourceType(SupportedResourceType ty);
 
-	const string& getResourceId();
+	const string& getResourceId() const;
 	bool setResourceId(const string& ri);
 
-	const string& getResourceName();
+	const string& getResourceName() const;
 	bool setResourceName(const string& rn);
 
-	const string& getParentId();
+	const string& getParentId() const;
 	bool setParentId(const string& pi);
 
 	bool getCreateTimestamp(TimeStamp &create_time);
 	bool getLastModifiedTimestamp(TimeStamp &create_time);
+
+	const string& getAnncTo() const;
+	bool setAnncTo(const string&);
+
+	const string& getAnncAttr() const;
 
 	template <typename StoreType>
 	bool outToResourceStore(ResourceStore<StoreType>& rdb, bool nolink = false) {

@@ -29,10 +29,14 @@ using google::protobuf::CopyMessage;
 const AnncAttr AEAnnc::ma_ = { "ri",  "rn",  "et",  "acpi", "lbl" };
 const AnncAttr AEAnnc::oa_ = { "apn", "api", "aei", "poa",  "or", "nl" };
 
-AEAnnc::AEAnnc(const AEClass& ae) : ae_(ae), p_aea_(getAEAnnc()) {
-	if (!copyAnncFields(ma_, oa_)) {
-		throw runtime_error("AEAnnc:: MA fields missing in source.");
-	}
+AEAnnc::AEAnnc(const AEClass& ae) : ae_(ae), p_aea_(getAEAnnc()) { }
+
+bool AEAnnc::copyAnncFields() {
+	return copyAnncFields(ma_, oa_);
+}
+
+bool AEAnnc::copyAnncFields(const AnncAttr& oa) {
+	return copyAnncFields(ma_, oa);
 }
 
 bool AEAnnc::copyAnncFields(AnncAttr ma, AnncAttr oa) {

@@ -10,12 +10,14 @@
 
 #include <string>
 #include <boost/algorithm/string/predicate.hpp>
+#include <boost/random/mersenne_twister.hpp>
 #include <json2pb.h>
 
 #include "CommonTypes.h"
 #include "AE.h"
 #include "Request.h"
 #include "RequestPrim.h"
+#include "RequestCache.h"
 #include "ResponsePrim.h"
 #include "ResourceStore.h"
 #include "ResourceBase.h"
@@ -29,7 +31,9 @@ using namespace MicroWireless::OneM2M;
 
 class RequestHandler {
 public:
-	RequestHandler(NSEBase& nse) : nse_(nse) {}
+	RequestHandler(NSEBase& nse) : nse_(nse), reqc_() {
+		gen_.seed(static_cast<long int>(time(0)));
+	}
 
 	virtual ~RequestHandler() {}
 
@@ -58,16 +62,11 @@ public:
 		}
 
 		if (rsc_ != ResponseStatusCode::OK) {
-			string fr_ = rdb.getRoot()->getDomain() + rdb.getRoot()->getCSEId();
-			ResponsePrim rsp_(&req, rsc_, fr_);
-			if (!pc_.empty()) {
-				rsp_.setContent(pc_);
-			}
-			nse_.send(rsp_, "localhost", 5555);
+			sendResponse(req, rsc_, rdb.getRoot()->getDomain() + rdb.getRoot()->getCSEId(), pc_);
 		}
 
 		return (rsc_ == ResponseStatusCode::OK);
-}
+	}
 
 	template <typename Root>
 	void getResourceHAddress(RequestPrim& req, string& addr, Root& root) {
@@ -150,8 +149,14 @@ protected:
 		return true;
 	}
 
+	void sendResponse(RequestPrim&, ResponseStatusCode, const string&, const string&);
+
+	void generateRequestId(string&);
+
 protected:
 	NSEBase& nse_;
+	RequestCache reqc_;
+	boost::random::mt19937 gen_;
 };
 
 }	// OneM2M

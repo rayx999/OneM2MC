@@ -28,6 +28,8 @@ class AEAnnc : public ResourceBaseAnnc {
 public:
 	AEAnnc(const AEClass& ae);
 	virtual ~AEAnnc();
+	bool copyAnncFields();
+	bool copyAnncFields(const AnncAttr& oa);
 
 private:
 	bool copyAnncFields(AnncAttr ma, AnncAttr oa);

@@ -26,31 +26,32 @@ class RequestPrim
 public:
 	friend class Request;
 
+	RequestPrim();
 	RequestPrim(const string &json);
 	RequestPrim(Operation op, const string & to, const string & fr, const string & rqi);
 
-	Operation getOperation();
+	Operation getOperation() const;
 
 	bool setResourceType(SupportedResourceType ty);
-	SupportedResourceType getResourceType();
+	SupportedResourceType getResourceType() const;
 
-	const string & getTo();
+	const string & getTo() const;
 	bool setTo(const string& to);
 
-	const string & getFrom();
+	const string & getFrom() const;
 	void setFrom(const string& fr);
 
-	const string & getRequestId();
+	const string & getRequestId() const;
 	void setRequestId(const string& rqi);
 
-	const string & getTargetResource();
+	const string & getTargetResource() const;
 	void setTargetResource(const string& target);
 
 	void setName(const string &nm);
-	const string& getName();
+	const string& getName() const;
 
 	void setContent(const string & pc);
-	const string& getContent();
+	const string& getContent() const;
 
 	bool setOriginatingTimestamp(TimeStamp &ot);
 	bool getOriginatingTimestamp(TimeStamp &ot);
@@ -65,16 +66,16 @@ public:
 	bool getOperationExecutionTime(Duration &oet);
 
 	void setResponseType(ResponseType rt);
-	ResponseType getResponseType();
+	ResponseType getResponseType() const;
 
 	bool setResultPersistence(Duration &rp);
 	bool getResultPersistence(Duration &rp);
 
 	bool setResultContent(ResultContent rcn);
-	ResultContent getResultContent();
+	ResultContent getResultContent() const;
 
 	bool setEventCat(EventCat ec);
-	EventCat getEventCat();
+	EventCat getEventCat() const;
 
 	bool setDeliveryAggregation(bool da);
 	bool getDeliveryAggregation();
@@ -86,12 +87,13 @@ public:
 	//bool getFilterCriteria(FilterCriteria & fc);
 
 	bool setDiscoveryResultType(DiscoveryResultType drt);
-	DiscoveryResultType getDiscoveryResultType();
+	DiscoveryResultType getDiscoveryResultType() const;
 
 	void getIdInfo(string& domain, string& csi);
-	const string& getIntRn();
+	const string& getIntRn() const;
 	bool isValid(ValidateType vt = VALIDATE_COMMON);
 	string getJson();
+	void swap(RequestPrim&);
 
 private:
 	void setDefaults();

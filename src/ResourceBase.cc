@@ -137,19 +137,19 @@ pb::Request* ResourceBase::getRequest() {
 	return base_.mutable_req();
 }
 
-const string& ResourceBase::getDomain() {
+const string& ResourceBase::getDomain() const {
 	return domain_;
 }
 
-const string& ResourceBase::getIntCsi() {
+const string& ResourceBase::getIntCsi() const {
 	return csi_;
 }
 
-const string& ResourceBase::getIntRi() {
+const string& ResourceBase::getIntRi() const {
 	return ri_;
 }
 
-SupportedResourceType ResourceBase::getResourceType() {
+SupportedResourceType ResourceBase::getResourceType() const {
 	return static_cast<SupportedResourceType>(base_.ty());
 }
 
@@ -158,7 +158,7 @@ bool ResourceBase::setResourceType(SupportedResourceType ty) {
 	return setLastModifiedTimestamp();
 }
 
-const string& ResourceBase::getResourceId() {
+const string& ResourceBase::getResourceId() const {
 	return base_.ri();
 }
 
@@ -168,7 +168,7 @@ bool ResourceBase::setResourceId(const string& ri) {
 	return setLastModifiedTimestamp();
 }
 
-const string& ResourceBase::getResourceName() {
+const string& ResourceBase::getResourceName() const {
 	return base_.rn();
 }
 
@@ -177,13 +177,26 @@ bool ResourceBase::setResourceName(const string& rn) {
 	return setLastModifiedTimestamp();
 }
 
-const string& ResourceBase::getParentId() {
+const string& ResourceBase::getParentId() const {
 	return base_.pi();
 }
 
 bool ResourceBase::setParentId(const string& pi) {
 	base_.set_pi(pi);
 	return setLastModifiedTimestamp();
+}
+
+const string& ResourceBase::getAnncTo() const {
+	return base_.at();
+}
+
+bool ResourceBase::setAnncTo(const string& at) {
+	base_.set_at(at);
+	return setLastModifiedTimestamp();
+}
+
+const string& ResourceBase::getAnncAttr() const {
+	return base_.aa();
 }
 
 bool ResourceBase::getCreateTimestamp(TimeStamp &ct) {

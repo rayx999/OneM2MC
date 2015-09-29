@@ -25,6 +25,8 @@ void RequestPrim::setDefaults() {
 	reqp_.set_rcn(static_cast<pb::CommonTypes_ResultContent>(ResultContent::ATTRIBUTES));
 }
 
+RequestPrim::RequestPrim() { }
+
 RequestPrim::RequestPrim(const string & json) {
 	// parse to PB buffer
 	try {
@@ -75,7 +77,7 @@ RequestPrim::RequestPrim(Operation op, const string & to, const string & fr, con
 	}
 }
 
-const string & RequestPrim::getTo() {
+const string & RequestPrim::getTo() const {
 	return reqp_.to();
 }
 
@@ -93,7 +95,7 @@ bool  RequestPrim::setTo(const string& to) {
 	}
 }
 
-const string & RequestPrim::getFrom() {
+const string & RequestPrim::getFrom() const {
 	return reqp_.fr();
 }
 
@@ -101,7 +103,7 @@ void  RequestPrim::setFrom(const string& fr) {
 	reqp_.set_fr(fr);
 }
 
-const string & RequestPrim::getRequestId() {
+const string & RequestPrim::getRequestId() const {
 	return reqp_.rqi();
 }
 
@@ -109,7 +111,7 @@ void  RequestPrim::setRequestId(const string& rqi) {
 	reqp_.set_rqi(rqi);
 }
 
-const string & RequestPrim::getTargetResource() {
+const string & RequestPrim::getTargetResource() const {
 	return target_;
 }
 
@@ -117,7 +119,7 @@ void RequestPrim::setTargetResource(const string& target) {
 	target_ = target;
 }
 
-Operation RequestPrim::getOperation() {
+Operation RequestPrim::getOperation() const {
 	return static_cast<Operation>(reqp_.op());
 }
 
@@ -126,7 +128,7 @@ bool RequestPrim::setResourceType(SupportedResourceType ty) {
 	return true;
 }
 
-SupportedResourceType RequestPrim::getResourceType() {
+SupportedResourceType RequestPrim::getResourceType() const {
 	return static_cast<SupportedResourceType>(reqp_.ty());
 }
 
@@ -135,7 +137,7 @@ void  RequestPrim::setName(const string& nm) {
 	reqp_.set_nm(nm);
 }
 
-const string&  RequestPrim::getName() {
+const string&  RequestPrim::getName() const {
 	return reqp_.nm();
 }
 
@@ -143,7 +145,7 @@ void RequestPrim::setContent(const string & pc) {
 	reqp_.set_pc(pc);
 }
 
-const string& RequestPrim::getContent() {
+const string& RequestPrim::getContent() const {
 	return reqp_.pc();
 }
 
@@ -164,7 +166,7 @@ void RequestPrim::setResponseType(ResponseType rt) {
 	reqp_.set_rt(static_cast<pb::CommonTypes_ResponseType>(rt));
 }
 
-ResponseType RequestPrim::getResponseType() {
+ResponseType RequestPrim::getResponseType() const {
 	return static_cast<ResponseType>(reqp_.rt());
 }
 
@@ -177,7 +179,7 @@ bool RequestPrim::setResultContent(ResultContent rcn) {
 	return true;
 }
 
-ResultContent RequestPrim::getResultContent() {
+ResultContent RequestPrim::getResultContent() const {
 	return static_cast<ResultContent>(reqp_.rcn());
 }
 
@@ -204,7 +206,7 @@ void RequestPrim::getIdInfo(string& domain, string& csi) {
 	csi = csi_;
 }
 
-const string& RequestPrim::getIntRn() {
+const string& RequestPrim::getIntRn() const {
 	return rn_;
 }
 
@@ -246,6 +248,14 @@ bool RequestPrim::isValid(ValidateType vt) {
 
 string RequestPrim::getJson() {
 	return pb2json(reqp_);
+}
+
+void RequestPrim::swap(RequestPrim& reqp) {
+	reqp_.Swap(&reqp.reqp_);
+	domain_.swap(reqp.domain_);
+	csi_.swap(reqp.csi_);
+	rn_.swap(reqp.rn_);
+	target_.swap(reqp.target_);
 }
 
 }	// OneM2M
