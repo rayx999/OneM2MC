@@ -36,7 +36,7 @@ protected:
 	static pb::ResourceBase ae_pc_;
 	static string ae_str_;
 
-	static string ri_;
+	static string ri_, aei_;
 	ResourceBase res_;
 
 public:
@@ -68,6 +68,7 @@ ExpOption AETest::exp_opt_;
 pb::ResourceBase AETest::ae_pc_;
 string AETest::ae_str_;
 string AETest::ri_;
+string AETest::aei_;
 
 const string AETest::request_json("{"
 		"\"ver\": 1,"
@@ -92,8 +93,7 @@ const string AETest::ae_exp("{"
 	    	"\"pi\"     : \"Z0005\","
 			"\"ae\"     : {"
 				"\"apn\" 	: \"FreshGo\","
-				"\"api\" 	: \"APP-01\","
-				"\"aei\" 	: \"AE-01\" "
+				"\"api\" 	: \"APP-01\" "
 			"}"
 		"}");
 
@@ -110,9 +110,10 @@ TEST_F(AETest, CreateAEFullURI) {
   pb::ResourceBase ret_;
   ASSERT_TRUE(ret_.ParseFromString(ret_pc_));
   ri_ = ret_.ri();
+  aei_ = "//microwireless.com/IN-CSE-01/" + ri_;
   ASSERT_FALSE(ri_.empty());
   ASSERT_STREQ(ret_.rn().c_str(), "AE-01"); // ret_ rn overwrites origianl in ae_content
-  ASSERT_STREQ(ret_.ae().aei().c_str(), "AE-01"); // AEId set
+  ASSERT_STREQ(ret_.ae().aei().c_str(), aei_.c_str()); // AEId set
   cout << "Responded ri: " << ri_ << endl;
 }
 
@@ -124,6 +125,7 @@ TEST_F(AETest, RetrieveAE) {
   nse_->addOpt(*p_coap_, pb::CoAPTypes_OptionType_CoAP_Uri_Path,
 		  "//microwireless.com/IN-CSE-01/" + ri_);
   ae_pc_.set_ri(ri_);
+  ae_pc_.mutable_ae()->set_aei("//microwireless.com/IN-CSE-01/" + ri_);
   retrieveTestBody(pb::CoAPTypes_MessageType_CoAP_ACK,
 		  pb::CoAPTypes_ResponseCode_CoAP_Content,
 		  exp_opt_, ae_pc_);
@@ -137,6 +139,7 @@ TEST_F(AETest, RetrieveAE1) {
   nse_->addOpt(*p_coap_, pb::CoAPTypes_OptionType_CoAP_Uri_Path,
 		  "//microwireless.com/IN-CSE-01/AE-01");
   ae_pc_.set_ri(ri_);
+  ae_pc_.mutable_ae()->set_aei("//microwireless.com/IN-CSE-01/" + ri_);
   retrieveTestBody(pb::CoAPTypes_MessageType_CoAP_ACK,
 		  pb::CoAPTypes_ResponseCode_CoAP_Content,
 		  exp_opt_, ae_pc_);
@@ -257,9 +260,10 @@ TEST_F(AETest, CreateAENoRn) {
   pb::ResourceBase ret_;
   ASSERT_TRUE(ret_.ParseFromString(ret_pc_));
   ri_ = ret_.ri();
+  aei_ = "//microwireless.com/IN-CSE-01/" + ri_;
   ASSERT_FALSE(ri_.empty());
   ASSERT_STREQ(ret_.rn().c_str(), ri_.c_str()); // Resource name same as ri
-  ASSERT_STREQ(ret_.ae().aei().c_str(), ri_.c_str()); // AE-id set to ri
+  ASSERT_STREQ(ret_.ae().aei().c_str(), aei_.c_str()); // AE-id set to ri
   cout << "Responded ri: " << ri_ << endl;
 }
 

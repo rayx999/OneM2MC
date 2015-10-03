@@ -99,6 +99,9 @@ public:
 		if (!result_) {
 			return ResponseStatusCode::INTERNAL_SERVER_ERROR;
 		}
+		// set acpi, fake acpi ri.
+		p_res_->setAccessControlPolicy("001-25423");
+		p_ret_->setAccessControlPolicy("001-25423");
 		return ResponseStatusCode::OK;
 	}
 

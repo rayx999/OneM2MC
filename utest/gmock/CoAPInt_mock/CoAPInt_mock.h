@@ -13,6 +13,7 @@
 
 #include "gmock/gmock.h"
 
+#include "gmock_common.h"
 #include "CoAPBinding.pb.h"
 #include "ResourceBase.pb.h"
 #include "CommonTypes.h"

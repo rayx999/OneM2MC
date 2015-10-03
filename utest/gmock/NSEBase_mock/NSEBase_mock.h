@@ -13,7 +13,12 @@
 
 #include "gmock/gmock.h"
 
+#include "gmock_common.h"
+#include "CopyMessage.pb.h"
 #include "ResourceBase.pb.h"
+#include "CSEBase.pb.h"
+#include "Request.pb.h"
+#include "AE.pb.h"
 #include "CommonTypes.h"
 #include "NSEBase.h"
 #include "CSEResourceStore.h"
@@ -27,7 +32,8 @@ class NSEBaseMock : public NSEBase {
 public:
   NSEBaseMock(const char* ip, const char* port) : NSEBase(ip, port) {};
   MOCK_METHOD0(run, void());
-  MOCK_METHOD3(send, void(ResponsePrim&, const std::string&, uint));
+  MOCK_METHOD3(send_request,  void(RequestPrim&,  const std::string&, uint));
+  MOCK_METHOD3(send_response, void(ResponsePrim&, const std::string&, uint));
 };
 
 class NSEBaseMockTest : public ::testing::Test {

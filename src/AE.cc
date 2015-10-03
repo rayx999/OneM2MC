@@ -23,13 +23,13 @@ namespace OneM2M {
 using namespace std;
 using namespace MicroWireless::OneM2M;
 
-map<int, map<Operation, AEClass::attrOption>> AEClass::allowAttr = {
-   {TAG_APN,   { {Operation::CREATE, OOPTIONAL }, {Operation::UPDATE, OOPTIONAL } } },
-   {TAG_API,   { {Operation::CREATE, MANDATORY }, {Operation::UPDATE, MANDATORY } } },
-   {TAG_AEI,   { {Operation::CREATE, NOTPRESENT}, {Operation::UPDATE, NOTPRESENT} } },
-   {TAG_POA,   { {Operation::CREATE, OOPTIONAL }, {Operation::UPDATE, OOPTIONAL } } },
-   {TAG_OR ,   { {Operation::CREATE, OOPTIONAL }, {Operation::UPDATE, OOPTIONAL } } },
-   {TAG_NL ,   { {Operation::CREATE, NOTPRESENT}, {Operation::UPDATE, NOTPRESENT} } }
+map<const string, map<Operation, AEClass::attrOption>> AEClass::allowAttr = {
+   {AttrName::APN(),   { {Operation::CREATE, OOPTIONAL }, {Operation::UPDATE, OOPTIONAL } } },
+   {AttrName::API(),   { {Operation::CREATE, MANDATORY }, {Operation::UPDATE, MANDATORY } } },
+   {AttrName::AEI(),   { {Operation::CREATE, OOPTIONAL }, {Operation::UPDATE, OOPTIONAL } } },
+   {AttrName::POA(),   { {Operation::CREATE, OOPTIONAL }, {Operation::UPDATE, OOPTIONAL } } },
+   {AttrName::OR() ,   { {Operation::CREATE, OOPTIONAL }, {Operation::UPDATE, OOPTIONAL } } },
+   {AttrName::NL() ,   { {Operation::CREATE, NOTPRESENT}, {Operation::UPDATE, NOTPRESENT} } }
 };
 
 AEClass::AEClass() : p_ae_(getAE()) { }
@@ -79,8 +79,9 @@ bool AEClass::setNewResourceAttr(const string& ri, const string& rn, const strin
 	if (!ResourceBase::setNewResourceBaseAttr(ri, rn, pi, ret)) {
 		return false;
 	}
-
-	return setAEId(rn) && ret.setAEId(rn);
+	// set AE-ID to FQ ri
+	string aei_ = getDomain() + getIntCsi() + '/' + ri;
+	return setAEId(aei_) && ret.setAEId(aei_);
 }
 
 const string& AEClass::getAppName() {

@@ -27,7 +27,8 @@ public:
 		NSEBase(ip, port), coap_int_(coap_int) { }
 	virtual ~NSE_CoAP() { }
 
-	virtual void send(ResponsePrim& rsp, const std::string& addr, uint port);
+	virtual void send_request (RequestPrim&  req, const std::string& addr, uint port);
+	virtual void send_response(ResponsePrim& rsp, const std::string& addr, uint port);
 	virtual void run();
 
 	bool convertCoAPRequest(const pb::CoAPBinding&, RequestPrim*& p_reqp);

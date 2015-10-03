@@ -42,6 +42,7 @@ void CopyMessage::copyFields() {
 void CopyMessage::copyFields(std::set<std::string>& at) {
 	std::set<std::string> at_(at);
 	for (const auto fn : at_) {
+		if (fn.empty()) continue;
 		if (copyField(fn)) {
 			at.erase(fn);
 		} else {

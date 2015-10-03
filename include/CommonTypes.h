@@ -14,6 +14,8 @@
 #include <string>
 #include <set>
 
+#include "Constants.h"
+
 namespace MicroWireless {
 
 namespace OneM2M {

@@ -26,8 +26,22 @@ using namespace MicroWireless::OneM2M;
 
 using google::protobuf::CopyMessage;
 
-const AnncAttr AEAnnc::ma_ = { "ri",  "rn",  "et",  "acpi", "lbl" };
-const AnncAttr AEAnnc::oa_ = { "apn", "api", "aei", "poa",  "or", "nl" };
+const AnncAttr AEAnnc::ma_ = {
+		AttrName::RI(),
+		AttrName::RN(),
+		AttrName::ET(),
+		AttrName::ACPI(),
+		AttrName::LBL()
+};
+
+const AnncAttr AEAnnc::oa_ = {
+		AttrName::APN(),
+		AttrName::API(),
+		AttrName::AEI(),
+		AttrName::POA(),
+		AttrName::OR(),
+		AttrName::NL()
+};
 
 AEAnnc::AEAnnc(const AEClass& ae) : ae_(ae), p_aea_(getAEAnnc()) { }
 

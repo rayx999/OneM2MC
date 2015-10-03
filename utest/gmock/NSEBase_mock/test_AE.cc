@@ -34,7 +34,7 @@ protected:
 	static pb::ResourceBase ae_pc_;
 	static string ae_str_;
 
-	static string ri_;
+	static string ri_, aei_;
 	ResourceBase res_;
 
 public:
@@ -64,6 +64,7 @@ public:
 pb::ResourceBase AETest::ae_pc_;
 string AETest::ae_str_;
 string AETest::ri_;
+string AETest::aei_;
 
 const string AETest::create_request("{"
 		"\"op\": 1, "
@@ -85,8 +86,7 @@ const string AETest::ae_exp("{"
 	    	"\"pi\"     : \"Z0005\","
 			"\"ae\"     : {"
 				"\"apn\" 	: \"FreshGo\","
-				"\"api\" 	: \"APP-01\","
-				"\"aei\" 	: \"AE-01\" "
+				"\"api\" 	: \"APP-01\" "
 			"}"
 		"}");
 
@@ -101,9 +101,10 @@ TEST_F(AETest, CreateAEFullURI) {
   pb::ResourceBase ret_;
   ASSERT_TRUE(ret_.ParseFromString(ret_pc_));
   ri_ = ret_.ri();
+  aei_ = "//microwireless.com/IN-CSE-01/" + ri_;
   ASSERT_FALSE(ri_.empty());
   ASSERT_STREQ(ret_.rn().c_str(), "AE-01"); // ret_ rn overwrites origianl in ae_content
-  ASSERT_STREQ(ret_.ae().aei().c_str(), "AE-01"); // AEId set
+  ASSERT_STREQ(ret_.ae().aei().c_str(), aei_.c_str()); // AEId set
   cout << "Responded ri: " << ri_ << endl;
 }
 
@@ -120,6 +121,7 @@ TEST_F(AETest, RetrieveAE) {
   ASSERT_TRUE(p_reqp_->setTo(p_reqp_->getTo() + "/" + ri_));
 
   ae_pc_.set_ri(ri_);
+  ae_pc_.mutable_ae()->set_aei("//microwireless.com/IN-CSE-01/" + ri_);
   retrieveTestBody(ResponseStatusCode::OK, "ab3f124a", exp_to_, exp_fr_, ae_pc_);
 }
 
@@ -135,6 +137,7 @@ TEST_F(AETest, RetrieveAE1) {
   NSEBaseMockTest::setupRequestPrim(json);
 
   ae_pc_.set_ri(ri_);
+  ae_pc_.mutable_ae()->set_aei("//microwireless.com/IN-CSE-01/" + ri_);
   retrieveTestBody(ResponseStatusCode::OK, "ab3f124a", exp_to_, exp_fr_, ae_pc_);
 }
 
@@ -204,8 +207,9 @@ TEST_F(AETest, CreateAENoRn) {
   pb::ResourceBase ret_;
   ASSERT_TRUE(ret_.ParseFromString(ret_pc_));
   ri_ = ret_.ri();
+  aei_ = "//microwireless.com/IN-CSE-01/" + ri_;
   ASSERT_FALSE(ri_.empty());
   ASSERT_STREQ(ret_.rn().c_str(), ri_.c_str()); // Resource name same as ri
-  ASSERT_STREQ(ret_.ae().aei().c_str(), ri_.c_str()); // AE-id set to ri
+  ASSERT_STREQ(ret_.ae().aei().c_str(), aei_.c_str()); // AE-id set to ri
   cout << "Responded ri: " << ri_ << endl;
 }

@@ -13,6 +13,7 @@
 #include <boost/format.hpp>
 
 #include "ResourceBase.pb.h"
+#include "NSEBase.h"
 #include "ResourceBase.h"
 #include "RequestHandler.h"
 
@@ -35,14 +36,14 @@ void RequestHandler::sendResponse(RequestPrim& reqp, ResponseStatusCode rsc,
 	if (!pc.empty()) {
 		rsp_.setContent(pc);
 	}
-	nse_.send(rsp_, "localhost", 5555);
+	nse_.send_response(rsp_, "localhost", 5555);
 }
 
 void RequestHandler::generateRequestId(string& rqi) {
-	boost::random::uniform_int_distribution<> dist(1, 999999999);
+	boost::random::uniform_int_distribution<> dist(1, 99999);
 	do {
-		rqi = boost::str(boost::format("RQI-%09d") % dist(gen_));
-	} while (!reqc_.isRequestIdInUse(rqi));
+		rqi = boost::str(boost::format("RQI-%05d%05d") % dist(gen_) % dist(gen_));
+	} while (reqc_.isRequestIdInUse(rqi));
 }
 
 }	// OneM2M

@@ -80,3 +80,10 @@ TEST_F(RequestHandlerTest, isNOTForMe) {
 	RequestPrim req_(req1_json);
 	ASSERT_EQ(p_hdl_->isForMe<CSEBase>(req_, cse_), ResponseStatusCode::ACCESS_DENIED);
 }
+
+TEST_F(RequestHandlerTest, generateRequestId) {
+	string rqi;
+	p_hdl_->generateRequestId(rqi);
+	std::cout << "generated rqi:" << rqi << std::endl;
+	ASSERT_FALSE(rqi.empty());
+}

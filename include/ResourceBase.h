@@ -25,7 +25,6 @@ namespace MicroWireless {
 
 namespace OneM2M {
 
-using namespace std;
 using namespace MicroWireless::OneM2M;
 
 using google::protobuf::Reflection;
@@ -36,11 +35,11 @@ public:
 	static const int ResourceBaseOffset;
 
 	ResourceBase();
-	ResourceBase(const string& json, const string& id_str);
+	ResourceBase(const std::string& json, const std::string& id_str);
 	virtual ~ResourceBase();
 
 	template <typename StoreType>
-	ResourceBase(const string& ri, ResourceStore<StoreType>& rdb) : base_() {
+	ResourceBase(const std::string& ri, ResourceStore<StoreType>& rdb) : base_() {
 		ResourceBase();
 		if (!setResourceBase(ri, rdb)) {
 			throw runtime_error("setResourceBase failed.");
@@ -48,14 +47,14 @@ public:
 	}
 
 	// set from json
-	bool setResourceBase(const string &json, const string& id_str);
-	// set from PB::ResourceBase in string
-	virtual bool setResourceBase(const string &pc, const string& id_str, Operation op);
-	bool setNewResourceBaseAttr(const string& ri, const string& rn,	const string& pi, ResourceBase& ret);
+	bool setResourceBase(const std::string &json, const std::string& id_str);
+	// set from PB::ResourceBase in std::string
+	virtual bool setResourceBase(const std::string &pc, const std::string& id_str, Operation op);
+	bool setNewResourceBaseAttr(const std::string& ri, const std::string& rn,	const std::string& pi, ResourceBase& ret);
 
 	template <typename Root>
 	bool setResourceBase(RequestPrim& reqp, Root& root) {
-		const string& pc_str_ = reqp.getContent();
+		const std::string& pc_str_ = reqp.getContent();
 		if (pc_str_.empty()) {
 			cerr << "setResourceBase: No content.\n";
 			return false;
@@ -64,7 +63,7 @@ public:
 			cerr << "setResourceBase: ParseFromString failed.\n";
 			return false;
 		}
-		string res_path = root.getDomain() + root.getCSEId();
+		std::string res_path = root.getDomain() + root.getCSEId();
 		if (!reqp.getIntRn().empty()) {
 			res_path += "/" + reqp.getIntRn();
 		} else if (!reqp.getName().empty()) {
@@ -76,9 +75,9 @@ public:
 	}
 
 	template <typename StoreType>
-	bool setResourceBase(const string& ri, ResourceStore<StoreType>& rdb) {
+	bool setResourceBase(const std::string& ri, ResourceStore<StoreType>& rdb) {
 		try {
-			string res_str_;
+			std::string res_str_;
 			if (rdb.getResource(ri, res_str_) && base_.ParseFromString(res_str_)) {
 				return checkResourceConsistency(rdb.getResourcePath(ri));
 			}
@@ -97,31 +96,35 @@ public:
 	pb::AE* getAE();
 	pb::Request* getRequest();
 
-	const string& getDomain() const;
+	const std::string& getDomain() const;
 	// get CSE id parsed from ResourceId
-	const string& getIntCsi() const;
+	const std::string& getIntCsi() const;
 	// get resource id parsed internally
-	const string& getIntRi() const;
+	const std::string& getIntRi() const;
 
 	SupportedResourceType getResourceType() const;
 	bool setResourceType(SupportedResourceType ty);
 
-	const string& getResourceId() const;
-	bool setResourceId(const string& ri);
+	const std::string& getResourceId() const;
+	bool setResourceId(const std::string& ri);
 
-	const string& getResourceName() const;
-	bool setResourceName(const string& rn);
+	const std::string& getResourceName() const;
+	bool setResourceName(const std::string& rn);
 
-	const string& getParentId() const;
-	bool setParentId(const string& pi);
+	int getAccessControlPolicyNum();
+	const std::string& getAccessControlPolicy(int i) const;
+	bool setAccessControlPolicy(const std::string& acpi);
+
+	const std::string& getParentId() const;
+	bool setParentId(const std::string& pi);
 
 	bool getCreateTimestamp(TimeStamp &create_time);
 	bool getLastModifiedTimestamp(TimeStamp &create_time);
 
-	const string& getAnncTo() const;
-	bool setAnncTo(const string&);
+	const std::string& getAnncTo() const;
+	bool setAnncTo(const std::string&);
 
-	const string& getAnncAttr() const;
+	const std::string& getAnncAttr() const;
 
 	template <typename StoreType>
 	bool outToResourceStore(ResourceStore<StoreType>& rdb, bool nolink = false) {
@@ -129,14 +132,14 @@ public:
 			cerr << "Invalid ri format:" << ri_ << endl;
 			return false;
 		}
-		string res_str;
+		std::string res_str;
 		if (base_.SerializeToString(&res_str)) {
-			const string res_path = rdb.getRoot()->getDomain()
+			const std::string res_path = rdb.getRoot()->getDomain()
 					+ rdb.getRoot()->getCSEId()
 					+ "/" + getResourceName();
 
 			if (nolink) {
-				return rdb.putResource(res_path, string(), res_str);
+				return rdb.putResource(res_path, std::string(), res_str);
 			} else {
 				return rdb.putResource(res_path, ri_, res_str);
 			}
@@ -146,9 +149,9 @@ public:
 		}
 	}
 
-	bool SerializeToString(string* pc);
+	bool SerializeToString(std::string* pc);
 	void CopyResourceTimeStamps(ResourceBase& src);
-	string getJson();
+	std::string getJson();
 
 private:
 	bool checkResourceAttributes(Operation op);
@@ -161,7 +164,7 @@ protected:
 	bool setLastModifiedTimestamp(TimeStamp* p_ts = NULL);
 
 	SupportedResourceType getResourceCase();
-	bool checkResourceConsistency(const string& id_str);
+	bool checkResourceConsistency(const std::string& id_str);
 
 	template <typename Resource, typename Map>
 	bool checkResourceAttributes(Operation op, Resource& res, Map& m) {
@@ -170,9 +173,10 @@ protected:
 		vector<const FieldDescriptor*> fields;
 		reflection->ListFields(res, &fields);
 		for (unsigned int i = 0; i < fields.size(); i++) {
-			if (m[fields[i]->number()][op] == NOTPRESENT) {
-				cerr << "checkResourceAttributes: Tag " << fields[i]->number();
-				cerr << " field shouldn't present.\n";
+			auto found_ = m.find(fields[i]->name());
+			if (found_ != m.end() && found_->second[op] == NOTPRESENT) {
+				cerr << "checkResourceAttributes: Attribute [" << fields[i]->name();
+				cerr << "] field shouldn't present.\n";
 				ret_ = false;
 			}
 		}
@@ -181,11 +185,11 @@ protected:
 		for (auto i = m.begin(); i != m.end(); ++i) {
 			if (i->second[op] != MANDATORY) continue;
 			auto found = find_if(fields.begin(), fields.end(), [&i](const FieldDescriptor* f) {
-				return f->number() == i->first;
+				return f->name() == i->first;
 			});
 			if (found == fields.end()){
-				cerr << "checkResourceAttributes: Tag " << i->first;
-				cerr << " field NOT present.\n";
+				cerr << "checkResourceAttributes: Attribute [" << i->first;
+				cerr << "] NOT present.\n";
 				ret_ = false;
 			}
 		}
@@ -195,7 +199,7 @@ protected:
 
 protected:
 	pb::ResourceBase base_;
-	string domain_, csi_, ri_;
+	std::string domain_, csi_, ri_;
 
 	enum attrOption {
 		MANDATORY  = 1,
@@ -204,21 +208,7 @@ protected:
 	};
 
 private:
-	enum commonAttrTag {
-		TAG_TY  = 1,
-		TAG_RI  = 2,
-		TAG_RN  = 3,
-		TAG_PI  = 4,
-		TAG_CT  = 5,
-		TAG_LT  = 6,
-		TAG_ET  = 7,
-		TAG_ACPI = 8,
-		TAG_LBL = 9,
-		TAG_AA  = 10,
-		TAG_AT  = 11,
-		TAG_ST  = 12
-	};
-	static map<int, map<Operation, attrOption>> allowAttr;
+	static map<const std::string, map<Operation, attrOption>> allowAttr;
 };
 
 }	// OneM2M

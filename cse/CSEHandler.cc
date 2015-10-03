@@ -26,12 +26,13 @@ namespace OneM2M {
 
 using namespace MicroWireless::OneM2M;
 
-map<SupportedResourceType, anncCreator> CSEHandler::annc_create_;
+map<SupportedResourceType, CSEHandler::anncCreator> CSEHandler::annc_create_;
 
 CSEHandler::CSEHandler(NSEBase& nse, CSEResourceStore& rdb)
 	: RequestHandler(nse), rdb_(rdb) {
+	annc_create_.clear();
 	annc_create_.insert( { SupportedResourceType::AE,
-			boost::bind(&CSEHandler::createAnnc<AEClass, AEAnnc>, this, _1, _2, _3) } );
+			boost::bind(&CSEHandler::createAnnc<AEClass, AEAnnc>, this, _1, _2, _3, _4) } );
 }
 
 void CSEHandler::handleRequest(RequestPrim& reqp) {
@@ -56,9 +57,9 @@ void CSEHandler::handleRequest(RequestPrim& reqp) {
 				rsc_ = ResponseStatusCode::INTERNAL_SERVER_ERROR;
 			} else if (!rch_.getNewResource().getAnncTo().empty()) {
 				const ResourceBase& res_ = rch_.getNewResource();
+				// keep current request pending
+				reqc_.addRequest(reqp, pc_);
 				if (initiateAnnc(reqp, res_, rsc_)) {
-					// keep current request pending
-					//reqc_.addRequest(reqp, pc_, delayedResponse);
 					return;
 				}
 			} else {
@@ -143,9 +144,16 @@ void CSEHandler::handleResponse(ResponsePrim& rspp) {
 bool CSEHandler::initiateAnnc(const RequestPrim& reqp, const ResourceBase& res,
 		ResponseStatusCode& rsc) {
 	vector<string> aa_, at_;
-	boost::split(aa_, res.getAnncAttr(), boost::is_any_of(","));
-	AnncAttr oa_(aa_.begin(), aa_.end());
-	boost::split(at_, res.getAnncTo(), boost::is_any_of(","));
+	AnncAttr oa_;
+	string s_ = res.getAnncAttr();
+	boost::trim(s_);
+	if (!s_.empty()) {
+		boost::split(aa_, s_, boost::is_any_of(","));
+		oa_.insert(aa_.begin(), aa_.end());
+	}
+	s_ = res.getAnncTo();
+	boost::trim(s_);
+	boost::split(at_, s_, boost::is_any_of(","));
 
 	if (at_.size() == 0) {
 		cerr << "CSEHandler::initiateAnnc: Invalid anncTo: " <<
@@ -154,8 +162,16 @@ bool CSEHandler::initiateAnnc(const RequestPrim& reqp, const ResourceBase& res,
 		return false;
 	}
 
+	auto found_ = annc_create_.find(res.getResourceType());
+	if (found_ == annc_create_.end()) {
+		cerr << "CSEHandler::initiateAnnc: Invalid annc resource type: " <<
+				(int)res.getResourceType() << endl;
+		rsc = ResponseStatusCode::BAD_REQUEST;
+		return false;
+	}
+
 	try {
-		annc_create_.at(res.getResourceType())(res, at_, oa_);
+		found_->second(res, at_, oa_, reqp.getRequestId());
 	} catch (exception &e) {
 		cerr << "initiateAnnc: exception:" << e.what() << endl;
 		return false;
@@ -164,20 +180,31 @@ bool CSEHandler::initiateAnnc(const RequestPrim& reqp, const ResourceBase& res,
 }
 
 void CSEHandler::postAnnc(const RequestPrim& reqp, const string& rqi, const ResponsePrim& rspp) {
+	RequestPrim ori_reqp_;
+	string ori_pc_;
+	if (!reqc_.getRequest(rqi, ori_reqp_, ori_pc_)) {
+		cerr << "CSEHandler::postAnnc: can not get original request [" << rqi << "]\n";
+		return;
+	}
 
-	if (reqp.getOperation() == Operation::CREATE) {
-		if (rspp.getResponseStatusCode() == ResponseStatusCode::CREATED) {
-			// send response to originator
-			RequestPrim ori_reqp_;
-			string ori_pc_;
-			RequestCache::PostRequestFunc f;
-			if (reqc_.getRequest(rqi, ori_reqp_, ori_pc_, f)) {
-				if (f != NULL) {
-					//ResponsePrim ori_rspp_;
-					//f(ori_reqp_, ori_pc_, ori_rspp_);
-				}
-			}
+	string fr_ = rdb_.getRoot()->getDomain() + rdb_.getRoot()->getCSEId();
+	if (rspp.getResponseStatusCode() == ResponseStatusCode::CREATED) {
+		string& rsp_pc_ = ori_pc_;
+		ResponseStatusCode rsp_rsc_;
+		switch (reqp.getOperation()) {
+		case Operation::CREATE:
+			rsp_rsc_ = ResponseStatusCode::CREATED;
+			break;
+		case Operation::UPDATE:
+			rsp_rsc_ = ResponseStatusCode::OK;
+			// return at attributes
+
+			break;
+		default:
+			cerr << "CSEHandler::postAnnc: Invalid operation: " << (int)reqp.getOperation();
+			return;
 		}
+		sendResponse(ori_reqp_, rsp_rsc_, fr_, rsp_pc_);
 	}
 }
 

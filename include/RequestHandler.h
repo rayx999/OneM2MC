@@ -151,6 +151,7 @@ protected:
 
 	void sendResponse(RequestPrim&, ResponseStatusCode, const string&, const string&);
 
+public:
 	void generateRequestId(string&);
 
 protected:

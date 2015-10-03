@@ -49,11 +49,11 @@ void NSEBase::work_thread(boost::shared_ptr<boost::asio::io_service> io_service)
 	}
 }
 
-void NSEBase::send(RequestPrim& reqp, const std::string& addr, uint port) {
+void NSEBase::send_request(RequestPrim& reqp, const std::string& addr, uint port) {
 	//cout << "NSEBase::sendRequest: rqi:" << reqp.getRequestId() << endl;
 }
 
-void NSEBase::send(ResponsePrim& rspp, const std::string& addr, uint port) {
+void NSEBase::send_response(ResponsePrim& rspp, const std::string& addr, uint port) {
 	//cout << "NSEBase::sendResponse: rsc:" << (int) rsp.getResponseStatusCode() << endl;
 }
 

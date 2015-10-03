@@ -34,8 +34,8 @@ public:
 	}
 
 	//void post(ResponsePrim& rsp);
-	virtual void send(RequestPrim&,  const std::string&, uint);
-	virtual void send(ResponsePrim&, const std::string&, uint);
+	virtual void send_request (RequestPrim&,  const std::string&, uint);
+	virtual void send_response(ResponsePrim&, const std::string&, uint);
 	virtual void run();
 
 	virtual ~NSEBase();

@@ -24,11 +24,12 @@ class NSEBase;
 class RequestPrim;
 class ResponsePrim;
 
-using anncCreator =  boost::function<void(const ResourceBase&, const vector<string>&, const AnncAttr&)>;
-
 class CSEHandler : public RequestHandler {
 
 public:
+	using anncCreator =  boost::function<void(const ResourceBase&,
+			const vector<string>&, const AnncAttr&, const string&)>;
+
 	CSEHandler(NSEBase& nse, CSEResourceStore& rdb);
 
 	void handleRequest(RequestPrim&);
@@ -38,7 +39,8 @@ public:
 
 private:
 	template <typename SourceType, typename AnncType>
-	void createAnnc(const ResourceBase& res, const vector<string>& at, const AnncAttr& oa) {
+	void createAnnc(const ResourceBase& res, const vector<string>& at, const AnncAttr& oa,
+			const string& rqi) {
 		AnncType annc_(static_cast<const SourceType&>(res));
 		if (oa.size() == 0) {
 			annc_.copyAnncFields();
@@ -54,10 +56,11 @@ private:
 				RequestPrim reqp_annc_(Operation::CREATE,
 					at[i], rdb_.getRoot()->getDomain() + rdb_.getRoot()->getCSEId(), rqi_);
 				reqp_annc_.setContent(pc_);
-				nse_.send(reqp_annc_, "localhost", 5555);
-				reqc_.addRequest(reqp_annc_, rqi_,
+				reqc_.addRequest(reqp_annc_, rqi, // original request rqi from AE
 						boost::bind(&CSEHandler::postAnnc, this, _1, _2, _3));
+				nse_.send_request(reqp_annc_, "localhost", 5555);
 			} catch (exception &e) {
+				cerr << "CSEHandler::createAnnc: exception: " << e.what() << endl;
 				continue;
 			}
 		}

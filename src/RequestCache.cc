@@ -62,7 +62,7 @@ bool RequestCache::getRequest(const std::string& rqi, RequestPrim& reqp, std::st
 	boost::lock_guard<boost::mutex> lock(m_);
 	if (req_c_.find(rqi) == req_c_.end()) {
 		cerr << "RequestCache::getRequest: request id [" <<
-				reqp.getRequestId() << "] doesn't exist.\n";
+				rqi << "] doesn't exist.\n";
 		return false;
 	}
 	reqp.swap(*req_c_.at(rqi).p_reqp_);

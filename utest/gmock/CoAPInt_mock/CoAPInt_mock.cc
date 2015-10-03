@@ -45,62 +45,6 @@ CSEHandler * CoAPIntMockTest::hdl_;
 CSEServer * CoAPIntMockTest::server_;
 bool CoAPIntMockTest::last_test_bad_ = true;
 
-// Matcher for keep test arg to val
-MATCHER_P(StrGood, val, "") {
-	if (arg.empty()) {
-		return false;
-	} else {
-		*val = arg;
-		return true;
-	}
-}
-
-bool matcher_cse(const pb::CSEBase& act, const pb::CSEBase& exp) {
-	return  act.cst() == exp.cst() &&
-			act.csi() == exp.csi();
-}
-
-bool matcher_req(const pb::Request& act, const pb::Request& exp) {
-	string act_str_;
-	string exp_str_;
-	if (act.SerializeToString(&act_str_) &&
-		exp.SerializeToString(&exp_str_)) {
-		return  act_str_ == exp_str_;
-	}
-	cerr << "macher_req: can't serialize to string\n";
-	return false;
-}
-
-bool matcher_ae(const pb::AE& act, const pb::AE& exp) {
-	return act.apn() == exp.apn() &&
-			act.api() == exp.api() &&
-			act.aei() == exp.aei();
-}
-
-MATCHER_P(PbEq, exp_res, "") {
-	pb::ResourceBase act_res_;
-	if (!act_res_.ParseFromString(arg)) {
-		return false;
-	}
-
-	if  (act_res_.ty() == exp_res.ty() &&
-		 act_res_.ri() == exp_res.ri() &&
-		 act_res_.rn() == exp_res.rn() &&
-		 act_res_.pi() == exp_res.pi() )
-	{
-		if (act_res_.has_csb()) {
-			return matcher_cse(act_res_.csb(), exp_res.csb());
-		} else if (act_res_.has_req()) {
-			return matcher_req(act_res_.req(), exp_res.req());
-		} else if (act_res_.has_ae()) {
-			return matcher_ae(act_res_.ae(), exp_res.ae());
-		} else {
-			cerr << "PbEq: No sub-resource.\n";
-		}
-	}
-	return false;
-}
-
 MATCHER_P(OptEq, exp_opt, "") {
 	for (auto i = arg.begin(); i != arg.end(); i++) {
 		if (exp_opt.find(i->num()) == exp_opt.end() ||
@@ -190,7 +134,7 @@ void CoAPIntMockTest::retrieveTestBody(pb::CoAPTypes_MessageType type, pb::CoAPT
 				Property(&pb::CoAPBinding::code, Eq(code)),
 				Property(&pb::CoAPBinding::opt_size, Eq((int)opt.size())),
 				Property(&pb::CoAPBinding::opt, OptEq(opt)),
-				Property(&pb::CoAPBinding::payload, PbEq(exp)))))
+				Property(&pb::CoAPBinding::payload, PbEq(&exp)))))
         .WillOnce(sendInvokedNotify(&mutex_, &cond_var_, &done_));
 
 	server_->run();
@@ -229,7 +173,7 @@ void CoAPIntMockTest::retrieveTestBody(pb::CoAPTypes_MessageType type, pb::CoAPT
 				Property(&pb::CoAPBinding::code, Eq(code)),
 				Property(&pb::CoAPBinding::opt_size, Eq((int)opt.size())),
 				Property(&pb::CoAPBinding::opt, OptEq(opt)),
-				Property(&pb::CoAPBinding::payload, StrGood(&pc)))))
+				Property(&pb::CoAPBinding::payload, StrSave(&pc)))))
 	    .WillOnce(sendInvokedNotify(&mutex_, &cond_var_, &done_));
 
 	server_->run();

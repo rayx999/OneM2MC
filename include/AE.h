@@ -20,7 +20,6 @@ namespace MicroWireless {
 
 namespace OneM2M {
 
-using namespace std;
 using namespace MicroWireless::OneM2M;
 
 class CSEBase;
@@ -31,19 +30,19 @@ public:
 	AEClass();
 	virtual ~AEClass();
 
-	AEClass(const string& json, const string& id_str);
-	AEClass(const string& ri, ResourceStore<CSEBase>& rdb);
+	AEClass(const std::string& json, const std::string& id_str);
+	AEClass(const std::string& ri, ResourceStore<CSEBase>& rdb);
 
-	bool setAE(const string& ri, ResourceStore<CSEBase>& rdb);
-	bool setAE(const string &json, const string& id_str);
-	virtual bool setResourceBase(const string& pc, const string& id_str, Operation op);
-	virtual bool setNewResourceAttr(const string& ri, const string& rn, const string& pi,
-			AEClass& ret);
+	bool setAE(const std::string& ri, ResourceStore<CSEBase>& rdb);
+	bool setAE(const std::string &json, const std::string& id_str);
+	virtual bool setResourceBase(const std::string& pc, const std::string& id_str, Operation op);
+	virtual bool setNewResourceAttr(const std::string& ri, const std::string& rn,
+			const std::string& pi, AEClass& ret);
 
-	const string& getAppName();
-	const string& getAppId();
-	const string& getAEId();
-	bool setAEId(const string& aei);
+	const std::string& getAppName();
+	const std::string& getAppId();
+	const std::string& getAEId();
+	bool setAEId(const std::string& aei);
 
 protected:
 
@@ -54,16 +53,7 @@ private:
 private:
 	pb::AE* p_ae_;
 
-	enum attrTag {
-		TAG_APN  = 100,
-		TAG_API  = 101,
-		TAG_AEI  = 102,
-		TAG_POA  = 103,
-		TAG_OR   = 104,
-		TAG_NL   = 105
-	};
-
-	static map<int, map<Operation, attrOption>> allowAttr;
+	static map<const std::string, map<Operation, attrOption>> allowAttr;
 };
 
 }	// OneM2M

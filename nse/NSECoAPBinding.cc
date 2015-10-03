@@ -207,7 +207,11 @@ bool NSE_CoAP::convertCoAPRequest(const pb::CoAPBinding& coap, RequestPrim*& p_r
 	return true;
 }
 
-void NSE_CoAP::send(ResponsePrim& rsp, const string& addr, uint port) {
+void NSE_CoAP::send_request(RequestPrim& reqp, const string& addr, uint port) {
+
+}
+
+void NSE_CoAP::send_response(ResponsePrim& rsp, const string& addr, uint port) {
 
 	//cout << "NSE_CoAP::send： Response rsc:" << (int)rsp.getResponseStatusCode() << endl;
 

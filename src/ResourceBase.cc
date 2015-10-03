@@ -28,20 +28,20 @@ using namespace MicroWireless::OneM2M;
 
 const int ResourceBase::ResourceBaseOffset = 30000;
 
-map<int, map<Operation, ResourceBase::attrOption>>
+map<const string, map<Operation, ResourceBase::attrOption>>
 	ResourceBase::allowAttr = {
-   {TAG_TY,   { {Operation::CREATE, NOTPRESENT}, {Operation::UPDATE, NOTPRESENT} } },
-   {TAG_RI,   { {Operation::CREATE, NOTPRESENT}, {Operation::UPDATE, NOTPRESENT} } },
-   {TAG_RN,   { {Operation::CREATE, NOTPRESENT}, {Operation::UPDATE, NOTPRESENT} } },
-   {TAG_PI,   { {Operation::CREATE, NOTPRESENT}, {Operation::UPDATE, NOTPRESENT} } },
-   {TAG_CT,   { {Operation::CREATE, NOTPRESENT}, {Operation::UPDATE, NOTPRESENT} } },
-   {TAG_LT,   { {Operation::CREATE, NOTPRESENT}, {Operation::UPDATE, NOTPRESENT} } },
-   {TAG_ET,   { {Operation::CREATE, OOPTIONAL }, {Operation::UPDATE, OOPTIONAL } } },
-   {TAG_ACPI, { {Operation::CREATE, NOTPRESENT}, {Operation::UPDATE, NOTPRESENT} } },
-   {TAG_LBL,  { {Operation::CREATE, OOPTIONAL }, {Operation::UPDATE, OOPTIONAL } } },
-   {TAG_AA,   { {Operation::CREATE, OOPTIONAL }, {Operation::UPDATE, OOPTIONAL } } },
-   {TAG_AT,   { {Operation::CREATE, OOPTIONAL }, {Operation::UPDATE, OOPTIONAL } } },
-   {TAG_ST,   { {Operation::CREATE, OOPTIONAL }, {Operation::UPDATE, OOPTIONAL } } }
+   {AttrName::TY(),   { {Operation::CREATE, NOTPRESENT}, {Operation::UPDATE, NOTPRESENT} } },
+   {AttrName::RI(),   { {Operation::CREATE, NOTPRESENT}, {Operation::UPDATE, NOTPRESENT} } },
+   {AttrName::RN(),   { {Operation::CREATE, NOTPRESENT}, {Operation::UPDATE, NOTPRESENT} } },
+   {AttrName::PI(),   { {Operation::CREATE, NOTPRESENT}, {Operation::UPDATE, NOTPRESENT} } },
+   {AttrName::CT(),   { {Operation::CREATE, NOTPRESENT}, {Operation::UPDATE, NOTPRESENT} } },
+   {AttrName::LT(),   { {Operation::CREATE, NOTPRESENT}, {Operation::UPDATE, NOTPRESENT} } },
+   {AttrName::ET(),   { {Operation::CREATE, OOPTIONAL }, {Operation::UPDATE, OOPTIONAL } } },
+   {AttrName::ACPI(), { {Operation::CREATE, NOTPRESENT}, {Operation::UPDATE, NOTPRESENT} } },
+   {AttrName::LBL(),  { {Operation::CREATE, OOPTIONAL }, {Operation::UPDATE, OOPTIONAL } } },
+   {AttrName::AA(),   { {Operation::CREATE, OOPTIONAL }, {Operation::UPDATE, OOPTIONAL } } },
+   {AttrName::AT(),   { {Operation::CREATE, OOPTIONAL }, {Operation::UPDATE, OOPTIONAL } } },
+   {AttrName::ST(),   { {Operation::CREATE, OOPTIONAL }, {Operation::UPDATE, OOPTIONAL } } }
 };
 
 ResourceBase::ResourceBase() : base_() {
@@ -175,6 +175,19 @@ const string& ResourceBase::getResourceName() const {
 bool ResourceBase::setResourceName(const string& rn) {
 	base_.set_rn(rn);
 	return setLastModifiedTimestamp();
+}
+
+int ResourceBase::getAccessControlPolicyNum() {
+	return base_.acpi_size();
+}
+
+const std::string& ResourceBase::getAccessControlPolicy(int i) const {
+	return base_.acpi(i);
+}
+
+bool ResourceBase::setAccessControlPolicy(const std::string& acpi) {
+	base_.add_acpi(acpi);
+	return true;
 }
 
 const string& ResourceBase::getParentId() const {

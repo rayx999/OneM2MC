@@ -41,63 +41,6 @@ CSEHandler * NSEBaseMockTest::hdl_;
 CSEServer * NSEBaseMockTest::server_;
 bool NSEBaseMockTest::last_test_bad_ = true;
 
-// Matcher for keep test arg to val
-MATCHER_P(StrGood, val, "") {
-	if (arg.empty()) {
-		return false;
-	} else {
-		*val = arg;
-		return true;
-	}
-}
-
-bool matcher_cse(const pb::CSEBase& act, const pb::CSEBase& exp) {
-	return  act.cst() == exp.cst() &&
-			act.csi() == exp.csi();
-}
-
-bool matcher_req(const pb::Request& act, const pb::Request& exp) {
-	string act_str_;
-	string exp_str_;
-	if (act.SerializeToString(&act_str_) &&
-		exp.SerializeToString(&exp_str_)) {
-		return  act_str_ == exp_str_;
-	}
-	cerr << "macher_req: can't serialize to string\n";
-	return false;
-}
-
-bool matcher_ae(const pb::AE& act, const pb::AE& exp) {
-	return act.apn() == exp.apn() &&
-			act.api() == exp.api() &&
-			act.aei() == exp.aei();
-}
-
-MATCHER_P(PbEq, exp_res, "") {
-	pb::ResourceBase act_res_;
-	if (!act_res_.ParseFromString(arg)) {
-		return false;
-	}
-
-	if  (act_res_.ty() == exp_res.ty() &&
-		 act_res_.ri() == exp_res.ri() &&
-		 act_res_.rn() == exp_res.rn() &&
-		 act_res_.pi() == exp_res.pi() )
-	{
-		if (act_res_.has_csb()) {
-			return matcher_cse(act_res_.csb(), exp_res.csb());
-		} else if (act_res_.has_req()) {
-			return matcher_req(act_res_.req(), exp_res.req());
-		} else if (act_res_.has_ae()) {
-			return matcher_ae(act_res_.ae(), exp_res.ae());
-		} else {
-			cerr << "PbEq: No sub-resource.\n";
-		}
-	}
-	return false;
-}
-
-
 void NSEBaseMockTest::SetUpTestCase()
 {
     rdb_ = new CSEResourceStore("data/.store");
@@ -142,11 +85,11 @@ void NSEBaseMockTest::retrieveTestBody(ResponseStatusCode rsc, const string& rqi
 	EXPECT_CALL(*nse_, run())
 		.WillOnce(Invoke(this, &NSEBaseMockTest::handleRequest));
 
-	EXPECT_CALL(*nse_, send(AllOf(Property(&ResponsePrim::getResponseStatusCode, Eq(rsc)),
+	EXPECT_CALL(*nse_, send_response(AllOf(Property(&ResponsePrim::getResponseStatusCode, Eq(rsc)),
 				Property(&ResponsePrim::getTo, StrEq(to)),
 				Property(&ResponsePrim::getFrom, StrEq(fr)),
 				Property(&ResponsePrim::getRequestId, StrEq(rqi)),
-				Property(&ResponsePrim::getContent, PbEq(exp))), _, _))
+				Property(&ResponsePrim::getContent, PbEq(&exp))), _, _))
 		.Times(1);
 
 	server_->run();
@@ -157,7 +100,7 @@ void NSEBaseMockTest::retrieveTestBody(ResponseStatusCode rsc, const string& rqi
 	 EXPECT_CALL(*nse_, run())
 		  .WillOnce(Invoke(this, &NSEBaseMockTest::handleRequest));
 
-	 EXPECT_CALL(*nse_, send(AllOf(Property(&ResponsePrim::getResponseStatusCode, Eq(rsc)),
+	 EXPECT_CALL(*nse_, send_response(AllOf(Property(&ResponsePrim::getResponseStatusCode, Eq(rsc)),
 					Property(&ResponsePrim::getTo, StrEq(to)),
 					Property(&ResponsePrim::getFrom, StrEq(fr)),
 					Property(&ResponsePrim::getRequestId, StrEq(rqi))), _, _))
@@ -171,11 +114,11 @@ void NSEBaseMockTest::retrieveTestBody(ResponseStatusCode rsc, const string& rqi
 	 EXPECT_CALL(*nse_, run())
 		  .WillOnce(Invoke(this, &NSEBaseMockTest::handleRequest));
 
-	 EXPECT_CALL(*nse_, send(AllOf(Property(&ResponsePrim::getResponseStatusCode, Eq(rsc)),
+	 EXPECT_CALL(*nse_, send_response(AllOf(Property(&ResponsePrim::getResponseStatusCode, Eq(rsc)),
 					Property(&ResponsePrim::getTo, StrEq(to)),
 					Property(&ResponsePrim::getFrom, StrEq(fr)),
 					Property(&ResponsePrim::getRequestId, StrEq(rqi)),
-					Property(&ResponsePrim::getContent, StrGood(&pc))), _, _))
+					Property(&ResponsePrim::getContent, StrSave(&pc))), _, _))
 		  .Times(1);
 
 	 server_->run();
