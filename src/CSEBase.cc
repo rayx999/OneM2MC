@@ -82,6 +82,11 @@ bool CSEBase::isResourceSupported(SupportedResourceType rt) {
 }
 
 bool CSEBase::checkIdConsistency() {
+	if (getResourceType() != SupportedResourceType::CSE_BASE) {
+		cerr << "checkIdConsistency: resource type mismatch:" <<
+		"should be CSE_BASE but is: " << (int)base_.ty() << endl;
+		return false;
+	}
 	if (domain_.empty()) {
 		cerr << "checkIdConsistency: Missing domain.";
 		return false;

@@ -102,10 +102,20 @@ bool AEClass::setAEId(const string& aei) {
 }
 
 bool AEClass::checkIdConsistency() {
-	if (!getResourceName().empty() && !getAEId().empty() &&
-		!boost::iequals(getAEId(), getResourceName())) {
+	if (getResourceType() != SupportedResourceType::AE) {
+		cerr << "checkIdConsistency: resource type mismatch:" <<
+		"should be AE but is: " << (int)base_.ty() << endl;
+		return false;
+	}
+	string aei_ = base_.ae().aei();
+	size_t aei_pos_ = aei_.rfind('/');
+	if (aei_pos_ != string::npos) {
+		aei_ = aei_.substr(aei_pos_ + 1);
+	}
+	if (!getResourceName().empty() && !aei_.empty() &&
+		!boost::iequals(aei_, getResourceName())) {
 		cerr << "checkIdConsistency: AEId conflicts.";
-		cerr << getAEId() << " vs. " << getResourceName() << endl;
+		cerr << aei_ << " vs. " << getResourceName() << endl;
 		return false;
 	}
 	return true;

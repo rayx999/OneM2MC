@@ -10,10 +10,11 @@
 #include <iostream>
 #include <fstream>
 #include <sstream>
-#include <boost/algorithm/string/predicate.hpp>
+#include <boost/algorithm/string.hpp>
 #include <json2pb.h>
 
 #include "CommonTypes.pb.h"
+#include "CopyMessage.pb.h"
 #include "ResourceBase.pb.h"
 #include "CommonUtils.h"
 #include "ResourceBase.h"
@@ -42,6 +43,21 @@ map<const string, map<Operation, ResourceBase::attrOption>>
    {AttrName::AA(),   { {Operation::CREATE, OOPTIONAL }, {Operation::UPDATE, OOPTIONAL } } },
    {AttrName::AT(),   { {Operation::CREATE, OOPTIONAL }, {Operation::UPDATE, OOPTIONAL } } },
    {AttrName::ST(),   { {Operation::CREATE, OOPTIONAL }, {Operation::UPDATE, OOPTIONAL } } }
+};
+
+map<const string, ResourceBase::attrOption>	ResourceBase::anncAttr = {
+   {AttrName::TY(),   NOTPRESENT},
+   {AttrName::RI(),   MANDATORY },
+   {AttrName::RN(),   MANDATORY },
+   {AttrName::PI(),   NOTPRESENT},
+   {AttrName::CT(),   NOTPRESENT},
+   {AttrName::LT(),   NOTPRESENT},
+   {AttrName::ET(),   MANDATORY },
+   {AttrName::ACPI(), MANDATORY },
+   {AttrName::LBL(),  MANDATORY },
+   {AttrName::AA(),   NOTPRESENT},
+   {AttrName::AT(),   NOTPRESENT},
+   {AttrName::ST(),   NOTPRESENT}
 };
 
 ResourceBase::ResourceBase() : base_() {
@@ -131,6 +147,10 @@ pb::CSEBase* ResourceBase::getCSEBase() {
 
 pb::AE* ResourceBase::getAE() {
 	return base_.mutable_ae();
+}
+
+pb::AE* ResourceBase::getAEAnnc() {
+	return base_.mutable_aea();
 }
 
 pb::Request* ResourceBase::getRequest() {
@@ -317,9 +337,22 @@ bool ResourceBase::SerializeToString(string* pc) {
 	return base_.SerializeToString(pc);
 }
 
+void ResourceBase::copyAnncFields(const ResourceBase& src, AnncAttr& ma, AnncAttr& oa) {
+	google::protobuf::CopyMessage cf_(src.getResourceBase(), base_);
+	cf_.copyFields(ma);
+	cf_.copyFields(oa);
+}
+
 void ResourceBase::CopyResourceTimeStamps(ResourceBase& src) {
 	*base_.mutable_ct() = src.base_.ct();
 	*base_.mutable_lt() = src.base_.lt();
+}
+
+bool ResourceBase::compare(pb::ResourceBase& tgt, bool noct, bool nolt) {
+	pb::ResourceBase src_ = base_;
+	if (noct) src_.clear_ct();
+	if (nolt) src_.clear_lt();
+	return compareMessage(src_, tgt);
 }
 
 string ResourceBase::getJson() {
@@ -327,6 +360,48 @@ string ResourceBase::getJson() {
 }
 
 ResourceBase::~ResourceBase() { }
+
+using google::protobuf::Message;
+using google::protobuf::Descriptor;
+using google::protobuf::Reflection;
+
+bool ResourceBase::filterAnncAttr(Message* msg, map<const string, attrOption> attr) {
+
+	vector<string> aas_;
+	boost::split(aas_, getAnncAttr(), boost::is_any_of(" ,"));
+	for (auto a : attr) {
+		if (a.first.empty()) continue;
+		if (std::find(aas_.begin(), aas_.end(), a.first) == aas_.end()) {
+			// mandatory attr always present
+			if (attr.at(a.first) == MANDATORY) continue;
+			// OA attr will not present
+			attr.at(a.first) = NOTPRESENT;
+		}
+	}
+
+	const Descriptor* d_ = msg->GetDescriptor();
+	const Reflection* r_ = msg->GetReflection();
+	bool ret_ = true;
+	for (auto a : attr) {
+		switch (a.second) {
+		case NOTPRESENT:
+			if (d_->FindFieldByName(a.first) != NULL) {
+				r_->ClearField(msg, d_->FindFieldByName(a.first));
+			}
+			break;
+		case MANDATORY:
+			if (d_->FindFieldByName(a.first) == NULL) {
+				cerr << "ResourceBase::filterAnncAttr: mandatory annc field missing: "
+						<< a.first << endl;
+				ret_ = false;
+			}
+			break;
+		default:
+			break;
+		}
+	}
+	return ret_;
+}
 
 }	// OneM2M
 

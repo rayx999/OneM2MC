@@ -48,7 +48,7 @@ private:
 			annc_.copyAnncFields(oa);
 		}
 		string pc_;
-		annc_.serializeToString(&pc_);
+		annc_.SerializeToString(&pc_);
 		for (unsigned int i = 0; i < at.size(); i++) {
 			string rqi_;
 			generateRequestId(rqi_);

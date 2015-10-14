@@ -46,7 +46,7 @@ const string AETest::ae_json("{"
 		"\"ae\"     : {"
 			"\"apn\" 	: \"FreshGo\","
 			"\"api\" 	: \"APP-01\","
-			"\"aei\" 	: \"AE-01\" "
+			"\"aei\" 	: \"//microwireless.com/IN-CSE-01/AE-01\" "
 		"}"
 	"}");
 
@@ -63,6 +63,29 @@ TEST_F(AETest, JsonValid) {
 	}
 }
 
+TEST_F(AETest, WrongResourceType) {
+	static const string json("{"
+			"\"ty\" 	: 5,"
+			"\"ri\" 	: \"Z0005\","
+			"\"rn\" 	: \"IN-CSE-01\","
+			"\"ct\" 	: { \"seconds\" : 1435434103 },"
+			"\"csb\"    : {"
+				"\"cst\" 	: 1,"
+				"\"csi\" 	: \"/IN-CSE-01\","
+				"\"srt\" 	: [ 2, 5, 16 ]"
+			"}"
+		"}");
+
+	try {
+		AEClass ae_(json, "//microwireless.com/IN-CSE-01/Z0005");
+	} catch (exception &e) {
+		cout << "Excepted exception: " << e.what() << endl;
+		return;
+	}
+	cerr << "Excepted exception doesn't occur." << endl;
+	ASSERT_TRUE(false);
+}
+
 TEST_F(AETest, JsonNoDomain) {
 	try {
 		AEClass ae_(ae_json, "/IN-CSE-01/AE-01");
@@ -76,7 +99,7 @@ TEST_F(AETest, JsonNoDomain) {
 TEST_F(AETest, JsonNoCSEIdInRi) {
 	try {
 		AEClass ae_(ae_json, id_str);
-		ASSERT_STREQ(ae_.getAEId().c_str(), "AE-01");
+		ASSERT_STREQ(ae_.getAEId().c_str(), "//microwireless.com/IN-CSE-01/AE-01");
 	} catch (exception &e) {
 		cout << "Unexcepted exception: " << e.what() << endl;
 		ASSERT_TRUE(false);
@@ -102,7 +125,7 @@ TEST_F(AETest, JsonConflictAEId) {
 			"\"ae\"     : {"
 				"\"apn\" 	: \"FreshGo\","
 				"\"api\" 	: \"APP-01\","
-				"\"aei\" 	: \"AE-01\" "
+				"\"aei\" 	: \"//microwireless.com/IN-CSE-01/AE-01\" "
 			"}"
 		"}");
 
@@ -149,7 +172,7 @@ TEST_F(AETest, CheckOutResource) {
 }
 
 TEST_F(AETest, GetAttributes) {
-	ASSERT_STREQ(ae_.getAEId().c_str(), "AE-01");
+	ASSERT_STREQ(ae_.getAEId().c_str(), "//microwireless.com/IN-CSE-01/AE-01");
 	ASSERT_STREQ(ae_.getResourceId().c_str(), "Z0002");
 	ASSERT_STREQ(ae_.getResourceName().c_str(), "AE-01");
 }

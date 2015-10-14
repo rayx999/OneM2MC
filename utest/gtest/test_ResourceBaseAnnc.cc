@@ -14,7 +14,6 @@
 #include "CommonTypes.h"
 #include "ResourceBase.h"
 #include "ResourceBase.pb.h"
-#include "ResourceBaseAnnc.h"
 
 using namespace std;
 using namespace MicroWireless::OneM2M;
@@ -26,7 +25,7 @@ protected:
 
 	AnncAttr ma_, oa_, empty_;
 	ResourceBase src_;
-	ResourceBaseAnnc annc_;
+	ResourceBase annc_;
 
 	ResourceBaseAnncTest() : src_(), annc_() {}
 	virtual ~ResourceBaseAnncTest() {}
@@ -57,7 +56,7 @@ const string ResourceBaseAnncTest::valid_path("//microwireless.com/IN-CSE-01/AE-
 
 TEST_F(ResourceBaseAnncTest, CheckMA) {
 	pb::ResourceBase tgt_;
-	ResourceBaseAnnc annc_;
+	ResourceBase annc_;
 
 	try {
 		ResourceBase src_(valid_json, valid_path);
@@ -71,7 +70,7 @@ TEST_F(ResourceBaseAnncTest, CheckMA) {
 		ASSERT_TRUE(false);
 	}
 	ASSERT_TRUE(ma_.size() == 0);
-	ASSERT_TRUE(annc_.compare(tgt_));
+	ASSERT_TRUE(annc_.compare(tgt_, true));
 }
 
 TEST_F(ResourceBaseAnncTest, CheckMAMissing) {
@@ -88,7 +87,7 @@ TEST_F(ResourceBaseAnncTest, CheckMAMissing) {
 			"}"
 	"}");
 
-	ResourceBaseAnnc annc_;
+	ResourceBase annc_;
 
 	try {
 		ResourceBase src_(json_no_rn, "//microwireless.com/IN-CSE-01/Z0002");
@@ -115,7 +114,7 @@ TEST_F(ResourceBaseAnncTest, CheckMAMissing1) {
 			"}"
 	"}");
 
-	ResourceBaseAnnc annc_;
+	ResourceBase annc_;
 
 	try {
 		ResourceBase src_(json_no_acpi, "//microwireless.com/IN-CSE-01/Z0002");
@@ -144,7 +143,7 @@ TEST_F(ResourceBaseAnncTest, CheckOA) {
 			"}"
 	"}");
 	pb::ResourceBase tgt_;
-	ResourceBaseAnnc annc_;
+	ResourceBase annc_;
 
 	try {
 		ResourceBase src_(json_st, valid_path);
@@ -160,5 +159,5 @@ TEST_F(ResourceBaseAnncTest, CheckOA) {
 	ASSERT_TRUE(ma_.size() == 0);
 	ASSERT_TRUE(oa_.size() == 6);
 	ASSERT_TRUE(oa_.find("st") == oa_.end());
-	ASSERT_TRUE(annc_.compare(tgt_));
+	ASSERT_TRUE(annc_.compare(tgt_, true));
 }

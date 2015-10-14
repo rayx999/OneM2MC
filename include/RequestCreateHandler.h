@@ -12,6 +12,7 @@
 
 #include "CommonTypes.h"
 #include "AE.h"
+#include "AEAnnc.h"
 #include "RequestPrim.h"
 #include "ResourceStore.h"
 #include "ResourceBase.h"
@@ -55,20 +56,6 @@ public:
 			return ResponseStatusCode::BAD_REQUEST;
 		}
 
-		switch (ty_) {
-		case SupportedResourceType::AE:
-			p_res_ = new AEClass();
-			p_ret_ = new AEClass();
-			break;
-		default:
-			return ResponseStatusCode::BAD_REQUEST;
-		}
-		if (p_res_ == NULL || p_ret_ == NULL) {
-			return ResponseStatusCode::BAD_REQUEST;
-		} else if (!p_res_->setResourceBase(pc_, sp_id_, Operation::CREATE)) {
-			return ResponseStatusCode::BAD_REQUEST;
-		}
-
 		string full_path;
 		ResponseStatusCode rsc_ = getFullPathToBeCreated(full_path);
 		if (rsc_ != ResponseStatusCode::OK) {
@@ -91,13 +78,16 @@ public:
 		bool result_ = false;
 		switch (ty_) {
 		case SupportedResourceType::AE:
-			result_ = ((AEClass*)p_res_)->setNewResourceAttr(ri_, rn_, pi_, *(AEClass*)p_ret_);
+			result_ = createNewResource<AEClass>(ri_, rn_, pi_);
+			break;
+		case SupportedResourceType::AE_ANNC:
+			result_ = createNewResource<AEAnnc>(ri_, rn_, pi_);
 			break;
 		default:
 			return ResponseStatusCode::INTERNAL_SERVER_ERROR;
 		}
 		if (!result_) {
-			return ResponseStatusCode::INTERNAL_SERVER_ERROR;
+			return ResponseStatusCode::BAD_REQUEST;
 		}
 		// set acpi, fake acpi ri.
 		p_res_->setAccessControlPolicy("001-25423");
@@ -126,6 +116,20 @@ public:
 	}
 
 private:
+	template <typename ResourceType>
+	bool createNewResource(const string& ri, const string& rn, const string& pi) {
+		ResourceType* p_res = new ResourceType();
+		ResourceType* p_ret = new ResourceType();
+
+		p_res_ = (ResourceBase*)p_res;
+		p_ret_ = (ResourceBase*)p_ret;
+		if (p_res == NULL || p_ret == NULL) {
+			return false;
+		} else if (!p_res->setResourceBase(pc_, sp_id_, Operation::CREATE)) {
+			return false;
+		}
+		return p_res->setNewResourceAttr(ri, rn, pi, *p_ret);
+	}
 
 	bool checkResourceType(SupportedResourceType& ty) {
 		pb::ResourceBase pb_res_;

@@ -62,6 +62,28 @@ TEST_F(CSEBaseTest, JsonValid) {
 	}
 }
 
+TEST_F(CSEBaseTest, WrongResourceType) {
+	static const string json("{"
+			"\"ty\" 	: 2,"
+			"\"ri\" 	: \"Z0002\","
+			"\"rn\" 	: \"AE-01\","
+			"\"ae\"     : {"
+				"\"apn\" 	: \"FreshGo\","
+				"\"api\" 	: \"APP-01\","
+				"\"aei\" 	: \"//microwireless.com/IN-CSE-01/AE-01\" "
+			"}"
+		"}");
+
+	try {
+		CSEBase cse_base_(json, "//microwireless.com/IN-CSE-01/Z0002");
+	} catch (exception &e) {
+		cout << "Excepted exception: " << e.what() << endl;
+		return;
+	}
+	cerr << "Excepted exception doesn't occur." << endl;
+	ASSERT_TRUE(false);
+}
+
 TEST_F(CSEBaseTest, JsonNoDomain) {
 	static const string json("{"
 			"\"ty\" 	: 5,"

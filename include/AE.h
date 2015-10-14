@@ -23,6 +23,7 @@ namespace OneM2M {
 using namespace MicroWireless::OneM2M;
 
 class CSEBase;
+class AEAnnc;
 
 class AEClass : public ResourceBase {
 
@@ -53,6 +54,7 @@ private:
 private:
 	pb::AE* p_ae_;
 
+	friend AEAnnc;
 	static map<const std::string, map<Operation, attrOption>> allowAttr;
 };
 

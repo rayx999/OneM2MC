@@ -15,6 +15,7 @@
 
 #include "CommonTypes.h"
 #include "AE.h"
+#include "AEAnnc.h"
 #include "Request.h"
 #include "RequestPrim.h"
 #include "RequestCache.h"
@@ -106,24 +107,34 @@ public:
 
 	template <typename StoreType>
 	bool composeContent(RequestPrim& req, string& pc, ResourceStore<StoreType>& rdb) {
-		bool ret_ = false;
+		bool ret_ = true;
 		ResourceBase base_;
 		if (!base_.setResourceBase(req.getTargetResource(), rdb)) {
 			cerr << "setResourceBase(" << req.getTargetResource() <<") failed.\n";
 			return false;
 		}
-
-		switch (req.getResultContent()) {
-		case ResultContent::ATTRIBUTES:
-			//pc = pb2json(res);
-			// return true;
-			return base_.SerializeToString(&pc);
+		// filter out non annc attributes
+		switch (base_.getResourceType()) {
+		case SupportedResourceType::AE_ANNC:
+			ret_ = ((AEAnnc*)&base_)->filterAnncAttr();
+			break;
 		default:
-			cerr << "serializeContent: Unknown ResultContent:"
-			<< static_cast<int>(req.getResultContent()) << endl;
 			break;
 		}
 
+		if (ret_) {
+			switch (req.getResultContent()) {
+			case ResultContent::ATTRIBUTES:
+				//pc = pb2json(res);
+				// return true;
+				ret_ = base_.SerializeToString(&pc);
+				break;
+			default:
+				cerr << "serializeContent: Unknown ResultContent:"
+				<< static_cast<int>(req.getResultContent()) << endl;
+				break;
+			}
+		}
 		return ret_;
 	}
 

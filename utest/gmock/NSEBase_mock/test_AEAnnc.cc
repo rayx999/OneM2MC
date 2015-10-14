@@ -40,10 +40,10 @@ using ::testing::_;
 class AEAnncTest : public NSEBaseMockTest {
 public:
 	static const std::string create_request;
-	static const std::string ae_content, ae_exp, aeA_exp;
+	static const std::string ae_content, aeA_content, ae_exp, aeA_exp;
 	static const string exp_to_, exp_fr_, exp_an_, an_rsp;
 
-	ResourceBase res_;
+	static string ri_, aei_, aeA_str_;
 
 public:
 	AEAnncTest() {}
@@ -85,6 +85,17 @@ const string AEAnncTest::ae_content("{"
 			"}"
 		"}");
 
+const string AEAnncTest::aeA_content("{"
+			"\"et\"     : { \"seconds\" : 1435434103 },"
+			"\"lbl\"    : [ \"test\" ],"
+			"\"aa\"		: \"apn api nl\","
+			"\"aeA\"    : {"
+				"\"apn\" 	: \"FreshGoAnnc1\","
+				"\"api\" 	: \"APP-02\","
+			    "\"nl\" 	: \"//microwireless.com/in-cse-02/10002-94770\" "
+			"}"
+		"}");
+
 const string AEAnncTest::aeA_exp("{"
 		    "\"rn\"     : \"FreshGoAnnc\","
 			"\"et\"     : { \"seconds\" : 1435434103 },"
@@ -107,6 +118,10 @@ const string AEAnncTest::ae_exp("{"
 const string AEAnncTest::exp_to_("//microwireless.com/AE-01");
 const string AEAnncTest::exp_fr_("//microwireless.com/IN-CSE-01");
 const string AEAnncTest::exp_an_("//microwireless.com/IN-CSE-02");
+
+string AEAnncTest::ri_;
+string AEAnncTest::aei_;
+string AEAnncTest::aeA_str_;
 
 ACTION_P4(handleResponse, hdl, rsc, fr, pc) {
 	RequestPrim& reqp_ = arg0;
@@ -146,8 +161,8 @@ MATCHER_P2(AnncEq, exp_res, ri, "") {
 	return false;
 }
 
-TEST_F(AEAnncTest, CreateAEAnnc) {
-  string rqi_, ri_, ret_pc_;
+TEST_F(AEAnncTest, CreateAEWithAt) {
+  string rqi_, ret_pc_;
   setupRequestPrim(create_request, ae_content);
   p_reqp_->setTo("//microwireless.com/in-cse-01/FreshGoAnnc");
 
@@ -182,107 +197,45 @@ TEST_F(AEAnncTest, CreateAEAnnc) {
   server_->run();
 }
 
-/*
-TEST_F(AEAnncTest, RetrieveAE) {
+TEST_F(AEAnncTest, CreateAEAnncAsCSE) {
+  setupRequestPrim(create_request, aeA_content);
+  p_reqp_->setTo("//microwireless.com/in-cse-01/FreshGoAnnc1");
+  p_reqp_->setFrom(exp_an_);
+
+  retrieveTestBody(ResponseStatusCode::CREATED, "ab3f124a", exp_an_, exp_fr_, aeA_str_);
+
+  pb::ResourceBase aeA_pc_;
+  aeA_pc_.ParseFromString(aeA_str_);
+  ASSERT_STREQ(aeA_pc_.rn().c_str(), "FreshGoAnnc1");
+  ASSERT_STREQ(aeA_pc_.pi().c_str(), "Z0005");
+  ri_ = aeA_pc_.ri();
+  aei_ = "//microwireless.com/IN-CSE-01/" + ri_;
+  ASSERT_STREQ(aeA_pc_.aea().aei().c_str(), aei_.c_str());
+}
+
+TEST_F(AEAnncTest, RetrieveAEAnncAsCSE) {
   ASSERT_FALSE(last_test_bad_);
 
   static const string json("{"
-			"\"op\": 2,"
-			"\"to\": \"//microwireless.com/IN-CSE-01\","
-			"\"rqi\": \"ab3f124a\","
-			"\"fr\": \"//microwireless.com/AE-01\""
-		"}");
+ 		"\"op\": 2,"
+ 		"\"to\": \"//microwireless.com/IN-CSE-01\","
+ 		"\"rqi\": \"ab3f124a\","
+ 		"\"fr\": \"//microwireless.com/IN-CSE-02\""
+ 	"}");
   NSEBaseMockTest::setupRequestPrim(json);
   ASSERT_TRUE(p_reqp_->setTo(p_reqp_->getTo() + "/" + ri_));
 
-  ae_pc_.set_ri(ri_);
-  retrieveTestBody(ResponseStatusCode::OK, "ab3f124a", exp_to_, exp_fr_, ae_pc_);
+  retrieveTestBody(ResponseStatusCode::OK, "ab3f124a", exp_an_, exp_fr_, aeA_str_);
+
+  pb::ResourceBase aeA_pc_;
+  aeA_pc_.ParseFromString(aeA_str_);
+  ASSERT_FALSE(aeA_pc_.ri().empty());
+  ASSERT_STREQ(aeA_pc_.rn().c_str(), "FreshGoAnnc1");
+  ASSERT_STREQ(aeA_pc_.acpi(0).c_str(), "001-25423");
+  ASSERT_STREQ(aeA_pc_.lbl(0).c_str(), "test");
+  ASSERT_TRUE(aeA_pc_.has_aea());
+  ASSERT_STREQ(aeA_pc_.aea().apn().c_str(), "FreshGoAnnc1");
+  ASSERT_STREQ(aeA_pc_.aea().api().c_str(), "APP-02");
+  ASSERT_TRUE(aeA_pc_.aea().aei().empty());
+  ASSERT_STREQ(aeA_pc_.aea().nl().c_str(), "//microwireless.com/in-cse-02/10002-94770");
 }
-
-TEST_F(AEAnncTest, RetrieveAE1) {
-  ASSERT_FALSE(last_test_bad_);
-
-  static const string json("{"
-			"\"op\": 2,"
-			"\"to\": \"//microwireless.com/IN-CSE-01/AE-01\","
-			"\"rqi\": \"ab3f124a\","
-			"\"fr\": \"//microwireless.com/AE-01\""
-		"}");
-  NSEBaseMockTest::setupRequestPrim(json);
-
-  ae_pc_.set_ri(ri_);
-  retrieveTestBody(ResponseStatusCode::OK, "ab3f124a", exp_to_, exp_fr_, ae_pc_);
-}
-
-TEST_F(AEAnncTest, CreateAEConflict) {
-  setupRequestPrim(create_request, ae_content);
-  p_reqp_->setTo("//microwireless.com/in-cse-01/AE-01");
-  retrieveTestBody(ResponseStatusCode::CONFLICT, "ab3f124a", exp_to_, exp_fr_);
-}
-
-TEST_F(AEAnncTest, CreateAEConflict1) {
-  setupRequestPrim(create_request, ae_content);
-  p_reqp_->setName("AE-01");
-
-  retrieveTestBody(ResponseStatusCode::CONFLICT, "ab3f124a", exp_to_, exp_fr_);
-}
-
-TEST_F(AEAnncTest, CreateAEConflict2) {
-  setupRequestPrim(create_request, ae_content);
-  p_reqp_->setTo("//in-cse-01.microwireless.com/AE-01");
-
-  retrieveTestBody(ResponseStatusCode::CONFLICT, "ab3f124a", exp_to_, exp_fr_);
-}
-
-TEST_F(AEAnncTest, CreateAENoContent) {
-  NSEBaseMockTest::setupRequestPrim(create_request);
-  retrieveTestBody(ResponseStatusCode::BAD_REQUEST, "ab3f124a", exp_to_, exp_fr_);
-}
-
-TEST_F(AEAnncTest, CreateAEInvalidContent) {
-  setupRequestPrim(create_request, ae_content);
-  p_reqp_->setContent("abcdefghijklmnopqrstuvwxyz1234567890");
-  retrieveTestBody(ResponseStatusCode::BAD_REQUEST, "ab3f124a", exp_to_, exp_fr_);
-}
-
-TEST_F(AEAnncTest, CreateAEParentInvalid) {
-  setupRequestPrim(create_request, ae_content);
-  p_reqp_->setName("AE-01/Fun/Wrong");
-
-  retrieveTestBody(ResponseStatusCode::NOT_FOUND, "ab3f124a", exp_to_, exp_fr_);
-}
-
-TEST_F(AEAnncTest, CreateAEWithNPFields) {
-  setupRequestPrim(create_request, ae_exp);
-   retrieveTestBody(ResponseStatusCode::BAD_REQUEST, "ab3f124a", exp_to_, exp_fr_);
-}
-
-TEST_F(AEAnncTest, CreateAENoMandaoryFields) {
-	  const string ae_json("{"
-					"\"ae\"     : {"
-						"\"apn\" 	: \"FreshGo\""
-					"}"
-				"}");
-   setupRequestPrim(create_request, ae_json);
-   retrieveTestBody(ResponseStatusCode::BAD_REQUEST, "ab3f124a", exp_to_, exp_fr_);
-}
-
-TEST_F(AEAnncTest, CreateAENoRn) {
-	  const string ae_json("{"
-					"\"ae\"     : {"
-						"\"apn\" 	: \"FreshGo\","
-						"\"api\" 	: \"APP-01\" "
-					"}"
-				"}");
-  string ret_pc_;
-  setupRequestPrim(create_request, ae_json);
-  retrieveTestBody(ResponseStatusCode::CREATED, "ab3f124a", exp_to_, exp_fr_, ret_pc_);
-  pb::ResourceBase ret_;
-  ASSERT_TRUE(ret_.ParseFromString(ret_pc_));
-  ri_ = ret_.ri();
-  ASSERT_FALSE(ri_.empty());
-  ASSERT_STREQ(ret_.rn().c_str(), ri_.c_str()); // Resource name same as ri
-  ASSERT_STREQ(ret_.ae().aei().c_str(), ri_.c_str()); // AE-id set to ri
-  cout << "Responded ri: " << ri_ << endl;
-}
-*/

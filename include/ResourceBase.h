@@ -34,6 +34,12 @@ class ResourceBase {
 public:
 	static const int ResourceBaseOffset;
 
+	enum attrOption {
+		MANDATORY  = 1,
+		OOPTIONAL  = 2,		// prefix 'O' to avoid wired conflict using boost
+		NOTPRESENT = 3
+	};
+
 	ResourceBase();
 	ResourceBase(const std::string& json, const std::string& id_str);
 	virtual ~ResourceBase();
@@ -49,7 +55,7 @@ public:
 	// set from json
 	bool setResourceBase(const std::string &json, const std::string& id_str);
 	// set from PB::ResourceBase in std::string
-	virtual bool setResourceBase(const std::string &pc, const std::string& id_str, Operation op);
+	virtual bool setResourceBase(const std::string&, const std::string&, Operation);
 	bool setNewResourceBaseAttr(const std::string& ri, const std::string& rn,	const std::string& pi, ResourceBase& ret);
 
 	template <typename Root>
@@ -94,6 +100,7 @@ public:
 
 	pb::CSEBase* getCSEBase();
 	pb::AE* getAE();
+	pb::AE* getAEAnnc();
 	pb::Request* getRequest();
 
 	const std::string& getDomain() const;
@@ -128,8 +135,8 @@ public:
 
 	template <typename StoreType>
 	bool outToResourceStore(ResourceStore<StoreType>& rdb, bool nolink = false) {
-		if (!isMatching(ri_, "[A-Z]?\\d{3}-\\d{5}") && !isMatching(ri_, "[A-Z]\\d{4}")) {
-			cerr << "Invalid ri format:" << ri_ << endl;
+		if (!isMatching(ri_, "[A-Z]?\\d{5}-\\d{5}") && !isMatching(ri_, "[A-Z]\\d{4}")) {
+			cerr << "outToResourceStore:Invalid ri format:" << ri_ << endl;
 			return false;
 		}
 		std::string res_str;
@@ -144,17 +151,20 @@ public:
 				return rdb.putResource(res_path, ri_, res_str);
 			}
 		} else {
-			cerr << "Serialization failed.\n";
+			cerr << "outToResourceStore: Serialization failed.\n";
 			return false;
 		}
 	}
 
 	bool SerializeToString(std::string* pc);
+	void copyAnncFields(const ResourceBase&, AnncAttr&, AnncAttr&);
+	bool compare(pb::ResourceBase&, bool noct = false, bool nolt = false);
 	void CopyResourceTimeStamps(ResourceBase& src);
 	std::string getJson();
 
 private:
 	bool checkResourceAttributes(Operation op);
+	bool filterAnncAttr(google::protobuf::Message*,	std::map<const std::string, attrOption>);
 
 protected:
 	template <typename StoreType>
@@ -173,17 +183,22 @@ protected:
 		vector<const FieldDescriptor*> fields;
 		reflection->ListFields(res, &fields);
 		for (unsigned int i = 0; i < fields.size(); i++) {
-			auto found_ = m.find(fields[i]->name());
-			if (found_ != m.end() && found_->second[op] == NOTPRESENT) {
-				cerr << "checkResourceAttributes: Attribute [" << fields[i]->name();
-				cerr << "] field shouldn't present.\n";
-				ret_ = false;
+			auto f_ = m.find(fields[i]->name());
+			if (f_ != m.end()) {
+				auto f_op_ = f_->second.find(op);
+				if (f_op_ != f_->second.end() && f_op_->second == NOTPRESENT) {
+					cerr << "checkResourceAttributes: Attribute [" << fields[i]->name();
+					cerr << "] field shouldn't present.\n";
+					ret_ = false;
+				}
 			}
 		}
 
 		// check mandatory attributes
 		for (auto i = m.begin(); i != m.end(); ++i) {
-			if (i->second[op] != MANDATORY) continue;
+			auto f_ = i->second.find(op);
+			if (f_ == i->second.end()) continue;
+			if (f_->second != MANDATORY) continue;
 			auto found = find_if(fields.begin(), fields.end(), [&i](const FieldDescriptor* f) {
 				return f->name() == i->first;
 			});
@@ -196,19 +211,19 @@ protected:
 		return ret_;
 	}
 
+	template <typename ResourceType, ResourceType* (ResourceBase::*getAnnc)()>
+	bool filterAnncAttr(std::map<const std::string, attrOption>& attr) {
+		return filterAnncAttr((this->*getAnnc)(), attr)
+			&& filterAnncAttr(&base_, anncAttr);
+	}
 
 protected:
 	pb::ResourceBase base_;
 	std::string domain_, csi_, ri_;
 
-	enum attrOption {
-		MANDATORY  = 1,
-		OOPTIONAL  = 2,		// prefix 'O' to avoid wired conflict using boost
-		NOTPRESENT = 3
-	};
-
 private:
 	static map<const std::string, map<Operation, attrOption>> allowAttr;
+	static map<const std::string, attrOption> anncAttr;
 };
 
 }	// OneM2M

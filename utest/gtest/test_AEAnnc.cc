@@ -45,7 +45,7 @@ const string AEAnncTest::valid_json("{"
 		"\"ae\"     : {"
 			"\"apn\" 	: \"FreshGo\","
 			"\"api\" 	: \"APP-01\","
-			"\"aei\" 	: \"AE-01\" "
+			"\"aei\" 	: \"//microwireless.com/IN-CSE-01/AE-01\" "
 		"}"
 "}");
 
@@ -61,7 +61,7 @@ TEST_F(AEAnncTest, CheckAll) {
 			"\"aeA\"    : {"
 				"\"apn\" 	: \"FreshGo\","
 				"\"api\" 	: \"APP-01\","
-				"\"aei\" 	: \"AE-01\" "
+				"\"aei\" 	: \"//microwireless.com/IN-CSE-01/AE-01\" "
 			"}"
 	"}");
 
@@ -72,7 +72,7 @@ TEST_F(AEAnncTest, CheckAll) {
 
 		ASSERT_TRUE(annc_.copyAnncFields());
 		json2pb(tgt_, tgt_json.c_str(), tgt_json.length());
-		ASSERT_TRUE(annc_.compare(tgt_));
+		ASSERT_TRUE(annc_.compare(tgt_, true));
 	} catch (exception &e) {
 		cout << "Unexpected exception: " << e.what() << endl;
 		ASSERT_TRUE(false);
@@ -89,7 +89,7 @@ TEST_F(AEAnncTest, CheckMAMissingMA) {
 			"\"ae\"     : {"
 				"\"apn\" 	: \"FreshGo\","
 				"\"api\" 	: \"APP-01\","
-				"\"aei\" 	: \"AE-01\" "
+				"\"aei\" 	: \"//microwireless.com/IN-CSE-01/AE-01\" "
 			"}"
 	"}");
 
@@ -113,7 +113,7 @@ TEST_F(AEAnncTest, CheckMAMissingMA1) {
 			"\"ae\"     : {"
 				"\"apn\" 	: \"FreshGo\","
 				"\"api\" 	: \"APP-01\","
-				"\"aei\" 	: \"AE-01\" "
+				"\"aei\" 	: \"//microwireless.com/IN-CSE-01/AE-01\" "
 			"}"
 	"}");
 
@@ -137,7 +137,7 @@ TEST_F(AEAnncTest, CheckMAMissingOA) {
 			"\"lbl\"    : [ \"test\" ],"
 			"\"ae\"     : {"
 				"\"apn\" 	: \"FreshGo\","
-				"\"aei\" 	: \"AE-01\" "
+				"\"aei\" 	: \"//microwireless.com/IN-CSE-01/AE-01\" "
 			"}"
 	"}");
 
@@ -149,7 +149,7 @@ TEST_F(AEAnncTest, CheckMAMissingOA) {
 			"\"lbl\"    : [ \"test\" ],"
 			"\"aeA\"    : {"
 				"\"apn\" 	: \"FreshGo\","
-				"\"aei\" 	: \"AE-01\" "
+				"\"aei\" 	: \"//microwireless.com/IN-CSE-01/AE-01\" "
 			"}"
 	"}");
 
@@ -159,9 +159,30 @@ TEST_F(AEAnncTest, CheckMAMissingOA) {
 		json2pb(tgt_, tgt_json.c_str(), tgt_json.length());
 		AEAnnc annc_(src_);
 		ASSERT_TRUE(annc_.copyAnncFields());
-		ASSERT_TRUE(annc_.compare(tgt_));
+		ASSERT_TRUE(annc_.compare(tgt_, true));
 	} catch (exception &e) {
 		cerr << "Unexpected exception: " << e.what() << endl;
 		ASSERT_TRUE(false);
 	}
 }
+
+TEST_F(AEAnncTest, SetResource) {
+	const string aeannc_json("{"
+			"\"et\"     : { \"seconds\" : 1435434103 },"
+			"\"lbl\"    : [ \"test\" ],"
+			"\"aeA\"    : {"
+				"\"apn\" 	: \"FreshGo\","
+				"\"api\" 	: \"APP-01\" "
+			"}"
+	"}");
+
+	pb::ResourceBase pb_annc_;
+	string pb_annc_str_;
+	json2pb(pb_annc_, aeannc_json.c_str(), aeannc_json.length());
+	ASSERT_TRUE(pb_annc_.SerializeToString(&pb_annc_str_));
+
+	AEAnnc annc_;
+	ASSERT_TRUE(annc_.setResourceBase(pb_annc_str_, "//microwireless.com/IN-CSE-01/Z1002",
+			Operation::CREATE));
+}
+

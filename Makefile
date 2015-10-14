@@ -20,7 +20,7 @@ PB_LIB    := -ljson2pb -ljansson -lprotobuf -lpthread # !!has to be exact order 
 MC_DIR    := src nse store $(PG_DIR)
 MC_SRC    := $(foreach sdir,$(MC_DIR),$(wildcard $(sdir)/*.cc))
 MC_OBJ    := $(patsubst %.cc,build/%.o,$(MC_SRC))
-MC_FLG    := -Wall -std=gnu++11
+MC_FLG    := -Wall -std=gnu++1y
 MC_INC    := -Iinclude $(addprefix -I,$(MC_DIR))
 MC_LIB    := -lboost_regex -lboost_filesystem -lboost_system -lboost_thread -L/usr/local/lib
 
@@ -30,7 +30,7 @@ EL_SRC    := $(foreach sdir,$(EL_DIR),$(wildcard $(sdir)/*.cc))
 EL_OBJ    := $(patsubst %.cc,build/%.o,$(EL_SRC))
 EL_FIL    := %CSEMain.o  # objects filter out for gmock
 EL_GMK    := $(filter-out $(EL_FIL),$(EL_OBJ))  # objects for gmock test
-EL_FLG    := -Wall -std=gnu++11
+EL_FLG    := -Wall -std=gnu++1y
 EL_INC    := $(addprefix -I,$(EL_DIR))
 EL_LIB    := 
 
