@@ -19,7 +19,7 @@ using namespace std;
 using namespace MicroWireless::OneM2M;
 
 using google::protobuf::CopyMessage;
-using google::protobuf::compareMessage;
+using google::protobuf::CompareMessage;
 
 class CopyMessageTest : public ::testing::Test {
 protected:
@@ -46,7 +46,7 @@ TEST_F(CopyMessageTest, ComparePositive) {
 	json2pb(src_, json.c_str(), json.length());
 	json2pb(dst_, json.c_str(), json.length());
 
-	ASSERT_TRUE(compareMessage(src_, dst_));
+	ASSERT_TRUE(CompareMessage(src_, dst_));
 }
 
 TEST_F(CopyMessageTest, CompareNegative) {
@@ -54,7 +54,7 @@ TEST_F(CopyMessageTest, CompareNegative) {
 	json2pb(dst_, json.c_str(), json.length());
 	dst_.set_ri("XXXXX");
 
-	ASSERT_FALSE(compareMessage(src_, dst_));
+	ASSERT_FALSE(CompareMessage(src_, dst_));
 }
 
 TEST_F(CopyMessageTest, CompareNegative1) {
@@ -62,7 +62,7 @@ TEST_F(CopyMessageTest, CompareNegative1) {
 	json2pb(dst_, json.c_str(), json.length());
 	dst_.clear_ri();
 
-	ASSERT_FALSE(compareMessage(src_, dst_));
+	ASSERT_FALSE(CompareMessage(src_, dst_));
 }
 
 TEST_F(CopyMessageTest, CompareNegative2) {
@@ -76,7 +76,7 @@ TEST_F(CopyMessageTest, CompareNegative2) {
 	json2pb(src_, json.c_str(), json.length());
 	json2pb(reqp_, json1.c_str(), json1.length());
 
-	ASSERT_FALSE(compareMessage(src_, reqp_));
+	ASSERT_FALSE(CompareMessage(src_, reqp_));
 }
 
 TEST_F(CopyMessageTest, FullCopy) {
@@ -84,7 +84,7 @@ TEST_F(CopyMessageTest, FullCopy) {
 	google::protobuf::CopyMessage cp_(src_, dst_);
 	cp_.copyFields();
 
-	ASSERT_TRUE(compareMessage(src_, dst_));
+	ASSERT_TRUE(CompareMessage(src_, dst_));
 }
 
 TEST_F(CopyMessageTest, FullCopy1) {
@@ -95,7 +95,7 @@ TEST_F(CopyMessageTest, FullCopy1) {
 	cp_.copyFields(ma_);
 
 	ASSERT_TRUE(ma_.size() == 0);
-	ASSERT_TRUE(compareMessage(src_, dst_));
+	ASSERT_TRUE(CompareMessage(src_, dst_));
 }
 
 TEST_F(CopyMessageTest, PartialCopy) {
@@ -110,7 +110,7 @@ TEST_F(CopyMessageTest, PartialCopy) {
 	cp_.copyFields(ma_);
 
 	ASSERT_TRUE(ma_.size() == 0);
-	ASSERT_TRUE(compareMessage(dst_, cmp_));
+	ASSERT_TRUE(CompareMessage(dst_, cmp_));
 }
 
 TEST_F(CopyMessageTest, CopyInvalidField) {
@@ -122,5 +122,5 @@ TEST_F(CopyMessageTest, CopyInvalidField) {
 
 	ASSERT_TRUE(ma_.size() == 1);
 	ASSERT_FALSE(ma_.find("blah") == ma_.end());
-	ASSERT_TRUE(compareMessage(src_, dst_));
+	ASSERT_TRUE(CompareMessage(src_, dst_));
 }

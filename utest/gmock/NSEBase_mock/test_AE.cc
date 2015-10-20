@@ -28,6 +28,8 @@ using namespace MicroWireless::OneM2M;
 class AETest : public NSEBaseMockTest {
 protected:
 	static const std::string create_request;
+	static const std::string retrieve_request;
+	static const std::string update_request;
 	static const std::string ae_content, ae_exp;
 	static const string exp_to_, exp_fr_;
 
@@ -73,7 +75,22 @@ const string AETest::create_request("{"
 		"\"fr\": \"//microwireless.com/AE-01\" "
 	"}");
 
+const string AETest::retrieve_request("{"
+			"\"op\": 2,"
+			"\"to\": \"//microwireless.com/IN-CSE-01\","
+			"\"rqi\": \"ab3f124a\","
+			"\"fr\": \"//microwireless.com/AE-01\""
+		"}");
+
+const string AETest::update_request("{"
+		"\"op\": 3, "
+		"\"to\": \"//microwireless.com/IN-CSE-01\", "
+		"\"rqi\": \"ab3f124a\", "
+		"\"fr\": \"//microwireless.com/AE-01\" "
+	"}");
+
 const string AETest::ae_content("{"
+		    "\"lbl\"	: [ \"ae-test\", \"ae-lbl\" ],"
 			"\"ae\"     : {"
 				"\"apn\" 	: \"FreshGo\","
 				"\"api\" 	: \"APP-01\" "
@@ -111,13 +128,7 @@ TEST_F(AETest, CreateAEFullURI) {
 TEST_F(AETest, RetrieveAE) {
   ASSERT_FALSE(last_test_bad_);
 
-  static const string json("{"
-			"\"op\": 2,"
-			"\"to\": \"//microwireless.com/IN-CSE-01\","
-			"\"rqi\": \"ab3f124a\","
-			"\"fr\": \"//microwireless.com/AE-01\""
-		"}");
-  NSEBaseMockTest::setupRequestPrim(json);
+  NSEBaseMockTest::setupRequestPrim(retrieve_request);
   ASSERT_TRUE(p_reqp_->setTo(p_reqp_->getTo() + "/" + ri_));
 
   ae_pc_.set_ri(ri_);
@@ -128,19 +139,48 @@ TEST_F(AETest, RetrieveAE) {
 TEST_F(AETest, RetrieveAE1) {
   ASSERT_FALSE(last_test_bad_);
 
-  static const string json("{"
-			"\"op\": 2,"
-			"\"to\": \"//microwireless.com/IN-CSE-01/AE-01\","
-			"\"rqi\": \"ab3f124a\","
-			"\"fr\": \"//microwireless.com/AE-01\""
-		"}");
-  NSEBaseMockTest::setupRequestPrim(json);
+  NSEBaseMockTest::setupRequestPrim(retrieve_request);
+  ASSERT_TRUE(p_reqp_->setTo("//microwireless.com/IN-CSE-01/AE-01"));
 
   ae_pc_.set_ri(ri_);
   ae_pc_.mutable_ae()->set_aei("//microwireless.com/IN-CSE-01/" + ri_);
+
   retrieveTestBody(ResponseStatusCode::OK, "ab3f124a", exp_to_, exp_fr_, ae_pc_);
 }
 
+TEST_F(AETest, UpdateAE) {
+  ASSERT_FALSE(last_test_bad_);
+
+  const string ae_upd("{"
+			"\"ae\"     : {"
+				"\"apn\" 	: \"FreshGoNew\" "
+			"}"
+		"}");
+
+  string ret_pc_;
+  setupRequestPrim(update_request, ae_upd);
+  ASSERT_TRUE(p_reqp_->setTo("//microwireless.com/in-cse-01/AE-01"));
+
+  retrieveTestBody(ResponseStatusCode::CHANGED, "ab3f124a", exp_to_, exp_fr_, ret_pc_);
+  pb::ResourceBase ret_;
+  ASSERT_TRUE(ret_.ParseFromString(ret_pc_));
+  ASSERT_STREQ(ret_.ae().apn().c_str(), "FreshGoNew");
+}
+
+TEST_F(AETest, RetrieveUpdatedAE) {
+  ASSERT_FALSE(last_test_bad_);
+
+  NSEBaseMockTest::setupRequestPrim(retrieve_request);
+  ASSERT_TRUE(p_reqp_->setTo("//microwireless.com/in-cse-01/AE-01"));
+
+  ae_pc_.set_ri(ri_);
+  ae_pc_.mutable_ae()->set_aei("//microwireless.com/IN-CSE-01/" + ri_);
+  ae_pc_.mutable_ae()->set_apn("FreshGoNew");
+
+  retrieveTestBody(ResponseStatusCode::OK, "ab3f124a", exp_to_, exp_fr_, ae_pc_);
+}
+
+/*
 TEST_F(AETest, CreateAEConflict) {
   setupRequestPrim(create_request, ae_content);
   p_reqp_->setTo("//microwireless.com/in-cse-01/AE-01");
@@ -160,7 +200,7 @@ TEST_F(AETest, CreateAEConflict2) {
 
   retrieveTestBody(ResponseStatusCode::CONFLICT, "ab3f124a", exp_to_, exp_fr_);
 }
-
+*/
 TEST_F(AETest, CreateAENoContent) {
   NSEBaseMockTest::setupRequestPrim(create_request);
   retrieveTestBody(ResponseStatusCode::BAD_REQUEST, "ab3f124a", exp_to_, exp_fr_);

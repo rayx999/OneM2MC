@@ -132,6 +132,41 @@ bool ResourceBase::setNewResourceBaseAttr(const string& ri, const string& rn,
 	return true;
 }
 
+bool ResourceBase::updateResource(const ResourceBase& upd) {
+	const Reflection* r_ = upd.base_.GetReflection();
+	vector<const FieldDescriptor*> fs_;
+	r_->ListFields(upd.base_, &fs_);
+	for (unsigned int i = 0; i < fs_.size(); i++) {
+		if (fs_[i]->name() == AttrName::ET()) {
+			Timestamp default_ts;
+			if (upd.base_.et() == default_ts) {
+				base_.clear_et();
+			} else {
+				base_.mutable_et()->CopyFrom(upd.base_.et());
+			}
+		} else if (fs_[i]->name() == AttrName::LBL()) {
+			if (upd.base_.lbl_size() == 0) {
+				base_.clear_lbl();
+			} else {
+				base_.mutable_lbl()->CopyFrom(upd.base_.lbl());
+			}
+		} else if (fs_[i]->name() == AttrName::AT()) {
+			if (upd.base_.at().empty() || upd.base_.at() == "") {
+				base_.clear_at();
+			} else {
+				base_.set_at(upd.base_.at());
+			}
+		} else if (fs_[i]->name() == AttrName::AA()) {
+			if (upd.base_.aa().empty() || upd.base_.aa() == "") {
+				base_.clear_aa();
+			} else {
+				base_.set_aa(upd.base_.aa());
+			}
+		}
+	}
+	return setLastModifiedTimestamp();
+}
+
 const pb::ResourceBase& ResourceBase::getResourceBase() const {
 	return base_;
 }
@@ -232,63 +267,28 @@ const string& ResourceBase::getAnncAttr() const {
 	return base_.aa();
 }
 
-bool ResourceBase::getCreateTimestamp(TimeStamp &ct) {
-	if (base_.has_ct()) {
-		const google::protobuf::Timestamp &_ct =
-				base_.ct();
-		ct.tv_sec = _ct.seconds();
-		ct.tv_usec = _ct.nanos() / 1000;
-		return true;
-	}
-	return false;
+bool ResourceBase::getCreateTimestamp(TimeStamp &ts) {
+	return getTimestamp<&pb::ResourceBase::has_ct, &pb::ResourceBase::ct>(ts);
 }
 
-bool ResourceBase::getLastModifiedTimestamp(TimeStamp &lt) {
-	if (base_.has_lt()) {
-		const google::protobuf::Timestamp &_lt =
-				base_.lt();
-		lt.tv_sec = _lt.seconds();
-		lt.tv_usec = _lt.nanos() / 1000;
-		return true;
-	}
-	return false;
+bool ResourceBase::getLastModifiedTimestamp(TimeStamp &ts) {
+	return getTimestamp<&pb::ResourceBase::has_lt, &pb::ResourceBase::lt>(ts);
+}
+
+bool ResourceBase::getExpirationTimestamp(TimeStamp &ts) {
+	return getTimestamp<&pb::ResourceBase::has_et, &pb::ResourceBase::et>(ts);
 }
 
 bool ResourceBase::setCreateTimestamp(TimeStamp* p_ts) {
-	TimeStamp ts_;
-	if (p_ts == NULL) {
-		gettimeofday(&ts_, NULL);
-	} else {
-		ts_ = *p_ts;
-	}
-	google::protobuf::Timestamp * ct_ = base_.mutable_ct();
-
-	if (ct_ != NULL) {
-		ct_->set_seconds(ts_.tv_sec);
-		ct_->set_nanos(ts_.tv_usec * 1000);
-		return true;
-	} else {
-		cerr << "Can't get pb::Timestamp." << endl;
-		return false;
-	}
+	return setTimestamp<&pb::ResourceBase::mutable_ct>(p_ts);
 }
 
 bool ResourceBase::setLastModifiedTimestamp(TimeStamp* p_ts) {
-	TimeStamp ts_;
-	if (p_ts == NULL) {
-		gettimeofday(&ts_, NULL);
-	} else {
-		ts_ = *p_ts;
-	}
-	google::protobuf::Timestamp * lt_ = base_.mutable_lt();
-	if (lt_ != NULL) {
-		lt_->set_seconds(ts_.tv_sec);
-		lt_->set_nanos(ts_.tv_usec * 1000);
-		return true;
-	} else {
-		cerr << "Can't g pb::Timestamp." << endl;
-		return false;
-	}
+	return setTimestamp<&pb::ResourceBase::mutable_lt>(p_ts);
+}
+
+bool ResourceBase::setExpirationTimestamp(TimeStamp* p_ts) {
+	return setTimestamp<&pb::ResourceBase::mutable_et>(p_ts);
 }
 
 SupportedResourceType ResourceBase::getResourceCase() {
@@ -352,7 +352,7 @@ bool ResourceBase::compare(pb::ResourceBase& tgt, bool noct, bool nolt) {
 	pb::ResourceBase src_ = base_;
 	if (noct) src_.clear_ct();
 	if (nolt) src_.clear_lt();
-	return compareMessage(src_, tgt);
+	return CompareMessage(src_, tgt);
 }
 
 string ResourceBase::getJson() {

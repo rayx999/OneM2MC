@@ -38,8 +38,6 @@ public:
 
 	virtual ~RequestHandler() {}
 
-	bool composeContent(ResourceBase& res_pc, ResourceBase& res, string& pc);
-
 	template <typename StoreType>
 	bool checkRequest(RequestPrim& req, StoreType& rdb) {
 		ResponseStatusCode rsc_ = isForMe(req, *rdb.cse());

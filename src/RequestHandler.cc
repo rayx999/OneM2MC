@@ -22,13 +22,6 @@ namespace OneM2M {
 
 using namespace MicroWireless::OneM2M;
 
-// add modified/created resources to content pc
-bool RequestHandler::composeContent(ResourceBase& res_pc, ResourceBase& res, string& pc) {
-	// get all timestamps
-	res_pc.CopyResourceTimeStamps(res);
-	return res_pc.SerializeToString(&pc);
-}
-
 void RequestHandler::sendResponse(RequestPrim& reqp, ResponseStatusCode rsc,
 		const string& fr, const string& pc) {
 	//cout << "CSEHandler::handleRequest: compose fr:" << fr_ << endl;

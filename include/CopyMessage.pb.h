@@ -47,7 +47,7 @@ private:
 	bool copyRepeatedSubMessage(const int, const FieldDescriptor*, const FieldDescriptor*);
 };
 
-bool compareMessage(const Message&, const Message&);
+bool CompareMessage(const Message&, const Message&);
 
 }	// protobuf
 

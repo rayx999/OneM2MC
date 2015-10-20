@@ -201,7 +201,7 @@ bool CopyMessage::copyField(const std::string& fn, const FieldDescriptor* sfd,
 	return false;
 }
 
-bool compareMessage(const Message& sm, const Message& dm) {
+bool CompareMessage(const Message& sm, const Message& dm) {
 	std::string ss_, ds_;
 	if (!sm.SerializePartialToString(&ss_) || !dm.SerializePartialToString(&ds_)) {
 		std::cerr << "compareMessage: SerializePartialToString failed.\n";

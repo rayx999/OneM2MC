@@ -18,6 +18,7 @@
 #include "ResourceBase.h"
 #include "RequestHandler.h"
 #include "RequestCreateHandler.h"
+#include "RequestUpdateHandler.h"
 #include "CSEHandler.h"
 #include "NSEBase.h"
 
@@ -70,6 +71,7 @@ void CSEHandler::handleRequest(RequestPrim& reqp) {
 		break;
 	}
 	case Operation::RETRIEVE:
+	case Operation::UPDATE:
 	{
 		string target_;
 		getResourceHAddress(reqp, target_, *rdb_.cse());
@@ -86,16 +88,27 @@ void CSEHandler::handleRequest(RequestPrim& reqp) {
 		}
 
 		//cout << "CSEHandler::handleRequest: Prepare content..." << endl;
-
-		if (!composeContent(reqp, pc_, rdb_)) {
-			cerr << "handleRequest: Retrieve resource " << reqp.getTargetResource();
-			cerr << " failed.\n";
-			rsc_ = ResponseStatusCode::INTERNAL_SERVER_ERROR;
+		if (reqp.getOperation() == Operation::RETRIEVE) {
+			if (!composeContent(reqp, pc_, rdb_)) {
+				cerr << "handleRequest: Retrieve resource " << reqp.getTargetResource();
+				cerr << " failed.\n";
+				rsc_ = ResponseStatusCode::INTERNAL_SERVER_ERROR;
+			}
+		} else if (reqp.getOperation() == Operation::UPDATE) {
+			RequestUpdateHandler<CSEBase> ruh_(reqp, rdb_);
+			rsc_ = ruh_.setResourceToBeUpdated();
+			if (rsc_ == ResponseStatusCode::OK) {
+				if (!ruh_.outToResourceStore()) {
+					rsc_ = ResponseStatusCode::INTERNAL_SERVER_ERROR;
+				} else  if (!ruh_.composeContent(pc_)) {
+					rsc_ = ResponseStatusCode::INTERNAL_SERVER_ERROR;
+				} else {
+					rsc_ = ResponseStatusCode::CHANGED;
+				}
+			}
 		}
 		break;
 	}
-	case Operation::UPDATE:
-		break;
 	case Operation::DDELETE:
 		break;
 	case Operation::NOTIFY:
@@ -106,7 +119,9 @@ void CSEHandler::handleRequest(RequestPrim& reqp) {
 	}
 
 	string rsp_pc_;
-	if (rsc_ == ResponseStatusCode::OK || rsc_ == ResponseStatusCode::CREATED) {
+	if (rsc_ == ResponseStatusCode::OK ||
+		rsc_ == ResponseStatusCode::CREATED ||
+		rsc_ == ResponseStatusCode::CHANGED) {
 		rsp_pc_ = pc_;
 	}
 	sendResponse(reqp, rsc_, rdb_.getRoot()->getDomain() + rdb_.getRoot()->getCSEId(), rsp_pc_);

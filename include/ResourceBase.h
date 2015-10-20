@@ -56,7 +56,8 @@ public:
 	bool setResourceBase(const std::string &json, const std::string& id_str);
 	// set from PB::ResourceBase in std::string
 	virtual bool setResourceBase(const std::string&, const std::string&, Operation);
-	bool setNewResourceBaseAttr(const std::string& ri, const std::string& rn,	const std::string& pi, ResourceBase& ret);
+	virtual bool setNewResourceBaseAttr(const std::string& ri, const std::string& rn,	const std::string& pi, ResourceBase& ret);
+	virtual bool updateResource(const ResourceBase&);
 
 	template <typename Root>
 	bool setResourceBase(RequestPrim& reqp, Root& root) {
@@ -125,8 +126,11 @@ public:
 	const std::string& getParentId() const;
 	bool setParentId(const std::string& pi);
 
-	bool getCreateTimestamp(TimeStamp &create_time);
-	bool getLastModifiedTimestamp(TimeStamp &create_time);
+	bool getCreateTimestamp(TimeStamp&);
+	bool getLastModifiedTimestamp(TimeStamp&);
+
+	bool getExpirationTimestamp(TimeStamp&);
+	bool setExpirationTimestamp(TimeStamp*);
 
 	const std::string& getAnncTo() const;
 	bool setAnncTo(const std::string&);
@@ -165,6 +169,37 @@ public:
 private:
 	bool checkResourceAttributes(Operation op);
 	bool filterAnncAttr(google::protobuf::Message*,	std::map<const std::string, attrOption>);
+
+	template <bool (pb::ResourceBase::*has)() const,
+			const google::protobuf::Timestamp& (pb::ResourceBase::*gt)() const>
+	bool getTimestamp(TimeStamp &ts) {
+		if ((base_.*has)()) {
+			const google::protobuf::Timestamp &ts_ = (base_.*gt)();
+			ts.tv_sec = ts_.seconds();
+			ts.tv_usec = ts_.nanos() / 1000;
+			return true;
+		}
+		return false;
+	}
+
+	template <google::protobuf::Timestamp* (pb::ResourceBase::*mut)()>
+	bool setTimestamp(TimeStamp* p_ts) {
+		TimeStamp ts_;
+		if (p_ts == NULL) {
+			gettimeofday(&ts_, NULL);
+		} else {
+			ts_ = *p_ts;
+		}
+		google::protobuf::Timestamp * pb_ts_ = (base_.*mut)();
+		if (pb_ts_ != NULL) {
+			pb_ts_->set_seconds(ts_.tv_sec);
+			pb_ts_->set_nanos(ts_.tv_usec * 1000);
+			return true;
+		} else {
+			cerr << "Can't g pb::Timestamp." << endl;
+			return false;
+		}
+	}
 
 protected:
 	template <typename StoreType>

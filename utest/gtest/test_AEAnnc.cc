@@ -172,7 +172,8 @@ TEST_F(AEAnncTest, SetResource) {
 			"\"lbl\"    : [ \"test\" ],"
 			"\"aeA\"    : {"
 				"\"apn\" 	: \"FreshGo\","
-				"\"api\" 	: \"APP-01\" "
+				"\"api\" 	: \"APP-01\","
+				"\"nl\"		: \"//microwireless.com/in-cse-01/10002-34523\" "
 			"}"
 	"}");
 
