@@ -148,7 +148,28 @@ TEST_F(AETest, RetrieveAE1) {
   retrieveTestBody(ResponseStatusCode::OK, "ab3f124a", exp_to_, exp_fr_, ae_pc_);
 }
 
-TEST_F(AETest, UpdateAE) {
+TEST_F(AETest, UpdateLblAcpi) {
+  ASSERT_FALSE(last_test_bad_);
+
+  const string ae_upd("{"
+			"\"lbl\"     : [ \"new-lbl\" ], "
+		  	"\"et\"	 	 : { }, "
+		    "\"ae\"		 : { } "
+		"}");
+
+  string ret_pc_;
+  setupRequestPrim(update_request, ae_upd);
+  ASSERT_TRUE(p_reqp_->setTo("//microwireless.com/in-cse-01/AE-01"));
+
+  retrieveTestBody(ResponseStatusCode::CHANGED, "ab3f124a", exp_to_, exp_fr_, ret_pc_);
+  pb::ResourceBase ret_;
+  ASSERT_TRUE(ret_.ParseFromString(ret_pc_));
+  ASSERT_EQ(ret_.lbl_size(), 1);
+  ASSERT_STREQ(ret_.lbl(0).c_str(), "new-lbl");
+  ASSERT_TRUE(ret_.has_et());
+}
+
+TEST_F(AETest, UpdateApn) {
   ASSERT_FALSE(last_test_bad_);
 
   const string ae_upd("{"
@@ -180,7 +201,44 @@ TEST_F(AETest, RetrieveUpdatedAE) {
   retrieveTestBody(ResponseStatusCode::OK, "ab3f124a", exp_to_, exp_fr_, ae_pc_);
 }
 
-/*
+TEST_F(AETest, UpdateApi) {
+  const string ae_upd("{"
+			"\"ae\"     : {"
+				"\"api\" 	: \"Blah\" "
+			"}"
+		"}");
+
+  setupRequestPrim(update_request, ae_upd);
+  ASSERT_TRUE(p_reqp_->setTo("//microwireless.com/in-cse-01/AE-01"));
+
+  retrieveTestBody(ResponseStatusCode::BAD_REQUEST, "ab3f124a", exp_to_, exp_fr_);
+}
+
+TEST_F(AETest, UpdateAei) {
+  const string ae_upd("{"
+			"\"ae\"     : {"
+				"\"aei\" 	: \"Blah\" "
+			"}"
+		"}");
+
+  setupRequestPrim(update_request, ae_upd);
+  ASSERT_TRUE(p_reqp_->setTo("//microwireless.com/in-cse-01/AE-01"));
+
+  retrieveTestBody(ResponseStatusCode::BAD_REQUEST, "ab3f124a", exp_to_, exp_fr_);
+}
+
+TEST_F(AETest, UpdateAcpi) {
+  const string ae_upd("{"
+			"\"ae\"     : { }, "
+			"\"acpi\" 	: [ \"Blah\" ] "
+		"}");
+
+  setupRequestPrim(update_request, ae_upd);
+  ASSERT_TRUE(p_reqp_->setTo("//microwireless.com/in-cse-01/AE-01"));
+
+  retrieveTestBody(ResponseStatusCode::BAD_REQUEST, "ab3f124a", exp_to_, exp_fr_);
+}
+
 TEST_F(AETest, CreateAEConflict) {
   setupRequestPrim(create_request, ae_content);
   p_reqp_->setTo("//microwireless.com/in-cse-01/AE-01");
@@ -200,7 +258,7 @@ TEST_F(AETest, CreateAEConflict2) {
 
   retrieveTestBody(ResponseStatusCode::CONFLICT, "ab3f124a", exp_to_, exp_fr_);
 }
-*/
+
 TEST_F(AETest, CreateAENoContent) {
   NSEBaseMockTest::setupRequestPrim(create_request);
   retrieveTestBody(ResponseStatusCode::BAD_REQUEST, "ab3f124a", exp_to_, exp_fr_);
