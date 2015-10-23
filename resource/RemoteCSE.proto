@@ -1,0 +1,19 @@
+// Resource File for <RemoteCSE>
+
+syntax = "proto3";
+
+package MicroWireless.OneM2M.pb;
+
+import "CommonTypes.proto";
+
+message RemoteCSE
+{
+  CommonTypes.CSEType cst = 100;		// CSE_type;
+  repeated string poa = 101;        // point_of_access;
+  string cb = 102;                  // CSEBase
+  string csi = 103;									// CSE_id;
+  string mei = 104;	                // M2M-External_ID;
+  string tri = 105;                 // Trigger-Recipient-ID
+  bool rr = 106;                    // Request_Reachability
+  string nl = 107;									// node_link;
+}

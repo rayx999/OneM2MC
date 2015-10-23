@@ -33,15 +33,26 @@ public:
 	static const std::string& AT();
 	static const std::string& ST();
 
+	// Common
+	static const std::string& POA();
+	static const std::string& NL();
+	static const std::string& RR();
+
 	// CSE
 
 	// AE
 	static const std::string& APN();
 	static const std::string& API();
 	static const std::string& AEI();
-	static const std::string& POA();
 	static const std::string& OR();
-	static const std::string& NL();
+
+
+	// RemoteCSE
+	static const std::string& CST();
+	static const std::string& CB();
+	static const std::string& CSI();
+	static const std::string& MEI();
+	static const std::string& TRI();
 };
 
 }	// OneM2M

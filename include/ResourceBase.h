@@ -16,7 +16,6 @@
 
 #include "CommonTypes.pb.h"
 #include "ResourceBase.pb.h"
-//#include "CSEBase.pb.h"
 #include "CommonTypes.h"
 #include "ResourceStore.h"
 #include "RequestPrim.h"
@@ -102,6 +101,7 @@ public:
 	pb::CSEBase* getCSEBase();
 	pb::AE* getAE();
 	pb::AE* getAEAnnc();
+	pb::RemoteCSE* getRemoteCSE();
 	pb::Request* getRequest();
 
 	const std::string& getDomain() const;

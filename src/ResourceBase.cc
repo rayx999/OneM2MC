@@ -188,6 +188,10 @@ pb::AE* ResourceBase::getAEAnnc() {
 	return base_.mutable_aea();
 }
 
+pb::RemoteCSE* ResourceBase::getRemoteCSE() {
+	return base_.mutable_csr();
+}
+
 pb::Request* ResourceBase::getRequest() {
 	return base_.mutable_req();
 }
@@ -350,9 +354,17 @@ void ResourceBase::CopyResourceTimeStamps(ResourceBase& src) {
 
 bool ResourceBase::compare(pb::ResourceBase& tgt, bool noct, bool nolt) {
 	pb::ResourceBase src_ = base_;
-	if (noct) src_.clear_ct();
-	if (nolt) src_.clear_lt();
-	return CompareMessage(src_, tgt);
+	pb::ResourceBase tgt_ = tgt;
+
+	if (noct) {
+		src_.clear_ct();
+		tgt_.clear_ct();
+	}
+	if (nolt) {
+		src_.clear_lt();
+		tgt_.clear_lt();
+	}
+	return CompareMessage(src_, tgt_);
 }
 
 string ResourceBase::getJson() {

@@ -30,15 +30,25 @@ const std::string& AttrName::AA()   { static const std::string s_ = "aa";  retur
 const std::string& AttrName::AT()   { static const std::string s_ = "at";  return s_; }
 const std::string& AttrName::ST()   { static const std::string s_ = "st";  return s_; }
 
+// Common
+const std::string& AttrName::POA()  { static const std::string s_ = "poa"; return s_; }
+const std::string& AttrName::RR()   { static const std::string s_ = "rr";  return s_; }
+const std::string& AttrName::NL()   { static const std::string s_ = "nl";  return s_; }
+
 // CSE
 
 // AE
 const std::string& AttrName::APN()  { static const std::string s_ = "apn"; return s_; }
 const std::string& AttrName::API()  { static const std::string s_ = "api"; return s_; }
 const std::string& AttrName::AEI()  { static const std::string s_ = "aei"; return s_; }
-const std::string& AttrName::POA()  { static const std::string s_ = "poa"; return s_; }
 const std::string& AttrName::OR()   { static const std::string s_ = "or";  return s_; }
-const std::string& AttrName::NL()   { static const std::string s_ = "nl";  return s_; }
+
+// RemoteCSE
+const std::string& AttrName::CST()  { static const std::string s_ = "cst"; return s_; }
+const std::string& AttrName::CB()   { static const std::string s_ = "cb";  return s_; }
+const std::string& AttrName::CSI()  { static const std::string s_ = "csi"; return s_; }
+const std::string& AttrName::MEI()  { static const std::string s_ = "mei"; return s_; }
+const std::string& AttrName::TRI()  { static const std::string s_ = "tri"; return s_; }
 
 }	// OneM2M
 

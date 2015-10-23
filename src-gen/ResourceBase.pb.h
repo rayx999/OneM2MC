@@ -30,6 +30,7 @@
 #include "google/protobuf/timestamp.pb.h"
 #include "CommonTypes.pb.h"
 #include "CSEBase.pb.h"
+#include "RemoteCSE.pb.h"
 #include "AE.pb.h"
 #include "Request.pb.h"
 // @@protoc_insertion_point(includes)
@@ -66,6 +67,7 @@ class ResourceBase : public ::google::protobuf::Message {
     kAe = 30002,
     kAeA = 40002,
     kCsb = 30005,
+    kCsr = 30016,
     kReq = 30017,
     RESOURCE_NOT_SET = 0,
   };
@@ -264,6 +266,15 @@ class ResourceBase : public ::google::protobuf::Message {
   ::MicroWireless::OneM2M::pb::CSEBase* release_csb();
   void set_allocated_csb(::MicroWireless::OneM2M::pb::CSEBase* csb);
 
+  // optional .MicroWireless.OneM2M.pb.RemoteCSE csr = 30016;
+  bool has_csr() const;
+  void clear_csr();
+  static const int kCsrFieldNumber = 30016;
+  const ::MicroWireless::OneM2M::pb::RemoteCSE& csr() const;
+  ::MicroWireless::OneM2M::pb::RemoteCSE* mutable_csr();
+  ::MicroWireless::OneM2M::pb::RemoteCSE* release_csr();
+  void set_allocated_csr(::MicroWireless::OneM2M::pb::RemoteCSE* csr);
+
   // optional .MicroWireless.OneM2M.pb.Request req = 30017;
   bool has_req() const;
   void clear_req();
@@ -279,6 +290,7 @@ class ResourceBase : public ::google::protobuf::Message {
   inline void set_has_ae();
   inline void set_has_aea();
   inline void set_has_csb();
+  inline void set_has_csr();
   inline void set_has_req();
 
   inline bool has_resource() const;
@@ -304,6 +316,7 @@ class ResourceBase : public ::google::protobuf::Message {
     ::MicroWireless::OneM2M::pb::AE* ae_;
     ::MicroWireless::OneM2M::pb::AE* aea_;
     ::MicroWireless::OneM2M::pb::CSEBase* csb_;
+    ::MicroWireless::OneM2M::pb::RemoteCSE* csr_;
     ::MicroWireless::OneM2M::pb::Request* req_;
   } resource_;
   mutable int _cached_size_;
@@ -922,6 +935,52 @@ inline void ResourceBase::set_allocated_csb(::MicroWireless::OneM2M::pb::CSEBase
     resource_.csb_ = csb;
   }
   // @@protoc_insertion_point(field_set_allocated:MicroWireless.OneM2M.pb.ResourceBase.csb)
+}
+
+// optional .MicroWireless.OneM2M.pb.RemoteCSE csr = 30016;
+inline bool ResourceBase::has_csr() const {
+  return resource_case() == kCsr;
+}
+inline void ResourceBase::set_has_csr() {
+  _oneof_case_[0] = kCsr;
+}
+inline void ResourceBase::clear_csr() {
+  if (has_csr()) {
+    delete resource_.csr_;
+    clear_has_resource();
+  }
+}
+inline const ::MicroWireless::OneM2M::pb::RemoteCSE& ResourceBase::csr() const {
+  // @@protoc_insertion_point(field_get:MicroWireless.OneM2M.pb.ResourceBase.csr)
+  return has_csr() ? *resource_.csr_
+                      : ::MicroWireless::OneM2M::pb::RemoteCSE::default_instance();
+}
+inline ::MicroWireless::OneM2M::pb::RemoteCSE* ResourceBase::mutable_csr() {
+  if (!has_csr()) {
+    clear_resource();
+    set_has_csr();
+    resource_.csr_ = new ::MicroWireless::OneM2M::pb::RemoteCSE;
+  }
+  // @@protoc_insertion_point(field_mutable:MicroWireless.OneM2M.pb.ResourceBase.csr)
+  return resource_.csr_;
+}
+inline ::MicroWireless::OneM2M::pb::RemoteCSE* ResourceBase::release_csr() {
+  if (has_csr()) {
+    clear_has_resource();
+    ::MicroWireless::OneM2M::pb::RemoteCSE* temp = resource_.csr_;
+    resource_.csr_ = NULL;
+    return temp;
+  } else {
+    return NULL;
+  }
+}
+inline void ResourceBase::set_allocated_csr(::MicroWireless::OneM2M::pb::RemoteCSE* csr) {
+  clear_resource();
+  if (csr) {
+    set_has_csr();
+    resource_.csr_ = csr;
+  }
+  // @@protoc_insertion_point(field_set_allocated:MicroWireless.OneM2M.pb.ResourceBase.csr)
 }
 
 // optional .MicroWireless.OneM2M.pb.Request req = 30017;
