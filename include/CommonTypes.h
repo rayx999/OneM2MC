@@ -40,7 +40,7 @@ enum class CSEType
 // also used for MemberType
 enum class SupportedResourceType
 {
-  SRT_NONE = 0,
+  NONE = 0,
 
   // Normal Resources
 

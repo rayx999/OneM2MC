@@ -12,7 +12,7 @@
 
 #include "CommonTypes.h"
 #include "AE.h"
-#include "AEAnnc.h"
+#include "RemoteCSE.h"
 #include "RequestPrim.h"
 #include "ResourceStore.h"
 #include "ResourceBase.h"
@@ -56,6 +56,9 @@ public:
 		switch (ty_) {
 		case SupportedResourceType::AE:
 			result_ = createUpdateResource<AEClass>();
+			break;
+		case SupportedResourceType::REMOTE_CSE:
+			result_ = createUpdateResource<RemoteCSE>();
 			break;
 		default:
 			return ResponseStatusCode::BAD_REQUEST;

@@ -99,7 +99,7 @@ const string AEAnncTest::aeA_content("{"
 const string AEAnncTest::aeA_exp("{"
 		    "\"rn\"     : \"FreshGoAnnc\","
 			"\"et\"     : { \"seconds\" : 1435434103 },"
-			"\"acpi\"	: [ \"001-25423\" ],"
+			"\"acpi\"	: [ \"00001-25423\" ],"
 			"\"lbl\"    : [ \"test\" ],"
 			"\"aeA\"    : {"
 				"\"apn\" 	: \"FreshGoAnnc\","
@@ -231,7 +231,7 @@ TEST_F(AEAnncTest, RetrieveAEAnncAsCSE) {
   aeA_pc_.ParseFromString(aeA_str_);
   ASSERT_FALSE(aeA_pc_.ri().empty());
   ASSERT_STREQ(aeA_pc_.rn().c_str(), "FreshGoAnnc1");
-  ASSERT_STREQ(aeA_pc_.acpi(0).c_str(), "001-25423");
+  ASSERT_STREQ(aeA_pc_.acpi(0).c_str(), "00001-25423");
   ASSERT_STREQ(aeA_pc_.lbl(0).c_str(), "test");
   ASSERT_TRUE(aeA_pc_.has_aea());
   ASSERT_STREQ(aeA_pc_.aea().apn().c_str(), "FreshGoAnnc1");

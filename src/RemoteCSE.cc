@@ -22,6 +22,8 @@ namespace MicroWireless {
 
 namespace OneM2M {
 
+// RR is MANDATORY for CREATE, but protobuf doesn't set bool field when it's false,
+// so change rr to OPTIONAL for CREATE
 std::map<const std::string, std::map<Operation, ResourceBase::attrOption>> RemoteCSE::allowAttr = {
    {AttrName::CST(),   { {Operation::CREATE, OOPTIONAL }, {Operation::UPDATE, NOTPRESENT} } },
    {AttrName::POA(),   { {Operation::CREATE, OOPTIONAL }, {Operation::UPDATE, OOPTIONAL } } },
@@ -29,7 +31,7 @@ std::map<const std::string, std::map<Operation, ResourceBase::attrOption>> Remot
    {AttrName::CSI(),   { {Operation::CREATE, MANDATORY }, {Operation::UPDATE, NOTPRESENT} } },
    {AttrName::MEI(),   { {Operation::CREATE, OOPTIONAL }, {Operation::UPDATE, OOPTIONAL } } },
    {AttrName::TRI(),   { {Operation::CREATE, OOPTIONAL }, {Operation::UPDATE, OOPTIONAL } } },
-   {AttrName::RR(),    { {Operation::CREATE, MANDATORY }, {Operation::UPDATE, OOPTIONAL } } },
+   {AttrName::RR(),    { {Operation::CREATE, OOPTIONAL }, {Operation::UPDATE, OOPTIONAL } } },
    {AttrName::NL(),    { {Operation::CREATE, OOPTIONAL }, {Operation::UPDATE, OOPTIONAL } } }
 };
 
@@ -64,6 +66,64 @@ bool RemoteCSE::setResourceBase(const std::string &json, const std::string& id_s
 	return ret_;
 }
 
+bool RemoteCSE::setResourceBase(const std::string& pc, const std::string& id_str, Operation op) {
+	bool ret_ = false;
+	if (ResourceBase::setResourceBase(pc, id_str, op)) {
+		p_csr_ = getRemoteCSE();
+		ret_ = checkIdConsistency() && checkAttributes(op);
+	}
+	return ret_;
+}
+
+bool RemoteCSE::setNewResourceAttr(const std::string& ri, const std::string& rn, const std::string& pi,
+		RemoteCSE& ret) {
+	if (!ResourceBase::setNewResourceBaseAttr(ri, rn, pi, ret)) {
+		return false;
+	}
+	return true;
+}
+
+bool RemoteCSE::updateResource(const RemoteCSE& upd) {
+	if (!ResourceBase::updateResource(upd)) {
+		return false;
+	}
+
+	const Reflection* r_ = upd.base_.csr().GetReflection();
+	vector<const FieldDescriptor*> fs_;
+	r_->ListFields(upd.base_.csr(), &fs_);
+	for (unsigned int i = 0; i < fs_.size(); i++) {
+		const string def_str_;
+		if (fs_[i]->name() == AttrName::POA()) {
+			if (upd.base_.csr().poa_size() == 0) {
+				p_csr_->clear_poa();
+			} else {
+				p_csr_->mutable_poa()->CopyFrom(upd.base_.csr().poa());
+			}
+		} else if (fs_[i]->name() == AttrName::MEI()) {
+			if (upd.getM2MExtId().empty() || upd.getM2MExtId() == def_str_) {
+				p_csr_->clear_mei();
+			} else {
+				p_csr_->set_mei(upd.getM2MExtId());
+			}
+		} else if (fs_[i]->name() == AttrName::TRI()) {
+			if (upd.getTriggerRecipientId().empty() || upd.getTriggerRecipientId() == def_str_) {
+				p_csr_->clear_tri();
+			} else {
+				p_csr_->set_tri(upd.getTriggerRecipientId());
+			}
+		} else if (fs_[i]->name() == AttrName::RR()) {
+			p_csr_->set_rr(upd.getRequestReachability());
+		} else if (fs_[i]->name() == AttrName::NL()) {
+			if (upd.getNodeLink().empty() || upd.getNodeLink() == def_str_) {
+				p_csr_->clear_nl();
+			} else {
+				p_csr_->set_nl(upd.getNodeLink());
+			}
+		}
+	}
+	return setLastModifiedTimestamp();
+}
+
 CSEType RemoteCSE::getCSEType() {
 	return static_cast<CSEType>(p_csr_->cst());
 }
@@ -94,12 +154,21 @@ bool RemoteCSE::setTriggerRecipientId(const std::string& tri){
 	return setLastModifiedTimestamp();
 }
 
-bool RemoteCSE::getRequestReachability() {
+bool RemoteCSE::getRequestReachability() const {
 	return p_csr_->rr();
 }
 
 bool RemoteCSE::setRequestReachability(bool rr){
 	p_csr_->set_rr(rr);
+	return setLastModifiedTimestamp();
+}
+
+const std::string& RemoteCSE::getNodeLink() const {
+	return p_csr_->nl();
+}
+
+bool RemoteCSE::setNodeLink(const std::string& nl){
+	p_csr_->set_nl(nl);
 	return setLastModifiedTimestamp();
 }
 

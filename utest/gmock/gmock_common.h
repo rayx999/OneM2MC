@@ -13,6 +13,7 @@
 
 #include "gmock/gmock.h"
 
+#include "CopyMessage.pb.h"
 #include "ResourceBase.pb.h"
 #include "CSEBase.pb.h"
 #include "Request.pb.h"
@@ -25,6 +26,8 @@
 
 using namespace std;
 using namespace MicroWireless::OneM2M;
+
+using google::protobuf::Message;
 
 // Matcher for keep test arg to val
 MATCHER_P(StrSave, val, "") {
@@ -72,9 +75,11 @@ MATCHER_P(PbEq, exp_res, "") {
 		if (act_res_.has_csb()) {
 			return matcher_cse(act_res_.csb(), exp_res->csb());
 		} else if (act_res_.has_req()) {
-			return matcher_req(act_res_.req(), exp_res->req());
+			return CompareMessage(act_res_.req(), exp_res->req());
 		} else if (act_res_.has_ae()) {
-			return matcher_ae(act_res_.ae(), exp_res->ae());
+			return CompareMessage(act_res_.ae(), exp_res->ae());
+		} else if (act_res_.has_csr()) {
+			return CompareMessage(act_res_.csr(), exp_res->csr());
 		} else {
 			cerr << "PbEq: No sub-resource.\n";
 		}

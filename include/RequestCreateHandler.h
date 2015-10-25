@@ -13,6 +13,7 @@
 #include "CommonTypes.h"
 #include "AE.h"
 #include "AEAnnc.h"
+#include "RemoteCSE.h"
 #include "RequestPrim.h"
 #include "ResourceStore.h"
 #include "ResourceBase.h"
@@ -83,6 +84,9 @@ public:
 		case SupportedResourceType::AE_ANNC:
 			result_ = createNewResource<AEAnnc>(ri_, rn_, pi_);
 			break;
+		case SupportedResourceType::REMOTE_CSE:
+			result_ = createNewResource<RemoteCSE>(ri_, rn_, pi_);
+			break;
 		default:
 			return ResponseStatusCode::INTERNAL_SERVER_ERROR;
 		}
@@ -90,8 +94,8 @@ public:
 			return ResponseStatusCode::BAD_REQUEST;
 		}
 		// set acpi, fake acpi ri.
-		p_res_->setAccessControlPolicy("001-25423");
-		p_ret_->setAccessControlPolicy("001-25423");
+		p_res_->setAccessControlPolicy("00001-25423");
+		p_ret_->setAccessControlPolicy("00001-25423");
 		return ResponseStatusCode::OK;
 	}
 

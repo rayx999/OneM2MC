@@ -32,6 +32,10 @@ public:
 
 	virtual bool setResourceBase(const std::string& ri, ResourceStore<CSEBase>& rdb);
 	virtual bool setResourceBase(const std::string &json, const std::string& id_str);
+	virtual bool setResourceBase(const std::string& pc, const std::string& id_str, Operation op);
+	virtual bool setNewResourceAttr(const std::string& ri, const std::string& rn,
+			const std::string& pi, RemoteCSE& ret);
+	virtual bool updateResource(const RemoteCSE& upd);
 
 	CSEType getCSEType();
 	const std::string& getCSEBase() const;
@@ -43,8 +47,11 @@ public:
 	const std::string& getTriggerRecipientId() const;
 	bool setTriggerRecipientId(const std::string&);
 
-	bool getRequestReachability();
+	bool getRequestReachability() const;
 	bool setRequestReachability(bool);
+
+	const std::string& getNodeLink() const;
+	bool setNodeLink(const std::string&);
 
 protected:
 

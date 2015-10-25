@@ -55,10 +55,56 @@ const string RemoteCSETest::csr_json("{"
 const string RemoteCSETest::csr_ri("00016-23637");
 const string RemoteCSETest::id_str("//microwireless.com/IN-CSE-01/00016-23637");
 
-TEST_F(RemoteCSETest, JsonValid) {
+TEST_F(RemoteCSETest, JsonValidFalseRR) {
 	try {
 		RemoteCSE csr_(csr_json, id_str);
-		//csr_.outToResourceStore(rdb);
+		ASSERT_FALSE(csr_.getRequestReachability());
+	} catch (exception &e) {
+		cout << "Unexpected exception: " << e.what() << endl;
+		ASSERT_TRUE(false);
+	}
+}
+
+
+TEST_F(RemoteCSETest, JsonValidTrueRR) {
+	const string json("{"
+			"\"ty\" 	: 16,"
+			"\"ri\" 	: \"00016-23637\","
+			"\"rn\" 	: \"AN-CSE-01\","
+			"\"csr\"     : {"
+				"\"cst\" 	: 3,"
+				"\"csi\" 	: \"Z00016\","
+				"\"rr\"		: true, "
+				"\"cb\" 	: \"//microwireless.com/AN-CSE-01\" "
+			"}"
+		"}");
+
+
+	try {
+		RemoteCSE csr_(json, id_str);
+		ASSERT_TRUE(csr_.getRequestReachability());
+	} catch (exception &e) {
+		cout << "Unexpected exception: " << e.what() << endl;
+		ASSERT_TRUE(false);
+	}
+}
+
+TEST_F(RemoteCSETest, JsonValidNoRR) {
+	const string json("{"
+			"\"ty\" 	: 16,"
+			"\"ri\" 	: \"00016-23637\","
+			"\"rn\" 	: \"AN-CSE-01\","
+			"\"csr\"     : {"
+				"\"cst\" 	: 3,"
+				"\"csi\" 	: \"Z00016\","
+				"\"cb\" 	: \"//microwireless.com/AN-CSE-01\" "
+			"}"
+		"}");
+
+
+	try {
+		RemoteCSE csr_(json, id_str);
+		ASSERT_FALSE(csr_.getRequestReachability());
 	} catch (exception &e) {
 		cout << "Unexpected exception: " << e.what() << endl;
 		ASSERT_TRUE(false);
