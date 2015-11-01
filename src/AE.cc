@@ -75,13 +75,13 @@ bool AEClass::setResourceBase(const string& pc, const string& id_str, Operation 
 	return ret_;
 }
 
-bool AEClass::setNewResourceAttr(const string& ri, const string& rn, const string& pi, AEClass& ret) {
-	if (!ResourceBase::setNewResourceBaseAttr(ri, rn, pi, ret)) {
+bool AEClass::setNewAttr(const string& ri, const string& rn, const string& pi, AEClass* p_ret) {
+	if (!ResourceBase::setNewAttr(ri, rn, pi, p_ret)) {
 		return false;
 	}
 	// set AE-ID to FQ ri
 	string aei_ = getDomain() + getIntCsi() + '/' + ri;
-	return setAEId(aei_) && ret.setAEId(aei_);
+	return setAEId(aei_) && (p_ret == NULL ? true : p_ret->setAEId(aei_));
 }
 
 bool AEClass::updateResource(const AEClass& upd) {

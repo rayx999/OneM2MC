@@ -28,6 +28,13 @@
 using namespace std;
 using namespace MicroWireless::OneM2M;
 
+ACTION_P4(handleResponse, hdl, rsc, fr, pc) {
+	RequestPrim& reqp_ = arg0;
+	ResponsePrim rspp(&reqp_, rsc, fr);
+	rspp.setContent(pc);
+	hdl->handleResponse(rspp);
+}
+
 class NSEBaseMock : public NSEBase {
 public:
   NSEBaseMock(const char* ip, const char* port) : NSEBase(ip, port) {};
@@ -41,7 +48,6 @@ protected:
 	static CSEResourceStore * rdb_;
 	static NSEBaseMock * nse_;
 	static CSEHandler * hdl_;
-	static CSEServer * server_;
 	static bool last_test_bad_;
 
 	RequestPrim* p_reqp_;

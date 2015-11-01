@@ -41,7 +41,6 @@ protected:
 	static CoAPIntMock * coap_int_;
 	static NSE_CoAP * nse_;
 	static CSEHandler * hdl_;
-	static CSEServer * server_;
 	static bool last_test_bad_;
 
 	pb::CoAPBinding* p_coap_;

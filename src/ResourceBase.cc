@@ -19,6 +19,7 @@
 #include "CommonUtils.h"
 #include "ResourceBase.h"
 #include "RequestPrim.h"
+#include "ResponsePrim.h"
 
 namespace MicroWireless {
 
@@ -118,16 +119,37 @@ bool ResourceBase::setResourceBase(const string &pc, const string& id_str, Opera
 	return checkResourceConsistency(id_str);
 }
 
-bool ResourceBase::setNewResourceBaseAttr(const string& ri, const string& rn,
-		const string& pi, ResourceBase& ret) {
-	if (!setResourceId(ri) || !ret.setResourceId(ri) ) {
+bool ResourceBase::setResourceBase(const ResponsePrim& rspp) {
+	// parse to PB buffer, try pb in string first
+	if (!base_.ParseFromString(rspp.getContent())) {
+		cerr << "setResourceBase: ParseFromString failed.\n";
 		return false;
 	}
-	if (!setParentId(pi) || !ret.setParentId(pi) ) {
+	if (!parseIds(rspp.getFrom(), CSERegex, domain_, csi_, ri_)) {
+		cerr << "setResourceBase: parseIds failed. res_path: " << rspp.getFrom() << endl;
+		return false;
+	}
+	if (ri_.empty()) {
+		ri_ = getResourceId();
+	}
+	return true;
+}
+
+bool ResourceBase::setNewAttr(const string& ri, const string& rn, const string& pi) {
+	return setNewAttr(ri, rn, pi, NULL);
+}
+
+bool ResourceBase::setNewAttr(const string& ri, const string& rn, const string& pi, ResourceBase* p_ret) {
+	if (!setResourceId(ri) || (p_ret != NULL && !p_ret->setResourceId(ri))) {
+		return false;
+	}
+	if (!setParentId(pi) || (p_ret != NULL && !p_ret->setParentId(pi))) {
 		return false;
 	}
 	if (rn != getResourceName()) {
-		return setResourceName(rn) && ret.setResourceName(rn);
+		if (!setResourceName(rn) || (p_ret != NULL && !p_ret->setResourceName(rn))) {
+			return false;
+		}
 	}
 	return true;
 }
@@ -271,6 +293,11 @@ const string& ResourceBase::getAnncAttr() const {
 	return base_.aa();
 }
 
+bool ResourceBase::setAnncAttr(const string& aa) {
+	base_.set_aa(aa);
+	return setLastModifiedTimestamp();
+}
+
 bool ResourceBase::getCreateTimestamp(TimeStamp &ts) {
 	return getTimestamp<&pb::ResourceBase::has_ct, &pb::ResourceBase::ct>(ts);
 }
@@ -337,7 +364,7 @@ bool ResourceBase::checkResourceConsistency(const string& id_str) {
 	return true;
 }
 
-bool ResourceBase::SerializeToString(string* pc) {
+bool ResourceBase::serializeToString(string* pc) {
 	return base_.SerializeToString(pc);
 }
 
@@ -347,9 +374,18 @@ void ResourceBase::copyAnncFields(const ResourceBase& src, AnncAttr& ma, AnncAtt
 	cf_.copyFields(oa);
 }
 
-void ResourceBase::CopyResourceTimeStamps(ResourceBase& src) {
+void ResourceBase::copyTimeStamps(ResourceBase& src) {
 	*base_.mutable_ct() = src.base_.ct();
 	*base_.mutable_lt() = src.base_.lt();
+}
+
+void ResourceBase::clrNotPresentAttrs() {
+	base_.clear_ty();
+	base_.clear_rn();
+	base_.clear_ri();
+	base_.clear_pi();
+	base_.clear_ct();
+	base_.clear_lt();
 }
 
 bool ResourceBase::compare(pb::ResourceBase& tgt, bool noct, bool nolt) {

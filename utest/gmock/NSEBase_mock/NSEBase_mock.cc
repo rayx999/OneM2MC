@@ -38,7 +38,6 @@ using ::testing::_;
 CSEResourceStore * NSEBaseMockTest::rdb_;
 NSEBaseMock * NSEBaseMockTest::nse_;
 CSEHandler * NSEBaseMockTest::hdl_;
-CSEServer * NSEBaseMockTest::server_;
 bool NSEBaseMockTest::last_test_bad_ = true;
 
 void NSEBaseMockTest::SetUpTestCase()
@@ -46,7 +45,7 @@ void NSEBaseMockTest::SetUpTestCase()
     rdb_ = new CSEResourceStore("data/.store");
     nse_ = new NiceMock<NSEBaseMock>("127.0.0.1", "1234");
     hdl_ = new CSEHandler(*nse_, *rdb_);
-    server_ = new CSEServer(*rdb_, *nse_, *hdl_);
+    CSEServer::setCSEServer(*rdb_, *nse_, *hdl_);
 }
 
 void NSEBaseMockTest::TearDownTestCase()
@@ -54,7 +53,7 @@ void NSEBaseMockTest::TearDownTestCase()
     delete rdb_;
     delete nse_;
     delete hdl_;
-    delete server_;
+    CSEServer::clrCSEServer();
 }
 
 void NSEBaseMockTest::TearDown() {
@@ -92,7 +91,7 @@ void NSEBaseMockTest::retrieveTestBody(ResponseStatusCode rsc, const string& rqi
 				Property(&ResponsePrim::getContent, PbEq(&exp))), _, _))
 		.Times(1);
 
-	server_->run();
+	CSEServer::run();
 }
 
 void NSEBaseMockTest::retrieveTestBody(ResponseStatusCode rsc, const string& rqi,
@@ -106,7 +105,7 @@ void NSEBaseMockTest::retrieveTestBody(ResponseStatusCode rsc, const string& rqi
 					Property(&ResponsePrim::getRequestId, StrEq(rqi))), _, _))
 		  .Times(1);
 
-	 server_->run();
+	 CSEServer::run();
 }
 
 void NSEBaseMockTest::retrieveTestBody(ResponseStatusCode rsc, const string& rqi,
@@ -121,7 +120,7 @@ void NSEBaseMockTest::retrieveTestBody(ResponseStatusCode rsc, const string& rqi
 					Property(&ResponsePrim::getContent, StrSave(&pc))), _, _))
 		  .Times(1);
 
-	 server_->run();
+	 CSEServer::run();
 }
 
 void NSEBaseMockTest::printResponse(ResponsePrim rsp) {

@@ -13,6 +13,7 @@
 #include "ResourceBase.pb.h"
 #include "RemoteCSE.pb.h"
 #include "CommonTypes.h"
+#include "CSEBase.h"
 #include "RemoteCSE.h"
 #include "ResourceBase.h"
 
@@ -48,6 +49,18 @@ RemoteCSE::RemoteCSE(const std::string& ri, ResourceStore<CSEBase>& rdb) : Resou
 	p_csr_ = getRemoteCSE();
 }
 
+RemoteCSE::RemoteCSE(CSEBase& csb) {
+	base_.CopyFrom(csb.getResourceBase());
+	base_.clear_csb();
+
+	base_.set_ty(pb::CommonTypes_SupportedResourceType_REMOTE_CSE);
+	p_csr_ = getRemoteCSE();
+	p_csr_->set_cst(static_cast<pb::CommonTypes_CSEType>(csb.getCSEType()));
+	p_csr_->set_cb(csb.getDomain() + csb.getCSEId());
+	p_csr_->set_csi(csb.getCSEId());
+	p_csr_->set_rr(true);
+}
+
 bool RemoteCSE::setResourceBase(const std::string& ri, ResourceStore<CSEBase>& rdb) {
 	bool ret_ = false;
 	if (ResourceBase::setResourceBase(ri, rdb)) {
@@ -75,9 +88,13 @@ bool RemoteCSE::setResourceBase(const std::string& pc, const std::string& id_str
 	return ret_;
 }
 
-bool RemoteCSE::setNewResourceAttr(const std::string& ri, const std::string& rn, const std::string& pi,
-		RemoteCSE& ret) {
-	if (!ResourceBase::setNewResourceBaseAttr(ri, rn, pi, ret)) {
+bool RemoteCSE::setNewAttr(const std::string& ri, const std::string& rn, const std::string& pi) {
+	return setNewAttr(ri, rn, pi, NULL);
+}
+
+bool RemoteCSE::setNewAttr(const std::string& ri, const std::string& rn, const std::string& pi,
+		RemoteCSE* p_ret) {
+	if (!ResourceBase::setNewAttr(ri, rn, pi, p_ret)) {
 		return false;
 	}
 	return true;

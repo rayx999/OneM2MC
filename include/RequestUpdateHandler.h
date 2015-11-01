@@ -72,7 +72,7 @@ public:
 
 	bool composeContent(string& pc) {
 		// keep all timestamps
-		return p_ret_->SerializeToString(&pc);
+		return p_ret_->serializeToString(&pc);
 	}
 
 private:

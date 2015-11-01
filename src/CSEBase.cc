@@ -38,7 +38,7 @@ CSEBase::CSEBase(const string& ri, ResourceStore<CSEBase>& rdb)	: ResourceBase(r
 
 bool CSEBase::setCSEBase(const string& ri, ResourceStore<CSEBase>& rdb) {
 	bool ret_ = false;
-	if (setResourceBase(ri, rdb)) {
+	if (ResourceBase::setResourceBase(ri, rdb)) {
 		p_cse_ = getCSEBase();
 		ret_ = checkIdConsistency();
 	}
@@ -47,7 +47,16 @@ bool CSEBase::setCSEBase(const string& ri, ResourceStore<CSEBase>& rdb) {
 
 bool CSEBase::setCSEBase(const string &json, const string& id_str) {
 	bool ret_ = false;
-	if (setResourceBase(json, id_str)) {
+	if (ResourceBase::setResourceBase(json, id_str)) {
+		p_cse_ = getCSEBase();
+		ret_ = checkIdConsistency();
+	}
+	return ret_;
+}
+
+bool CSEBase::setResourceBase(const ResponsePrim& rspp) {
+	bool ret_ = ResourceBase::setResourceBase(rspp);
+	if (ret_) {
 		p_cse_ = getCSEBase();
 		ret_ = checkIdConsistency();
 	}

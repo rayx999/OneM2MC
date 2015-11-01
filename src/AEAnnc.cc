@@ -74,13 +74,13 @@ bool AEAnnc::setResourceBase(const string& pc, const string& id_str, Operation o
 	return ret_;
 }
 
-bool AEAnnc::setNewResourceAttr(const string& ri, const string& rn, const string& pi, AEAnnc& ret) {
-	if (!ResourceBase::setNewResourceBaseAttr(ri, rn, pi, ret)) {
+bool AEAnnc::setNewAttr(const string& ri, const string& rn, const string& pi, AEAnnc* p_ret) {
+	if (!ResourceBase::setNewAttr(ri, rn, pi, p_ret)) {
 		return false;
 	}
 	// set AE-ID to FQ ri
 	string aei_ = getDomain() + getIntCsi() + '/' + ri;
-	return setAEId(aei_) && ret.setAEId(aei_);
+	return setAEId(aei_) && (p_ret == NULL ? true : p_ret->setAEId(aei_));
 }
 
 const string& AEAnnc::getAppName() {

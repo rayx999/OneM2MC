@@ -38,6 +38,10 @@ public:
 
 	virtual ~RequestHandler() {}
 
+	bool sendRequest(Operation, const string&, const string&,
+			const string&, const string&, RequestCache::PostRequestFunc);
+	void sendResponse(RequestPrim&, ResponseStatusCode, const string&, const string&);
+
 	template <typename StoreType>
 	bool checkRequest(RequestPrim& req, StoreType& rdb) {
 		ResponseStatusCode rsc_ = isForMe(req, *rdb.cse());
@@ -125,7 +129,7 @@ public:
 			case ResultContent::ATTRIBUTES:
 				//pc = pb2json(res);
 				// return true;
-				ret_ = base_.SerializeToString(&pc);
+				ret_ = base_.serializeToString(&pc);
 				break;
 			default:
 				cerr << "serializeContent: Unknown ResultContent:"
@@ -145,7 +149,7 @@ protected:
 		// set a resource to hold ri as response content
 		ResourceBase res_;
 		res_.setResourceId(ri_);
-		res_.SerializeToString(&pc);
+		res_.serializeToString(&pc);
 
 		Request req_(reqp, ri_, rdb.getRoot()->getResourceId());
 		if (req_.getResourceName().empty()) {
@@ -157,8 +161,6 @@ protected:
 		}
 		return true;
 	}
-
-	void sendResponse(RequestPrim&, ResponseStatusCode, const string&, const string&);
 
 public:
 	void generateRequestId(string&);

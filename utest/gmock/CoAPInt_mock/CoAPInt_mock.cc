@@ -42,7 +42,6 @@ CSEResourceStore * CoAPIntMockTest::rdb_;
 CoAPIntMock * CoAPIntMockTest::coap_int_;
 NSE_CoAP * CoAPIntMockTest::nse_;
 CSEHandler * CoAPIntMockTest::hdl_;
-CSEServer * CoAPIntMockTest::server_;
 bool CoAPIntMockTest::last_test_bad_ = true;
 
 MATCHER_P(OptEq, exp_opt, "") {
@@ -67,7 +66,7 @@ void CoAPIntMockTest::SetUpTestCase()
     coap_int_ = new NiceMock<CoAPIntMock>("127.0.0.1", "1234");
     nse_ = new NSE_CoAP("127.0.0.1", "1234", *coap_int_);
     hdl_ = new CSEHandler(*nse_, *rdb_);
-    server_ = new CSEServer(*rdb_, *nse_, *hdl_);
+    CSEServer::setCSEServer(*rdb_, *nse_, *hdl_);
 }
 
 void CoAPIntMockTest::TearDownTestCase()
@@ -76,7 +75,7 @@ void CoAPIntMockTest::TearDownTestCase()
     delete coap_int_;
     delete nse_;
     delete hdl_;
-    delete server_;
+    CSEServer::clrCSEServer();
 }
 
 void CoAPIntMockTest::SetUp() {
@@ -137,7 +136,7 @@ void CoAPIntMockTest::retrieveTestBody(pb::CoAPTypes_MessageType type, pb::CoAPT
 				Property(&pb::CoAPBinding::payload, PbEq(&exp)))))
         .WillOnce(sendInvokedNotify(&mutex_, &cond_var_, &done_));
 
-	server_->run();
+	CSEServer::run();
 
 	waitForSend();
     EXPECT_TRUE(done_);
@@ -156,7 +155,7 @@ void CoAPIntMockTest::retrieveTestBody(pb::CoAPTypes_MessageType type, pb::CoAPT
 				Property(&pb::CoAPBinding::opt, OptEq(opt)))))
         .WillOnce(sendInvokedNotify(&mutex_, &cond_var_, &done_));
 
-	server_->run();
+	CSEServer::run();
 
 	waitForSend();
     EXPECT_TRUE(done_);
@@ -176,7 +175,7 @@ void CoAPIntMockTest::retrieveTestBody(pb::CoAPTypes_MessageType type, pb::CoAPT
 				Property(&pb::CoAPBinding::payload, StrSave(&pc)))))
 	    .WillOnce(sendInvokedNotify(&mutex_, &cond_var_, &done_));
 
-	server_->run();
+	CSEServer::run();
 
 	waitForSend();
 	EXPECT_TRUE(done_);

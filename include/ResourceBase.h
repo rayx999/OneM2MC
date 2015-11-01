@@ -26,6 +26,8 @@ namespace OneM2M {
 
 using namespace MicroWireless::OneM2M;
 
+class ResponsePrim;
+
 using google::protobuf::Reflection;
 using google::protobuf::FieldDescriptor;
 
@@ -54,9 +56,12 @@ public:
 	// set from json
 	bool setResourceBase(const std::string &json, const std::string& id_str);
 	// set from PB::ResourceBase in std::string
-	virtual bool setResourceBase(const std::string&, const std::string&, Operation);
-	virtual bool setNewResourceBaseAttr(const std::string& ri, const std::string& rn,	const std::string& pi, ResourceBase& ret);
-	virtual bool updateResource(const ResourceBase&);
+	bool setResourceBase(const std::string&, const std::string&, Operation);
+	bool setResourceBase(const ResponsePrim&);
+
+	bool setNewAttr(const std::string& ri, const std::string& rn, const std::string& pi);
+	bool setNewAttr(const std::string& ri, const std::string& rn, const std::string& pi, ResourceBase* p_ret);
+	bool updateResource(const ResourceBase&);
 
 	template <typename Root>
 	bool setResourceBase(RequestPrim& reqp, Root& root) {
@@ -136,6 +141,7 @@ public:
 	bool setAnncTo(const std::string&);
 
 	const std::string& getAnncAttr() const;
+	bool setAnncAttr(const std::string&);
 
 	template <typename StoreType>
 	bool outToResourceStore(ResourceStore<StoreType>& rdb, bool nolink = false) {
@@ -160,10 +166,11 @@ public:
 		}
 	}
 
-	bool SerializeToString(std::string* pc);
+	void clrNotPresentAttrs();
+	bool serializeToString(std::string* pc);
 	void copyAnncFields(const ResourceBase&, AnncAttr&, AnncAttr&);
 	bool compare(pb::ResourceBase&, bool noct = false, bool nolt = false);
-	void CopyResourceTimeStamps(ResourceBase& src);
+	void copyTimeStamps(ResourceBase&);
 	std::string getJson();
 
 private:

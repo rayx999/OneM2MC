@@ -52,9 +52,9 @@ int main(int argc, char* argv[])
 	NSE_CoAP nse_coap_(argv[1], argv[2], coap_int_);
 	CSEResourceStore rdb_(store_fn);
 	CSEHandler hdl_(nse_coap_, rdb_);
-	CSEServer server_(rdb_, nse_coap_, hdl_);
+	CSEServer::setCSEServer(rdb_, nse_coap_, hdl_);
 
-	server_.run();
+	CSEServer::run();
   }
   catch (std::exception& e)
   {

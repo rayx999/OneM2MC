@@ -123,13 +123,6 @@ string AEAnncTest::ri_;
 string AEAnncTest::aei_;
 string AEAnncTest::aeA_str_;
 
-ACTION_P4(handleResponse, hdl, rsc, fr, pc) {
-	RequestPrim& reqp_ = arg0;
-	ResponsePrim rspp(&reqp_, rsc, fr);
-	rspp.setContent(pc);
-	hdl->handleResponse(rspp);
-}
-
 ACTION_P2(setExpAE, exp_ae, ri) {
 	exp_ae->set_ri(*ri);
 	exp_ae->mutable_ae()->set_aei("//microwireless.com/IN-CSE-01/" + *ri);
@@ -194,7 +187,7 @@ TEST_F(AEAnncTest, CreateAEWithAt) {
 				Property(&ResponsePrim::getContent, PbEq(&exp_ae_))), _, _))
 		.Times(1);
 
-  server_->run();
+  CSEServer::run();
 }
 
 TEST_F(AEAnncTest, CreateAEAnncAsCSE) {

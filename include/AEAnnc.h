@@ -30,7 +30,7 @@ public:
 	virtual ~AEAnnc();
 
 	virtual bool setResourceBase(const std::string& pc, const std::string& id_str, Operation op);
-	virtual bool setNewResourceAttr(const std::string&, const std::string&,	const std::string&, AEAnnc&);
+	virtual bool setNewAttr(const std::string&, const std::string&,	const std::string&, AEAnnc*);
 
 	const std::string& getAppName();
 	const std::string& getAppId();

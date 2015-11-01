@@ -22,6 +22,22 @@ namespace OneM2M {
 
 using namespace MicroWireless::OneM2M;
 
+bool RequestHandler::sendRequest(Operation op, const string& to, const string& fr,
+		const string& rsp_pc, const string& pc, RequestCache::PostRequestFunc f) {
+	string rqi_;
+	generateRequestId(rqi_);
+	try {
+		RequestPrim reqp_(op, to, fr, rqi_);
+		reqp_.setContent(pc);
+		reqc_.addRequest(reqp_, rsp_pc, f);// original request rqi from originator
+		nse_.send_request(reqp_, "localhost", 5555);
+	} catch (exception &e) {
+		cerr << "RequestHandler::sendRequest: exception: " << e.what() << endl;
+		return false;
+	}
+	return true;
+}
+
 void RequestHandler::sendResponse(RequestPrim& reqp, ResponseStatusCode rsc,
 		const string& fr, const string& pc) {
 	//cout << "CSEHandler::handleRequest: compose fr:" << fr_ << endl;

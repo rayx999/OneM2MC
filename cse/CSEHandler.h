@@ -48,21 +48,13 @@ private:
 			annc_.copyAnncFields(oa);
 		}
 		string pc_;
-		annc_.SerializeToString(&pc_);
+		annc_.serializeToString(&pc_);
 		for (unsigned int i = 0; i < at.size(); i++) {
-			string rqi_;
-			generateRequestId(rqi_);
-			try {
-				RequestPrim reqp_annc_(Operation::CREATE,
-					at[i], rdb_.getRoot()->getDomain() + rdb_.getRoot()->getCSEId(), rqi_);
-				reqp_annc_.setContent(pc_);
-				reqc_.addRequest(reqp_annc_, rqi, // original request rqi from AE
-						boost::bind(&CSEHandler::postAnnc, this, _1, _2, _3));
-				nse_.send_request(reqp_annc_, "localhost", 5555);
-			} catch (exception &e) {
-				cerr << "CSEHandler::createAnnc: exception: " << e.what() << endl;
-				continue;
-			}
+			sendRequest(Operation::CREATE, at[i], // to
+					rdb_.getRoot()->getDomain() + rdb_.getRoot()->getCSEId(), // fr
+					rqi, // original request rqi from originator
+					pc_, // content
+					boost::bind(&CSEHandler::postAnnc, this, _1, _2, _3));
 		}
 	}
 

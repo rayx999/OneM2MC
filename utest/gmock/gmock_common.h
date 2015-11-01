@@ -23,11 +23,42 @@
 #include "CSEResourceStore.h"
 #include "CSEHandler.h"
 #include "CSEServer.h"
+#include "IApiCallBack.h"
 
 using namespace std;
 using namespace MicroWireless::OneM2M;
 
+class IApiCallBackMock : public IApiCallBack {
+public:
+	IApiCallBackMock(const std::string& cookie) : IApiCallBack(cookie) {};
+	MOCK_METHOD4(registerCSECb, void(const std::string&, const std::string&, ApiStatus, unsigned int));
+};
+
 using google::protobuf::Message;
+
+MATCHER(NumPrn, "") {
+	cout << "NumPrn:" << (int)arg << endl;
+	return true;
+}
+
+MATCHER(StrPrn, "") {
+	if (arg.empty()) {
+		return false;
+	}
+	cout << "StrPrn:" << arg << endl;
+	return true;
+}
+
+MATCHER(PbPrn, "") {
+	if (arg.empty()) {
+		return false;
+	}
+
+	pb::ResourceBase res;
+	res.ParseFromString(arg);
+	cout << "PbPrn:" << pb2json(res) << endl;
+	return true;
+}
 
 // Matcher for keep test arg to val
 MATCHER_P(StrSave, val, "") {

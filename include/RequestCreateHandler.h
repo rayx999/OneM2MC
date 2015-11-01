@@ -105,8 +105,8 @@ public:
 
 	bool composeContent(string& pc) {
 		// keep all timestamps
-		p_ret_->CopyResourceTimeStamps(*p_res_);
-		return p_ret_->SerializeToString(&pc);
+		p_ret_->copyTimeStamps(*p_res_);
+		return p_ret_->serializeToString(&pc);
 	}
 
 	bool saveParentLastModifiedTime() {
@@ -132,7 +132,7 @@ private:
 		} else if (!p_res->setResourceBase(pc_, sp_id_, Operation::CREATE)) {
 			return false;
 		}
-		return p_res->setNewResourceAttr(ri, rn, pi, *p_ret);
+		return p_res->setNewAttr(ri, rn, pi, p_ret);
 	}
 
 	bool checkResourceType(SupportedResourceType& ty) {

@@ -34,12 +34,11 @@ public:
 	AEClass(const std::string& json, const std::string& id_str);
 	AEClass(const std::string& ri, ResourceStore<CSEBase>& rdb);
 
-	virtual bool setResourceBase(const std::string& ri, ResourceStore<CSEBase>& rdb);
-	virtual bool setResourceBase(const std::string &json, const std::string& id_str);
-	virtual bool setResourceBase(const std::string& pc, const std::string& id_str, Operation op);
-	virtual bool setNewResourceAttr(const std::string& ri, const std::string& rn,
-			const std::string& pi, AEClass& ret);
-	virtual bool updateResource(const AEClass&);
+	bool setResourceBase(const std::string& ri, ResourceStore<CSEBase>& rdb);
+	bool setResourceBase(const std::string &json, const std::string& id_str);
+	bool setResourceBase(const std::string& pc, const std::string& id_str, Operation op);
+	bool setNewAttr(const std::string&, const std::string&, const std::string&, AEClass*);
+	bool updateResource(const AEClass&);
 
 	const std::string& getAppName() const;
 	const std::string& getAppId() const;

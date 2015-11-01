@@ -21,9 +21,9 @@ namespace MicroWireless {
 
 namespace OneM2M {
 
-using namespace std;
-
 #define DEFAULT_CSEBASE_FN	"CSEBase"
+
+class ResponsePrim;
 
 class CSEBase : public ResourceBase {
 
@@ -31,14 +31,15 @@ public:
 	CSEBase();
 	~CSEBase();
 
-	CSEBase(const string& json, const string& id_str);
-	CSEBase(const string& ri, ResourceStore<CSEBase>& rdb);
+	CSEBase(const std::string& json, const std::string& id_str);
+	CSEBase(const std::string& ri, ResourceStore<CSEBase>& rdb);
 
-	bool setCSEBase(const string& ri, ResourceStore<CSEBase>& rdb);
-	bool setCSEBase(const string &json, const string& id_str);
+	bool setCSEBase(const std::string& ri, ResourceStore<CSEBase>& rdb);
+	bool setCSEBase(const std::string &json, const std::string& id_str);
+	bool setResourceBase(const ResponsePrim&);
 
 	CSEType getCSEType();
-	const string &getCSEId();
+	const std::string &getCSEId();
 
 	int getSupportedResource(SupportedResourceType *&rt);
 	bool isResourceSupported(SupportedResourceType rt);
