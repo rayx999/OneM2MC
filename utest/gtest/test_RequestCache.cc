@@ -30,9 +30,9 @@ class RequestCacheTest : public ::testing::Test {
 protected:
 	static const string reqp_json;
 
-	static RequestCache cache_;
+	RequestCache& cache_;
 
-	RequestCacheTest() {}
+	RequestCacheTest() : cache_(RequestCache::getCache()) {}
 	virtual ~RequestCacheTest() {}
 
 	virtual void SetUp() {	}
@@ -61,8 +61,6 @@ public:
 		ASSERT_TRUE(cache_.getRequest(rqi_, reqp_));
 	}
 };
-
-RequestCache RequestCacheTest::cache_;
 
 const string RequestCacheTest::reqp_json("{"
 		"\"op\": 2, "

@@ -32,13 +32,13 @@ namespace {
 CSEResourceStore* p_rdb_ = NULL;
 CSEHandler* p_hdl_ = NULL;
 NSEBase* p_nse_ = NULL;
-ApiCallCache<IApiCallBack*>* p_cache_ = NULL;
+ApiCallCache* p_cache_ = NULL;
 std::string self_;
 
 void postRegisterCSE2(const RequestPrim& reqp, const std::string& call_id,
 		const ResponsePrim& rspp)	{
 	IApiCallBack* p_cb_ = NULL;
-	if (!p_cache_->getCallback(call_id, p_cb_) || p_cb_ == NULL) {
+	if (!p_cache_->get(call_id, p_cb_) || p_cb_ == NULL) {
 		std::cerr << "PostRegisterCSE2: getCallback failed on call_id:" <<
 			call_id << std::endl;
 		return;
@@ -85,7 +85,7 @@ void postRegisterCSE2(const RequestPrim& reqp, const std::string& call_id,
 void postRegisterCSE1(const RequestPrim& reqp, const std::string& call_id,
 		const ResponsePrim& rspp)	{
 	IApiCallBack* p_cb_ = NULL;
-	if (!p_cache_->getCallback(call_id, p_cb_) || p_cb_ == NULL) {
+	if (!p_cache_->get(call_id, p_cb_) || p_cb_ == NULL) {
 		std::cerr << "PostRegisterCSE1: getCallback failed on call_id:" <<
 			call_id << std::endl;
 		return;
@@ -146,7 +146,7 @@ void setCSEApi(CSEResourceStore& rdb, NSEBase& nse, CSEHandler& hdl) {
 	p_rdb_ = &rdb;
 	p_nse_ = &nse;
 	p_hdl_ = &hdl;
-	p_cache_ = &ApiCallCache<IApiCallBack*>::getApiCallCache();
+	p_cache_ = &ApiCallCache::getCache();
 
 	self_ = p_rdb_->getRoot()->getDomain() + p_rdb_->getRoot()->getCSEId();
 }

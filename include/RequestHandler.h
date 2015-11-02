@@ -32,7 +32,7 @@ using namespace MicroWireless::OneM2M;
 
 class RequestHandler {
 public:
-	RequestHandler(NSEBase& nse) : nse_(nse), reqc_() {
+	RequestHandler(NSEBase& nse) : nse_(nse), reqc_(RequestCache::getCache()) {
 		gen_.seed(static_cast<long int>(time(0)));
 	}
 
@@ -167,7 +167,7 @@ public:
 
 protected:
 	NSEBase& nse_;
-	RequestCache reqc_;
+	RequestCache& reqc_;
 	boost::random::mt19937 gen_;
 };
 

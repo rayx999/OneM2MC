@@ -16,6 +16,7 @@
 #include <boost/function.hpp>
 
 #include "RequestPrim.h"
+#include "MapCache.h"
 
 namespace MicroWireless {
 namespace OneM2M {
@@ -28,6 +29,8 @@ class RequestCache {
 public:
 	using PostRequestFunc = boost::function<void (const RequestPrim&,
 			const std::string&, const ResponsePrim&)>;
+
+	static RequestCache& getCache();
 
 	bool addRequest(const RequestPrim&);
 	bool addRequest(const RequestPrim&, const std::string&);
@@ -48,8 +51,18 @@ private:
 		PostRequestFunc f_;
 	};
 
-	boost::mutex m_;
-	std::map<const std::string, const CacheItem> req_c_;
+	RequestCache() : req_c_(MapCache<CacheItem>::getCache()) {}
+
+	RequestCache(const RequestCache&) = delete;
+	RequestCache& operator=(const RequestCache&) = delete;
+
+    void* operator new(std::size_t) = delete;
+    void* operator new[](std::size_t) = delete;
+
+    void operator delete(void*) = delete;
+    void operator delete[](void*) = delete;
+
+	MapCache<CacheItem>& req_c_;
 };
 
 

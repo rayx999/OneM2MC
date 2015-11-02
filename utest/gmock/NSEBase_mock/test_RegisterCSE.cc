@@ -98,12 +98,11 @@ const string RegisterCSETest::csb_("{"
 const string RegisterCSETest::in_cse_01("//microwireless.com/IN-CSE-01");
 const string RegisterCSETest::in_cse_02("//microwireless.com/IN-CSE-02");
 
-
 TEST_F(RegisterCSETest, RegisterCSE) {
 	 EXPECT_CALL(*nse_, run())
 		  .WillOnce(Invoke(this, &RegisterCSETest::registerCSE));
 	 {
-		// InSequence s;  Callback will not be in sequence due to gmock call stack in one thread.
+		// InSequence s;  Callback will not be in sequence due to gmock_nse call stack in one thread.
 		EXPECT_CALL(*p_cb_, registerCSECb(_, _, ApiStatus::ACCEPTED, _));
 		EXPECT_CALL(*p_cb_, registerCSECb(_, _, ApiStatus::REMOTE_CSE_CREATE_REQ_SENT, _));
 		EXPECT_CALL(*p_cb_, registerCSECb(_, _, ApiStatus::REMOTE_CSE_CREATE_RSP_RECV, _));
